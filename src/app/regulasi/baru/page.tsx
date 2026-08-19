@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import Navbar from "@/components/Navbar";
 import { JENIS_REGULASI, KATEGORI_REGULASI } from "@/lib/types";
+import { friendlyStorageError } from "@/lib/storage-error";
 
 export default function TambahRegulasiPage() {
   const router = useRouter();
@@ -38,6 +39,15 @@ export default function TambahRegulasiPage() {
       let fileNama: string | null = null;
 
       if (file) {
+        const MAX_SIZE_MB = 10;
+        if (file.size > MAX_SIZE_MB * 1024 * 1024) {
+          throw new Error(
+            `Ukuran file ${(file.size / (1024 * 1024)).toFixed(
+              1
+            )} MB melebihi batas maksimal ${MAX_SIZE_MB} MB. Gunakan file yang lebih kecil.`
+          );
+        }
+
         const ext = file.name.split(".").pop();
         const safeName = `${Date.now()}-${Math.random()
           .toString(36)
@@ -47,7 +57,9 @@ export default function TambahRegulasiPage() {
             .from("regulasi-files")
             .upload(safeName, file);
 
-        if (uploadError) throw uploadError;
+        if (uploadError) {
+          throw new Error(friendlyStorageError(uploadError));
+        }
         filePath = uploadData.path;
         fileNama = file.name;
       }

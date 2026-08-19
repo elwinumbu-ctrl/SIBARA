@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/client";
 import Navbar from "@/components/Navbar";
 import StatusBadge from "@/components/StatusBadge";
 import { JENIS_REGULASI, KATEGORI_REGULASI, Regulasi } from "@/lib/types";
+import { friendlyStorageError } from "@/lib/storage-error";
 
 export default function DetailRegulasiPage() {
   const { id } = useParams<{ id: string }>();
@@ -18,6 +19,7 @@ export default function DetailRegulasiPage() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [fileUrl, setFileUrl] = useState<string | null>(null);
+  const [newFile, setNewFile] = useState<File | null>(null);
 
   useEffect(() => {
     async function load() {
@@ -52,29 +54,77 @@ export default function DetailRegulasiPage() {
     setSaving(true);
     setError(null);
 
-    const { error } = await supabase
-      .from("regulasi")
-      .update({
-        judul: regulasi.judul,
-        nomor_regulasi: regulasi.nomor_regulasi,
-        jenis: regulasi.jenis,
-        instansi_penerbit: regulasi.instansi_penerbit,
-        tahun: regulasi.tahun,
-        kategori: regulasi.kategori,
-        status: regulasi.status,
-        deskripsi: regulasi.deskripsi,
-        link_resmi: regulasi.link_resmi,
-      })
-      .eq("id", regulasi.id);
+    try {
+      let filePath = regulasi.file_path;
+      let fileNama = regulasi.file_nama;
+      const oldFilePath = regulasi.file_path;
 
-    setSaving(false);
+      if (newFile) {
+        const MAX_SIZE_MB = 10;
+        if (newFile.size > MAX_SIZE_MB * 1024 * 1024) {
+          throw new Error(
+            `Ukuran file ${(newFile.size / (1024 * 1024)).toFixed(
+              1
+            )} MB melebihi batas maksimal ${MAX_SIZE_MB} MB. Gunakan file yang lebih kecil.`
+          );
+        }
 
-    if (error) {
-      setError(error.message);
-      return;
+        const ext = newFile.name.split(".").pop();
+        const safeName = `${Date.now()}-${Math.random()
+          .toString(36)
+          .slice(2, 8)}.${ext}`;
+        const { data: uploadData, error: uploadError } =
+          await supabase.storage
+            .from("regulasi-files")
+            .upload(safeName, newFile);
+
+        if (uploadError) {
+          throw new Error(friendlyStorageError(uploadError));
+        }
+        filePath = uploadData.path;
+        fileNama = newFile.name;
+      }
+
+      const { error: updateError } = await supabase
+        .from("regulasi")
+        .update({
+          judul: regulasi.judul,
+          nomor_regulasi: regulasi.nomor_regulasi,
+          jenis: regulasi.jenis,
+          instansi_penerbit: regulasi.instansi_penerbit,
+          tahun: regulasi.tahun,
+          kategori: regulasi.kategori,
+          status: regulasi.status,
+          deskripsi: regulasi.deskripsi,
+          link_resmi: regulasi.link_resmi,
+          file_path: filePath,
+          file_nama: fileNama,
+        })
+        .eq("id", regulasi.id);
+
+      if (updateError) throw updateError;
+
+      // Hapus file lama dari storage setelah file baru berhasil disimpan
+      if (newFile && oldFilePath) {
+        await supabase.storage.from("regulasi-files").remove([oldFilePath]);
+      }
+
+      setRegulasi({ ...regulasi, file_path: filePath, file_nama: fileNama });
+      if (filePath) {
+        const { data: pub } = supabase.storage
+          .from("regulasi-files")
+          .getPublicUrl(filePath);
+        setFileUrl(pub.publicUrl);
+      }
+
+      setNewFile(null);
+      setEditing(false);
+      router.refresh();
+    } catch (err: any) {
+      setError(err.message || "Terjadi kesalahan saat menyimpan perubahan.");
+    } finally {
+      setSaving(false);
     }
-    setEditing(false);
-    router.refresh();
   }
 
   async function handleDelete() {
@@ -85,7 +135,15 @@ export default function DetailRegulasiPage() {
     if (!confirmed) return;
 
     if (regulasi.file_path) {
-      await supabase.storage.from("regulasi-files").remove([regulasi.file_path]);
+      // Jangan hentikan proses hapus data hanya karena file di storage
+      // gagal dihapus (misalnya bucket bermasalah) — data tetap harus bisa dihapus.
+      try {
+        await supabase.storage
+          .from("regulasi-files")
+          .remove([regulasi.file_path]);
+      } catch {
+        // diabaikan, lanjutkan menghapus data
+      }
     }
     const { error } = await supabase
       .from("regulasi")
@@ -194,7 +252,10 @@ export default function DetailRegulasiPage() {
 
               <div className="flex items-center gap-3 pt-4 border-t border-paper-line">
                 <button
-                  onClick={() => setEditing(true)}
+                  onClick={() => {
+                    setNewFile(null);
+                    setEditing(true);
+                  }}
                   className="rounded-md bg-ink text-paper-card text-sm font-medium px-4 py-2 hover:bg-ink-light transition-colors"
                 >
                   Ubah Data
@@ -357,6 +418,26 @@ export default function DetailRegulasiPage() {
                 />
               </div>
 
+              <div>
+                <label className="block text-xs font-medium text-slate-muted mb-1">
+                  Dokumen (PDF/Word)
+                </label>
+                {regulasi.file_nama && !newFile && (
+                  <p className="text-xs text-slate-muted mb-2">
+                    Saat ini: 📎 {regulasi.file_nama}
+                  </p>
+                )}
+                <input
+                  type="file"
+                  accept=".pdf,.doc,.docx"
+                  onChange={(e) => setNewFile(e.target.files?.[0] ?? null)}
+                  className="w-full text-sm text-slate-muted file:mr-3 file:rounded-md file:border-0 file:bg-ink file:text-paper-card file:text-xs file:font-medium file:px-3 file:py-2 file:cursor-pointer"
+                />
+                <p className="text-xs text-slate-muted mt-1">
+                  Kosongkan jika tidak ingin mengganti dokumen yang sudah ada.
+                </p>
+              </div>
+
               {error && (
                 <p className="text-sm text-status-dicabut bg-status-dicabut/10 rounded-md px-3 py-2">
                   {error}
@@ -372,7 +453,11 @@ export default function DetailRegulasiPage() {
                   {saving ? "Menyimpan..." : "Simpan Perubahan"}
                 </button>
                 <button
-                  onClick={() => setEditing(false)}
+                  onClick={() => {
+                    setNewFile(null);
+                    setEditing(false);
+                    setError(null);
+                  }}
                   className="text-sm text-slate-muted hover:text-ink"
                 >
                   Batal
