@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { createClient } from "@/lib/supabase/client";
+import { Mail, Lock, Eye, EyeOff, Loader2, ShieldCheck } from "lucide-react";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -36,21 +37,18 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-ink-dark px-4 py-12 text-paper-card">
-      {/* photo background */}
+    <div className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-primary-800 px-4 py-12 text-white">
       <div
         className="pointer-events-none absolute inset-0 bg-cover bg-center"
         style={{ backgroundImage: "url(/login-bg.png)" }}
       />
-      {/* dark overlay for readability */}
-      <div className="pointer-events-none absolute inset-0 bg-ink-dark/80" />
-      {/* decorative full-page background */}
+      <div className="pointer-events-none absolute inset-0 bg-primary-800/85" />
       <div
-        className="pointer-events-none absolute inset-0 opacity-[0.06]"
+        className="pointer-events-none absolute inset-0 opacity-[0.05]"
         style={{
           backgroundImage:
-            "radial-gradient(circle at 1px 1px, #FBF9F4 1px, transparent 0)",
-          backgroundSize: "24px 24px",
+            "radial-gradient(circle at 1px 1px, #FFFFFF 1px, transparent 0)",
+          backgroundSize: "22px 22px",
         }}
       />
       <div
@@ -59,22 +57,18 @@ export default function LoginPage() {
       />
       <div
         className="pointer-events-none absolute -bottom-40 -left-32 w-[420px] h-[420px] rounded-full opacity-15 blur-3xl"
-        style={{ backgroundColor: "#2F4470" }}
-      />
-      <div
-        className="pointer-events-none absolute top-1/3 left-1/2 -translate-x-1/2 w-[520px] h-[520px] rounded-full opacity-10 blur-3xl"
-        style={{ backgroundColor: "#2F4470" }}
+        style={{ backgroundColor: "#3C5D8F" }}
       />
 
       <div className="relative flex items-center gap-2.5 mb-10">
-        <span className="w-1.5 h-1.5 rounded-full bg-seal" />
-        <span className="text-xs tracking-[0.2em] uppercase text-paper-card/70">
+        <ShieldCheck size={14} className="text-accent-light" />
+        <span className="text-xs tracking-[0.2em] uppercase text-white/70">
           Pemerintah Kabupaten Sumba Barat
         </span>
       </div>
 
       <div className="relative w-full max-w-sm flex flex-col items-center text-center">
-        <div className="w-20 h-20 rounded-2xl bg-paper-card/95 shadow-2xl flex items-center justify-center p-2.5 mb-5 ring-1 ring-white/10">
+        <div className="w-20 h-20 rounded-2xl bg-white shadow-2xl flex items-center justify-center p-2.5 mb-5 ring-1 ring-white/10">
           <Image
             src="/logo-sumba-barat.png"
             alt="Lambang Kabupaten Sumba Barat"
@@ -85,139 +79,66 @@ export default function LoginPage() {
           />
         </div>
 
-        <h1 className="font-display text-3xl leading-tight mb-2">SIBARA</h1>
-        <p className="text-sm text-paper-card/75">
+        <h1 className="font-display text-3xl font-bold leading-tight mb-2">SIBARA</h1>
+        <p className="text-sm text-white/75">
           Sistem Informasi Bank Regulasi Dana BOSP
         </p>
-        <p className="text-xs text-paper-card/55 mb-8">
+        <p className="text-xs text-white/50 mb-8">
           Inspektorat Kabupaten Sumba Barat — Wilayah IV
         </p>
 
         <form
           onSubmit={handleSubmit}
-          className="w-full bg-paper-card border border-paper-line rounded-xl shadow-2xl p-6 sm:p-7 space-y-4 text-left"
+          className="w-full bg-white rounded-2xl shadow-2xl p-6 sm:p-7 space-y-4 text-left"
         >
           <div>
-            <label className="block text-xs font-medium text-slate-muted mb-1.5">
+            <label className="block text-xs font-semibold text-ink-subtle mb-1.5">
               Email
             </label>
             <div className="relative">
-              <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-muted">
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.8"
-                >
-                  <path
-                    d="M3 6.5a1.5 1.5 0 0 1 1.5-1.5h15A1.5 1.5 0 0 1 21 6.5v11a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 17.5v-11Z"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  <path
-                    d="m4 6.5 8 6.25L20 6.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
+              <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-ink-faint">
+                <Mail size={16} />
               </span>
               <input
                 type="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full rounded-lg border border-paper-line bg-white pl-9 pr-3 py-2.5 text-sm text-slate-text focus:border-ink focus:outline-none focus:ring-2 focus:ring-ink/10 transition-shadow"
+                className="w-full rounded-lg border border-border bg-surface-muted pl-9 pr-3 py-2.5 text-sm text-ink focus:border-primary focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/10 transition-shadow"
                 placeholder="nama@sumbabaratkab.go.id"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-slate-muted mb-1.5">
+            <label className="block text-xs font-semibold text-ink-subtle mb-1.5">
               Kata sandi
             </label>
             <div className="relative">
-              <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-muted">
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.8"
-                >
-                  <rect
-                    x="4.5"
-                    y="10.5"
-                    width="15"
-                    height="9.5"
-                    rx="1.8"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  <path
-                    d="M7.5 10.5V7.75a4.5 4.5 0 1 1 9 0v2.75"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
+              <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-ink-faint">
+                <Lock size={16} />
               </span>
               <input
                 type={showPassword ? "text" : "password"}
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full rounded-lg border border-paper-line bg-white pl-9 pr-10 py-2.5 text-sm text-slate-text focus:border-ink focus:outline-none focus:ring-2 focus:ring-ink/10 transition-shadow"
+                className="w-full rounded-lg border border-border bg-surface-muted pl-9 pr-10 py-2.5 text-sm text-ink focus:border-primary focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/10 transition-shadow"
                 placeholder="••••••••"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword((v) => !v)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-muted hover:text-ink transition-colors"
-                aria-label={
-                  showPassword ? "Sembunyikan kata sandi" : "Tampilkan kata sandi"
-                }
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-ink-faint hover:text-primary transition-colors"
+                aria-label={showPassword ? "Sembunyikan kata sandi" : "Tampilkan kata sandi"}
               >
-                {showPassword ? (
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.8"
-                  >
-                    <path
-                      d="M3 3l18 18M10.6 10.6a3 3 0 0 0 4.24 4.24M6.4 6.4C4.1 7.9 2.5 10 1.5 12c1.6 3.4 5.4 6.5 10.5 6.5 1.7 0 3.2-.35 4.55-.95M9.9 4.65A11.6 11.6 0 0 1 12 4.5c5.1 0 8.9 3.1 10.5 6.5-.5 1.05-1.2 2.15-2.1 3.15"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                ) : (
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.8"
-                  >
-                    <path
-                      d="M1.5 12S5.3 5.5 12 5.5 22.5 12 22.5 12 18.7 18.5 12 18.5 1.5 12 1.5 12Z"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                    <circle cx="12" cy="12" r="3" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                )}
+                {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
               </button>
             </div>
           </div>
 
           {error && (
-            <p className="text-sm text-status-dicabut bg-status-dicabut/10 rounded-md px-3 py-2">
+            <p className="text-sm text-status-dicabut bg-status-dicabut-bg rounded-lg px-3 py-2.5">
               {error}
             </p>
           )}
@@ -225,32 +146,11 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full inline-flex items-center justify-center gap-2 rounded-lg bg-ink text-paper-card text-sm font-medium py-2.5 hover:bg-ink-light transition-colors disabled:opacity-60"
+            className="w-full inline-flex items-center justify-center gap-2 rounded-lg bg-primary text-white text-sm font-semibold py-2.5 hover:bg-primary-600 transition-colors disabled:opacity-60"
           >
             {loading ? (
               <>
-                <svg
-                  className="animate-spin"
-                  width="15"
-                  height="15"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                >
-                  <circle
-                    cx="12"
-                    cy="12"
-                    r="9"
-                    stroke="currentColor"
-                    strokeWidth="3"
-                    opacity="0.25"
-                  />
-                  <path
-                    d="M21 12a9 9 0 0 0-9-9"
-                    stroke="currentColor"
-                    strokeWidth="3"
-                    strokeLinecap="round"
-                  />
-                </svg>
+                <Loader2 size={15} className="animate-spin" />
                 Memproses...
               </>
             ) : (
@@ -259,17 +159,15 @@ export default function LoginPage() {
           </button>
         </form>
 
-        <p className="text-center text-xs text-paper-card/55 mt-6">
+        <p className="text-center text-xs text-white/50 mt-6">
           Akses terbatas untuk auditor Inspektorat Kabupaten Sumba Barat.
           Hubungi admin sistem untuk pembuatan akun.
         </p>
       </div>
 
-      <div className="relative flex items-center gap-3 text-xs text-paper-card/45 mt-12">
-        <span className="font-display italic">
-          &ldquo;Pada Eweta Manda Elu&rdquo;
-        </span>
-        <span className="w-1 h-1 rounded-full bg-paper-card/30" />
+      <div className="relative flex items-center gap-3 text-xs text-white/40 mt-12">
+        <span className="font-display italic">&ldquo;Pada Eweta Manda Elu&rdquo;</span>
+        <span className="w-1 h-1 rounded-full bg-white/30" />
         <span>© {new Date().getFullYear()} Kabupaten Sumba Barat</span>
       </div>
     </div>

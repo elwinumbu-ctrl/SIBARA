@@ -1,10 +1,12 @@
 import { createClient } from "@/lib/supabase/server";
-import Navbar from "@/components/Navbar";
+import AppShell from "@/components/AppShell";
 import SearchFilterBar from "@/components/SearchFilterBar";
 import StatCard from "@/components/StatCard";
 import RegulasiCard from "@/components/RegulasiCard";
+import ViewToggle from "@/components/ViewToggle";
 import Link from "next/link";
 import { Regulasi } from "@/lib/types";
+import { FileSearch, Plus } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -52,6 +54,7 @@ export default async function DashboardPage({
   const isFiltered = Boolean(
     searchParams.q || searchParams.jenis || searchParams.kategori || searchParams.tahun || searchParams.status
   );
+  const view = searchParams.view === "list" ? "list" : "grid";
 
   const displayName = user?.email?.split("@")[0] ?? "Auditor";
   const hour = new Date().getHours();
@@ -59,108 +62,106 @@ export default async function DashboardPage({
     hour < 11 ? "Selamat pagi" : hour < 15 ? "Selamat siang" : hour < 18 ? "Selamat sore" : "Selamat malam";
 
   return (
-    <div className="min-h-screen">
-      <Navbar email={user?.email} />
-
-      {/* Hero header */}
-      <div className="relative overflow-hidden bg-ink-dark text-paper-card">
+    <AppShell active="dashboard" email={user?.email} subtitle="Ringkasan Bank Regulasi Dana BOSP">
+      {/* Hero */}
+      <div className="relative overflow-hidden rounded-2xl bg-primary text-white mb-6">
         <div
-          className="pointer-events-none absolute inset-0 opacity-[0.06]"
+          className="pointer-events-none absolute inset-0 opacity-[0.05]"
           style={{
             backgroundImage:
-              "radial-gradient(circle at 1px 1px, #FBF9F4 1px, transparent 0)",
-            backgroundSize: "20px 20px",
+              "radial-gradient(circle at 1px 1px, #FFFFFF 1px, transparent 0)",
+            backgroundSize: "18px 18px",
           }}
         />
         <div
-          className="pointer-events-none absolute -top-20 right-0 w-80 h-80 rounded-full opacity-20 blur-3xl"
+          className="pointer-events-none absolute -top-16 right-0 w-72 h-72 rounded-full opacity-20 blur-3xl"
           style={{ backgroundColor: "#B8862E" }}
         />
-
-        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 pt-8 pb-10">
-          <p className="text-xs tracking-[0.15em] uppercase text-paper-card/60 mb-2">
+        <div className="relative px-5 sm:px-8 py-7 sm:py-9">
+          <p className="text-xs tracking-[0.15em] uppercase text-white/55 mb-2">
             {greeting}, {displayName}
           </p>
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
             <div>
-              <h1 className="font-display text-3xl leading-tight">Bank Regulasi</h1>
-              <p className="text-sm text-paper-card/70 mt-1.5">
+              <h2 className="font-display text-2xl sm:text-3xl font-bold leading-tight">
+                Bank Regulasi Dana BOSP
+              </h2>
+              <p className="text-sm text-white/70 mt-1.5">
                 Pengawasan Dana BOSP — Inspektur Pembantu Wilayah IV
               </p>
             </div>
             <Link
               href="/regulasi/baru"
-              className="inline-flex items-center gap-1.5 rounded-lg bg-seal text-ink-dark text-sm font-semibold px-4 py-2.5 hover:bg-seal-light transition-colors shadow-lg shadow-black/10 self-start"
+              className="inline-flex items-center gap-1.5 rounded-lg bg-accent text-white text-sm font-semibold px-4 py-2.5 hover:bg-accent-light transition-colors shadow-lg shadow-black/10 self-start"
             >
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4">
-                <path d="M12 5v14M5 12h14" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
+              <Plus size={16} strokeWidth={2.4} />
               Tambah Regulasi
             </Link>
           </div>
         </div>
       </div>
 
-      <main className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6 -mt-14 relative">
-          <StatCard label="Total Regulasi" value={total} tone="ink" />
-          <StatCard label="Berlaku" value={berlaku} tone="berlaku" />
-          <StatCard label="Ditinjau" value={ditinjau} tone="ditinjau" />
-          <StatCard label="Dicabut" value={dicabut} tone="dicabut" />
-        </div>
+      {/* Stat cards */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <StatCard label="Total Regulasi" value={total} tone="primary" caption="Seluruh regulasi terdaftar" />
+        <StatCard label="Berlaku" value={berlaku} tone="berlaku" caption="Masih berlaku aktif" />
+        <StatCard label="Ditinjau" value={ditinjau} tone="ditinjau" caption="Sedang ditinjau ulang" />
+        <StatCard label="Dicabut" value={dicabut} tone="dicabut" caption="Sudah tidak berlaku" />
+      </div>
 
-        <SearchFilterBar tahunList={tahunList} />
+      <SearchFilterBar tahunList={tahunList} />
 
-        {error && (
-          <p className="text-sm text-status-dicabut bg-status-dicabut/10 rounded-md px-4 py-3 mb-4">
-            Gagal memuat data: {error.message}
+      {error && (
+        <p className="text-sm text-status-dicabut bg-status-dicabut-bg rounded-lg px-4 py-3 mb-4">
+          Gagal memuat data: {error.message}
+        </p>
+      )}
+
+      {!error && (
+        <div className="flex items-center justify-between mb-4">
+          <p className="text-xs text-ink-subtle">
+            Menampilkan{" "}
+            <span className="font-semibold text-ink">{list.length}</span>{" "}
+            dari <span className="font-semibold text-ink">{total}</span> regulasi
+            {isFiltered ? " (terfilter)" : ""}
           </p>
-        )}
+          <ViewToggle view={view} />
+        </div>
+      )}
 
-        {!error && (
-          <div className="flex items-center justify-between mb-4">
-            <p className="text-xs text-slate-muted">
-              Menampilkan{" "}
-              <span className="font-medium text-slate-text">{list.length}</span>{" "}
-              dari <span className="font-medium text-slate-text">{total}</span> regulasi
-              {isFiltered ? " (terfilter)" : ""}
-            </p>
+      {list.length === 0 && !error ? (
+        <div className="text-center py-16 bg-white border border-dashed border-border-strong rounded-2xl">
+          <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-primary/8 text-primary mb-4">
+            <FileSearch size={22} strokeWidth={1.7} />
           </div>
-        )}
-
-        {list.length === 0 && !error ? (
-          <div className="text-center py-16 bg-paper-card border border-dashed border-paper-line rounded-xl">
-            <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-ink/5 text-ink mb-4">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
-                <path d="M4 5.5a1.5 1.5 0 0 1 1.5-1.5h13A1.5 1.5 0 0 1 20 5.5v13a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 18.5v-13Z" strokeLinecap="round" strokeLinejoin="round" />
-                <path d="M8 9h8M8 13h5" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </div>
-            <p className="font-display text-lg text-ink mb-1">
-              Belum ada regulasi yang cocok
-            </p>
-            <p className="text-sm text-slate-muted mb-4 max-w-sm mx-auto">
-              Ubah kata kunci atau filter, atau tambahkan regulasi baru ke
-              dalam bank regulasi.
-            </p>
-            <Link
-              href="/regulasi/baru"
-              className="inline-flex items-center gap-1.5 rounded-md bg-ink text-paper-card text-sm font-medium px-4 py-2 hover:bg-ink-light transition-colors"
-            >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
-                <path d="M12 5v14M5 12h14" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-              Tambah Regulasi
-            </Link>
-          </div>
-        ) : (
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {list.map((r) => (
-              <RegulasiCard key={r.id} regulasi={r} />
-            ))}
-          </div>
-        )}
-      </main>
-    </div>
+          <p className="font-display font-semibold text-lg text-ink mb-1">
+            Belum ada regulasi yang cocok
+          </p>
+          <p className="text-sm text-ink-subtle mb-4 max-w-sm mx-auto">
+            Ubah kata kunci atau filter, atau tambahkan regulasi baru ke
+            dalam bank regulasi.
+          </p>
+          <Link
+            href="/regulasi/baru"
+            className="inline-flex items-center gap-1.5 rounded-lg bg-primary text-white text-sm font-medium px-4 py-2 hover:bg-primary-600 transition-colors"
+          >
+            <Plus size={15} strokeWidth={2.2} />
+            Tambah Regulasi
+          </Link>
+        </div>
+      ) : view === "grid" ? (
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {list.map((r) => (
+            <RegulasiCard key={r.id} regulasi={r} view="grid" />
+          ))}
+        </div>
+      ) : (
+        <div className="flex flex-col gap-3">
+          {list.map((r) => (
+            <RegulasiCard key={r.id} regulasi={r} view="list" />
+          ))}
+        </div>
+      )}
+    </AppShell>
   );
 }

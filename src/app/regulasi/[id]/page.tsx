@@ -3,10 +3,25 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
-import Navbar from "@/components/Navbar";
+import AppShell from "@/components/AppShell";
 import StatusBadge from "@/components/StatusBadge";
 import { JENIS_REGULASI, KATEGORI_REGULASI, Regulasi } from "@/lib/types";
 import { friendlyStorageError } from "@/lib/storage-error";
+import {
+  ArrowLeft,
+  Building2,
+  ExternalLink,
+  FileDown,
+  Loader2,
+  Pencil,
+  Tag,
+  Trash2,
+  UploadCloud,
+} from "lucide-react";
+
+const inputClass =
+  "w-full rounded-lg border border-border bg-surface-muted px-3 py-2.5 text-sm text-ink focus:border-primary focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/10 transition-shadow";
+const labelClass = "block text-xs font-semibold text-ink-subtle mb-1.5";
 
 export default function DetailRegulasiPage() {
   const { id } = useParams<{ id: string }>();
@@ -104,7 +119,6 @@ export default function DetailRegulasiPage() {
 
       if (updateError) throw updateError;
 
-      // Hapus file lama dari storage setelah file baru berhasil disimpan
       if (newFile && oldFilePath) {
         await supabase.storage.from("regulasi-files").remove([oldFilePath]);
       }
@@ -135,8 +149,6 @@ export default function DetailRegulasiPage() {
     if (!confirmed) return;
 
     if (regulasi.file_path) {
-      // Jangan hentikan proses hapus data hanya karena file di storage
-      // gagal dihapus (misalnya bucket bermasalah) — data tetap harus bisa dihapus.
       try {
         await supabase.storage
           .from("regulasi-files")
@@ -160,42 +172,43 @@ export default function DetailRegulasiPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen">
-        <Navbar />
-        <main className="max-w-2xl mx-auto px-4 sm:px-6 py-16 text-center text-sm text-slate-muted">
+      <AppShell active="regulasi" title="Detail Regulasi" showAddButton={false}>
+        <div className="flex items-center justify-center gap-2 py-24 text-sm text-ink-subtle">
+          <Loader2 size={16} className="animate-spin" />
           Memuat data regulasi...
-        </main>
-      </div>
+        </div>
+      </AppShell>
     );
   }
 
   if (error && !regulasi) {
     return (
-      <div className="min-h-screen">
-        <Navbar />
-        <main className="max-w-2xl mx-auto px-4 sm:px-6 py-16 text-center">
-          <p className="text-sm text-status-dicabut">{error}</p>
-        </main>
-      </div>
+      <AppShell active="regulasi" title="Detail Regulasi" showAddButton={false}>
+        <div className="max-w-2xl mx-auto text-center py-16">
+          <p className="text-sm text-status-dicabut bg-status-dicabut-bg inline-block rounded-lg px-4 py-2.5">
+            {error}
+          </p>
+        </div>
+      </AppShell>
     );
   }
 
   if (!regulasi) return null;
 
   return (
-    <div className="min-h-screen">
-      <Navbar />
-      <main className="max-w-2xl mx-auto px-4 sm:px-6 py-8">
+    <AppShell active="regulasi" title="Detail Regulasi" showAddButton={false}>
+      <div className="max-w-2xl mx-auto">
         <button
           onClick={() => router.push("/dashboard")}
-          className="text-sm text-slate-muted hover:text-ink mb-4 inline-block"
+          className="inline-flex items-center gap-1.5 text-sm text-ink-subtle hover:text-ink mb-4"
         >
-          ← Kembali ke daftar
+          <ArrowLeft size={15} />
+          Kembali ke daftar
         </button>
 
-        <div className="bg-paper-card border border-paper-line rounded-lg shadow-card p-6">
+        <div className="bg-white border border-border rounded-2xl shadow-card p-5 sm:p-6">
           <div className="flex items-start justify-between gap-3 mb-4">
-            <span className="font-mono text-xs text-slate-muted">
+            <span className="font-mono text-xs text-ink-faint">
               {regulasi.nomor_regulasi || "Tanpa nomor"} · {regulasi.tahun}
             </span>
             <StatusBadge status={regulasi.status} />
@@ -203,39 +216,40 @@ export default function DetailRegulasiPage() {
 
           {!editing ? (
             <>
-              <h1 className="font-display text-xl text-ink mb-3">
+              <h1 className="font-display text-xl font-bold text-ink mb-3">
                 {regulasi.judul}
               </h1>
 
-              <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-slate-muted mb-4">
-                <span>
-                  <strong className="text-ink">Jenis:</strong> {regulasi.jenis}
+              <div className="flex flex-wrap gap-x-5 gap-y-2 text-sm text-ink-subtle mb-4">
+                <span className="flex items-center gap-1.5">
+                  <FileDown size={14} className="text-ink-faint" />
+                  <strong className="text-ink font-medium">Jenis:</strong> {regulasi.jenis}
                 </span>
-                <span>
-                  <strong className="text-ink">Instansi:</strong>{" "}
-                  {regulasi.instansi_penerbit}
+                <span className="flex items-center gap-1.5">
+                  <Building2 size={14} className="text-ink-faint" />
+                  <strong className="text-ink font-medium">Instansi:</strong> {regulasi.instansi_penerbit}
                 </span>
-                <span>
-                  <strong className="text-ink">Kategori:</strong>{" "}
-                  {regulasi.kategori}
+                <span className="flex items-center gap-1.5">
+                  <Tag size={14} className="text-ink-faint" />
+                  <strong className="text-ink font-medium">Kategori:</strong> {regulasi.kategori}
                 </span>
               </div>
 
               {regulasi.deskripsi && (
-                <p className="text-sm text-slate-text leading-relaxed border-t border-paper-line pt-4 mb-4">
+                <p className="text-sm text-ink leading-relaxed border-t border-border pt-4 mb-4">
                   {regulasi.deskripsi}
                 </p>
               )}
 
-              <div className="flex flex-wrap gap-3 mb-4">
+              <div className="flex flex-wrap gap-3 mb-5">
                 {regulasi.link_resmi && (
                   <a
                     href={regulasi.link_resmi}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-sm text-ink underline underline-offset-2 hover:text-seal"
+                    className="inline-flex items-center gap-1.5 text-sm text-primary font-medium hover:text-primary-600"
                   >
-                    Buka sumber resmi ↗
+                    Buka sumber resmi <ExternalLink size={13} />
                   </a>
                 )}
                 {fileUrl && (
@@ -243,27 +257,29 @@ export default function DetailRegulasiPage() {
                     href={fileUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-sm text-ink underline underline-offset-2 hover:text-seal"
+                    className="inline-flex items-center gap-1.5 text-sm text-primary font-medium hover:text-primary-600 bg-primary/8 rounded-lg px-3 py-1.5"
                   >
-                    📎 Unduh {regulasi.file_nama || "dokumen"} ↗
+                    <FileDown size={14} /> Unduh {regulasi.file_nama || "dokumen"}
                   </a>
                 )}
               </div>
 
-              <div className="flex items-center gap-3 pt-4 border-t border-paper-line">
+              <div className="flex items-center gap-3 pt-4 border-t border-border">
                 <button
                   onClick={() => {
                     setNewFile(null);
                     setEditing(true);
                   }}
-                  className="rounded-md bg-ink text-paper-card text-sm font-medium px-4 py-2 hover:bg-ink-light transition-colors"
+                  className="inline-flex items-center gap-1.5 rounded-lg bg-primary text-white text-sm font-semibold px-4 py-2.5 hover:bg-primary-600 transition-colors"
                 >
+                  <Pencil size={14} />
                   Ubah Data
                 </button>
                 <button
                   onClick={handleDelete}
-                  className="text-sm text-status-dicabut hover:underline"
+                  className="inline-flex items-center gap-1.5 text-sm text-status-dicabut hover:bg-status-dicabut-bg rounded-lg px-3 py-2.5 transition-colors"
                 >
+                  <Trash2 size={14} />
                   Hapus regulasi
                 </button>
               </div>
@@ -271,83 +287,56 @@ export default function DetailRegulasiPage() {
           ) : (
             <div className="space-y-4">
               <div>
-                <label className="block text-xs font-medium text-slate-muted mb-1">
-                  Judul regulasi
-                </label>
+                <label className={labelClass}>Judul regulasi</label>
                 <input
                   value={regulasi.judul}
-                  onChange={(e) =>
-                    setRegulasi({ ...regulasi, judul: e.target.value })
-                  }
-                  className="w-full rounded-md border border-paper-line bg-white px-3 py-2 text-sm focus:border-ink focus:outline-none"
+                  onChange={(e) => setRegulasi({ ...regulasi, judul: e.target.value })}
+                  className={inputClass}
                 />
               </div>
 
               <div className="grid sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-medium text-slate-muted mb-1">
-                    Nomor regulasi
-                  </label>
+                  <label className={labelClass}>Nomor regulasi</label>
                   <input
                     value={regulasi.nomor_regulasi ?? ""}
-                    onChange={(e) =>
-                      setRegulasi({
-                        ...regulasi,
-                        nomor_regulasi: e.target.value,
-                      })
-                    }
-                    className="w-full rounded-md border border-paper-line bg-white px-3 py-2 text-sm font-mono focus:border-ink focus:outline-none"
+                    onChange={(e) => setRegulasi({ ...regulasi, nomor_regulasi: e.target.value })}
+                    className={`${inputClass} font-mono`}
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-slate-muted mb-1">
-                    Tahun terbit
-                  </label>
+                  <label className={labelClass}>Tahun terbit</label>
                   <input
                     type="number"
                     value={regulasi.tahun}
-                    onChange={(e) =>
-                      setRegulasi({ ...regulasi, tahun: Number(e.target.value) })
-                    }
-                    className="w-full rounded-md border border-paper-line bg-white px-3 py-2 text-sm focus:border-ink focus:outline-none"
+                    onChange={(e) => setRegulasi({ ...regulasi, tahun: Number(e.target.value) })}
+                    className={inputClass}
                   />
                 </div>
               </div>
 
               <div className="grid sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-medium text-slate-muted mb-1">
-                    Jenis regulasi
-                  </label>
+                  <label className={labelClass}>Jenis regulasi</label>
                   <select
                     value={regulasi.jenis}
-                    onChange={(e) =>
-                      setRegulasi({ ...regulasi, jenis: e.target.value })
-                    }
-                    className="w-full rounded-md border border-paper-line bg-white px-3 py-2 text-sm focus:border-ink focus:outline-none"
+                    onChange={(e) => setRegulasi({ ...regulasi, jenis: e.target.value })}
+                    className={inputClass}
                   >
                     {JENIS_REGULASI.map((j) => (
-                      <option key={j} value={j}>
-                        {j}
-                      </option>
+                      <option key={j} value={j}>{j}</option>
                     ))}
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-slate-muted mb-1">
-                    Kategori
-                  </label>
+                  <label className={labelClass}>Kategori</label>
                   <select
                     value={regulasi.kategori}
-                    onChange={(e) =>
-                      setRegulasi({ ...regulasi, kategori: e.target.value })
-                    }
-                    className="w-full rounded-md border border-paper-line bg-white px-3 py-2 text-sm focus:border-ink focus:outline-none"
+                    onChange={(e) => setRegulasi({ ...regulasi, kategori: e.target.value })}
+                    className={inputClass}
                   >
                     {KATEGORI_REGULASI.map((k) => (
-                      <option key={k} value={k}>
-                        {k}
-                      </option>
+                      <option key={k} value={k}>{k}</option>
                     ))}
                   </select>
                 </div>
@@ -355,33 +344,21 @@ export default function DetailRegulasiPage() {
 
               <div className="grid sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-medium text-slate-muted mb-1">
-                    Instansi penerbit
-                  </label>
+                  <label className={labelClass}>Instansi penerbit</label>
                   <input
                     value={regulasi.instansi_penerbit}
-                    onChange={(e) =>
-                      setRegulasi({
-                        ...regulasi,
-                        instansi_penerbit: e.target.value,
-                      })
-                    }
-                    className="w-full rounded-md border border-paper-line bg-white px-3 py-2 text-sm focus:border-ink focus:outline-none"
+                    onChange={(e) => setRegulasi({ ...regulasi, instansi_penerbit: e.target.value })}
+                    className={inputClass}
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-slate-muted mb-1">
-                    Status keberlakuan
-                  </label>
+                  <label className={labelClass}>Status keberlakuan</label>
                   <select
                     value={regulasi.status}
                     onChange={(e) =>
-                      setRegulasi({
-                        ...regulasi,
-                        status: e.target.value as Regulasi["status"],
-                      })
+                      setRegulasi({ ...regulasi, status: e.target.value as Regulasi["status"] })
                     }
-                    className="w-full rounded-md border border-paper-line bg-white px-3 py-2 text-sm focus:border-ink focus:outline-none"
+                    className={inputClass}
                   >
                     <option value="berlaku">Berlaku</option>
                     <option value="ditinjau">Ditinjau</option>
@@ -391,64 +368,64 @@ export default function DetailRegulasiPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-slate-muted mb-1">
-                  Ringkasan / deskripsi
-                </label>
+                <label className={labelClass}>Ringkasan / deskripsi</label>
                 <textarea
                   rows={3}
                   value={regulasi.deskripsi ?? ""}
-                  onChange={(e) =>
-                    setRegulasi({ ...regulasi, deskripsi: e.target.value })
-                  }
-                  className="w-full rounded-md border border-paper-line bg-white px-3 py-2 text-sm focus:border-ink focus:outline-none"
+                  onChange={(e) => setRegulasi({ ...regulasi, deskripsi: e.target.value })}
+                  className={inputClass}
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-slate-muted mb-1">
-                  Tautan sumber resmi
-                </label>
+                <label className={labelClass}>Tautan sumber resmi</label>
                 <input
                   type="url"
                   value={regulasi.link_resmi ?? ""}
-                  onChange={(e) =>
-                    setRegulasi({ ...regulasi, link_resmi: e.target.value })
-                  }
-                  className="w-full rounded-md border border-paper-line bg-white px-3 py-2 text-sm focus:border-ink focus:outline-none"
+                  onChange={(e) => setRegulasi({ ...regulasi, link_resmi: e.target.value })}
+                  className={inputClass}
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-slate-muted mb-1">
-                  Dokumen (PDF/Word)
-                </label>
+                <label className={labelClass}>Dokumen (PDF/Word)</label>
                 {regulasi.file_nama && !newFile && (
-                  <p className="text-xs text-slate-muted mb-2">
-                    Saat ini: 📎 {regulasi.file_nama}
+                  <p className="flex items-center gap-1.5 text-xs text-ink-subtle mb-2">
+                    <FileDown size={12} /> Saat ini: {regulasi.file_nama}
                   </p>
                 )}
-                <input
-                  type="file"
-                  accept=".pdf,.doc,.docx"
-                  onChange={(e) => setNewFile(e.target.files?.[0] ?? null)}
-                  className="w-full text-sm text-slate-muted file:mr-3 file:rounded-md file:border-0 file:bg-ink file:text-paper-card file:text-xs file:font-medium file:px-3 file:py-2 file:cursor-pointer"
-                />
-                <p className="text-xs text-slate-muted mt-1">
-                  Kosongkan jika tidak ingin mengganti dokumen yang sudah ada.
-                </p>
+                <label className="flex items-center gap-3 rounded-lg border border-dashed border-border-strong bg-surface-muted px-4 py-3.5 cursor-pointer hover:border-primary hover:bg-primary/5 transition-colors">
+                  <span className="inline-flex items-center justify-center w-9 h-9 rounded-lg bg-primary/8 text-primary shrink-0">
+                    <UploadCloud size={16} />
+                  </span>
+                  <span className="min-w-0">
+                    <span className="block text-sm font-medium text-ink truncate">
+                      {newFile ? newFile.name : "Klik untuk mengganti dokumen"}
+                    </span>
+                    <span className="block text-xs text-ink-faint">
+                      Kosongkan jika tidak ingin mengganti dokumen yang sudah ada.
+                    </span>
+                  </span>
+                  <input
+                    type="file"
+                    accept=".pdf,.doc,.docx"
+                    onChange={(e) => setNewFile(e.target.files?.[0] ?? null)}
+                    className="hidden"
+                  />
+                </label>
               </div>
 
               {error && (
-                <p className="text-sm text-status-dicabut bg-status-dicabut/10 rounded-md px-3 py-2">
+                <p className="text-sm text-status-dicabut bg-status-dicabut-bg rounded-lg px-3 py-2.5">
                   {error}
                 </p>
               )}
 
-              <div className="flex items-center gap-3 pt-2 border-t border-paper-line">
+              <div className="flex items-center gap-3 pt-2 border-t border-border">
                 <button
                   onClick={handleSave}
                   disabled={saving}
-                  className="rounded-md bg-ink text-paper-card text-sm font-medium px-4 py-2 hover:bg-ink-light transition-colors disabled:opacity-60"
+                  className="rounded-lg bg-primary text-white text-sm font-semibold px-5 py-2.5 hover:bg-primary-600 transition-colors disabled:opacity-60 mt-4"
                 >
                   {saving ? "Menyimpan..." : "Simpan Perubahan"}
                 </button>
@@ -458,7 +435,7 @@ export default function DetailRegulasiPage() {
                     setEditing(false);
                     setError(null);
                   }}
-                  className="text-sm text-slate-muted hover:text-ink"
+                  className="text-sm text-ink-subtle hover:text-ink mt-4"
                 >
                   Batal
                 </button>
@@ -466,7 +443,7 @@ export default function DetailRegulasiPage() {
             </div>
           )}
         </div>
-      </main>
-    </div>
+      </div>
+    </AppShell>
   );
 }

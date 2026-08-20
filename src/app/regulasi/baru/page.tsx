@@ -3,9 +3,14 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
-import Navbar from "@/components/Navbar";
+import AppShell from "@/components/AppShell";
 import { JENIS_REGULASI, KATEGORI_REGULASI } from "@/lib/types";
 import { friendlyStorageError } from "@/lib/storage-error";
+import { UploadCloud } from "lucide-react";
+
+const inputClass =
+  "w-full rounded-lg border border-border bg-surface-muted px-3 py-2.5 text-sm text-ink focus:border-primary focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/10 transition-shadow";
+const labelClass = "block text-xs font-semibold text-ink-subtle mb-1.5";
 
 export default function TambahRegulasiPage() {
   const router = useRouter();
@@ -91,49 +96,42 @@ export default function TambahRegulasiPage() {
   }
 
   return (
-    <div className="min-h-screen">
-      <Navbar />
-      <main className="max-w-2xl mx-auto px-4 sm:px-6 py-8">
-        <h1 className="font-display text-2xl text-ink mb-1">
+    <AppShell active="regulasi" title="Tambah Regulasi" showAddButton={false}>
+      <div className="max-w-2xl mx-auto">
+        <h2 className="font-display text-xl font-bold text-ink mb-1">
           Tambah Regulasi
-        </h1>
-        <p className="text-sm text-slate-muted mb-6">
+        </h2>
+        <p className="text-sm text-ink-subtle mb-6">
           Lengkapi data regulasi agar mudah ditemukan dan dikelola auditor lain.
         </p>
 
         <form
           onSubmit={handleSubmit}
-          className="bg-paper-card border border-paper-line rounded-lg shadow-card p-6 space-y-5"
+          className="bg-white border border-border rounded-2xl shadow-card p-5 sm:p-6 space-y-5"
         >
           <div>
-            <label className="block text-xs font-medium text-slate-muted mb-1">
-              Judul regulasi *
-            </label>
+            <label className={labelClass}>Judul regulasi *</label>
             <input
               required
               value={judul}
               onChange={(e) => setJudul(e.target.value)}
               placeholder='Contoh: "Petunjuk Teknis Pengelolaan Dana BOS Reguler Tahun 2026"'
-              className="w-full rounded-md border border-paper-line bg-white px-3 py-2 text-sm focus:border-ink focus:outline-none"
+              className={inputClass}
             />
           </div>
 
           <div className="grid sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-medium text-slate-muted mb-1">
-                Nomor regulasi
-              </label>
+              <label className={labelClass}>Nomor regulasi</label>
               <input
                 value={nomorRegulasi}
                 onChange={(e) => setNomorRegulasi(e.target.value)}
                 placeholder="Contoh: Permendikbudristek No. 63 Tahun 2023"
-                className="w-full rounded-md border border-paper-line bg-white px-3 py-2 text-sm font-mono focus:border-ink focus:outline-none"
+                className={`${inputClass} font-mono`}
               />
             </div>
             <div>
-              <label className="block text-xs font-medium text-slate-muted mb-1">
-                Tahun terbit *
-              </label>
+              <label className={labelClass}>Tahun terbit *</label>
               <input
                 type="number"
                 required
@@ -141,41 +139,25 @@ export default function TambahRegulasiPage() {
                 max={2100}
                 value={tahun}
                 onChange={(e) => setTahun(Number(e.target.value))}
-                className="w-full rounded-md border border-paper-line bg-white px-3 py-2 text-sm focus:border-ink focus:outline-none"
+                className={inputClass}
               />
             </div>
           </div>
 
           <div className="grid sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-medium text-slate-muted mb-1">
-                Jenis regulasi *
-              </label>
-              <select
-                value={jenis}
-                onChange={(e) => setJenis(e.target.value)}
-                className="w-full rounded-md border border-paper-line bg-white px-3 py-2 text-sm focus:border-ink focus:outline-none"
-              >
+              <label className={labelClass}>Jenis regulasi *</label>
+              <select value={jenis} onChange={(e) => setJenis(e.target.value)} className={inputClass}>
                 {JENIS_REGULASI.map((j) => (
-                  <option key={j} value={j}>
-                    {j}
-                  </option>
+                  <option key={j} value={j}>{j}</option>
                 ))}
               </select>
             </div>
             <div>
-              <label className="block text-xs font-medium text-slate-muted mb-1">
-                Kategori *
-              </label>
-              <select
-                value={kategori}
-                onChange={(e) => setKategori(e.target.value)}
-                className="w-full rounded-md border border-paper-line bg-white px-3 py-2 text-sm focus:border-ink focus:outline-none"
-              >
+              <label className={labelClass}>Kategori *</label>
+              <select value={kategori} onChange={(e) => setKategori(e.target.value)} className={inputClass}>
                 {KATEGORI_REGULASI.map((k) => (
-                  <option key={k} value={k}>
-                    {k}
-                  </option>
+                  <option key={k} value={k}>{k}</option>
                 ))}
               </select>
             </div>
@@ -183,26 +165,18 @@ export default function TambahRegulasiPage() {
 
           <div className="grid sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-medium text-slate-muted mb-1">
-                Instansi penerbit *
-              </label>
+              <label className={labelClass}>Instansi penerbit *</label>
               <input
                 required
                 value={instansi}
                 onChange={(e) => setInstansi(e.target.value)}
                 placeholder="Contoh: Kemendikbudristek"
-                className="w-full rounded-md border border-paper-line bg-white px-3 py-2 text-sm focus:border-ink focus:outline-none"
+                className={inputClass}
               />
             </div>
             <div>
-              <label className="block text-xs font-medium text-slate-muted mb-1">
-                Status keberlakuan *
-              </label>
-              <select
-                value={status}
-                onChange={(e) => setStatus(e.target.value)}
-                className="w-full rounded-md border border-paper-line bg-white px-3 py-2 text-sm focus:border-ink focus:outline-none"
-              >
+              <label className={labelClass}>Status keberlakuan *</label>
+              <select value={status} onChange={(e) => setStatus(e.target.value)} className={inputClass}>
                 <option value="berlaku">Berlaku</option>
                 <option value="ditinjau">Ditinjau</option>
                 <option value="dicabut">Dicabut</option>
@@ -211,67 +185,72 @@ export default function TambahRegulasiPage() {
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-slate-muted mb-1">
-              Ringkasan / deskripsi
-            </label>
+            <label className={labelClass}>Ringkasan / deskripsi</label>
             <textarea
               value={deskripsi}
               onChange={(e) => setDeskripsi(e.target.value)}
               rows={3}
               placeholder="Ringkasan singkat isi regulasi dan relevansinya dengan audit Dana BOSP..."
-              className="w-full rounded-md border border-paper-line bg-white px-3 py-2 text-sm focus:border-ink focus:outline-none"
+              className={inputClass}
             />
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-slate-muted mb-1">
-              Tautan sumber resmi
-            </label>
+            <label className={labelClass}>Tautan sumber resmi</label>
             <input
               type="url"
               value={linkResmi}
               onChange={(e) => setLinkResmi(e.target.value)}
               placeholder="https://jdih.kemendikbud.go.id/..."
-              className="w-full rounded-md border border-paper-line bg-white px-3 py-2 text-sm focus:border-ink focus:outline-none"
+              className={inputClass}
             />
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-slate-muted mb-1">
-              Unggah dokumen (PDF)
+            <label className={labelClass}>Unggah dokumen (PDF)</label>
+            <label className="flex items-center gap-3 rounded-lg border border-dashed border-border-strong bg-surface-muted px-4 py-4 cursor-pointer hover:border-primary hover:bg-primary/5 transition-colors">
+              <span className="inline-flex items-center justify-center w-9 h-9 rounded-lg bg-primary/8 text-primary shrink-0">
+                <UploadCloud size={17} />
+              </span>
+              <span className="min-w-0">
+                <span className="block text-sm font-medium text-ink truncate">
+                  {file ? file.name : "Klik untuk memilih file"}
+                </span>
+                <span className="block text-xs text-ink-faint">PDF, DOC, atau DOCX — maks. 10 MB</span>
+              </span>
+              <input
+                type="file"
+                accept=".pdf,.doc,.docx"
+                onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+                className="hidden"
+              />
             </label>
-            <input
-              type="file"
-              accept=".pdf,.doc,.docx"
-              onChange={(e) => setFile(e.target.files?.[0] ?? null)}
-              className="w-full text-sm text-slate-muted file:mr-3 file:rounded-md file:border-0 file:bg-ink file:text-paper-card file:text-xs file:font-medium file:px-3 file:py-2 file:cursor-pointer"
-            />
           </div>
 
           {error && (
-            <p className="text-sm text-status-dicabut bg-status-dicabut/10 rounded-md px-3 py-2">
+            <p className="text-sm text-status-dicabut bg-status-dicabut-bg rounded-lg px-3 py-2.5">
               {error}
             </p>
           )}
 
-          <div className="flex items-center gap-3 pt-2">
+          <div className="flex items-center gap-3 pt-2 border-t border-border">
             <button
               type="submit"
               disabled={loading}
-              className="rounded-md bg-ink text-paper-card text-sm font-medium px-5 py-2.5 hover:bg-ink-light transition-colors disabled:opacity-60"
+              className="rounded-lg bg-primary text-white text-sm font-semibold px-5 py-2.5 hover:bg-primary-600 transition-colors disabled:opacity-60 mt-4"
             >
               {loading ? "Menyimpan..." : "Simpan Regulasi"}
             </button>
             <button
               type="button"
               onClick={() => router.back()}
-              className="text-sm text-slate-muted hover:text-ink"
+              className="text-sm text-ink-subtle hover:text-ink mt-4"
             >
               Batal
             </button>
           </div>
         </form>
-      </main>
-    </div>
+      </div>
+    </AppShell>
   );
 }

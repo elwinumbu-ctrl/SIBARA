@@ -31,9 +31,21 @@ export async function middleware(request: NextRequest) {
   } = await supabase.auth.getUser();
 
   const isAuthRoute = request.nextUrl.pathname.startsWith("/login");
-  const isProtectedRoute =
-    request.nextUrl.pathname.startsWith("/dashboard") ||
-    request.nextUrl.pathname.startsWith("/regulasi");
+  const PROTECTED_PREFIXES = [
+    "/dashboard",
+    "/regulasi",
+    "/kategori",
+    "/tahun",
+    "/status",
+    "/dokumen",
+    "/laporan",
+    "/rekapitulasi",
+    "/pengguna",
+    "/pengaturan",
+  ];
+  const isProtectedRoute = PROTECTED_PREFIXES.some((prefix) =>
+    request.nextUrl.pathname.startsWith(prefix)
+  );
 
   if (!user && isProtectedRoute) {
     const url = request.nextUrl.clone();
