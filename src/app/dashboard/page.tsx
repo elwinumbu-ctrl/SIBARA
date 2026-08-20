@@ -62,7 +62,12 @@ export default async function DashboardPage({
     hour < 11 ? "Selamat pagi" : hour < 15 ? "Selamat siang" : hour < 18 ? "Selamat sore" : "Selamat malam";
 
   return (
-    <AppShell active="dashboard" email={user?.email} subtitle="Ringkasan Bank Regulasi Dana BOSP">
+    <AppShell
+      active="dashboard"
+      email={user?.email}
+      subtitle="Ringkasan Bank Regulasi Dana BOSP"
+      showAddButton={false}
+    >
       {/* Hero */}
       <div className="relative overflow-hidden rounded-2xl bg-primary text-white mb-6">
         <div
@@ -92,7 +97,7 @@ export default async function DashboardPage({
             </div>
             <Link
               href="/regulasi/baru"
-              className="inline-flex items-center gap-1.5 rounded-lg bg-accent text-white text-sm font-semibold px-4 py-2.5 hover:bg-accent-light transition-colors shadow-lg shadow-black/10 self-start"
+              className="inline-flex items-center gap-1.5 rounded-lg bg-white/10 backdrop-blur-md border border-white/25 text-white text-sm font-semibold px-4 py-2.5 hover:bg-white/20 hover:border-white/40 transition-all shadow-lg shadow-black/10 self-start"
             >
               <Plus size={16} strokeWidth={2.4} />
               Tambah Regulasi
