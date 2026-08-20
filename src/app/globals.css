@@ -34,3 +34,12 @@ body {
   height: 8px;
   border-radius: 0 0 3px 3px;
 }
+
+/* Hide scrollbar for the horizontally-scrollable menu strip on small screens */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
