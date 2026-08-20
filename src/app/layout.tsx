@@ -1,11 +1,17 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { ThemeProvider } from "@/components/ThemeProvider";
 
 export const metadata: Metadata = {
   title: "SIBARA — Bank Regulasi Dana BOSP",
   description:
     "Sistem Informasi Bank Regulasi Dana BOSP Berbasis Digital — Inspektorat Kabupaten Sumba Barat",
 };
+
+// Mencegah "flash" tema salah saat halaman pertama kali dimuat: kelas
+// `dark` diterapkan ke <html> sebelum render, berdasarkan preferensi
+// tersimpan atau preferensi sistem.
+const NO_FLASH_THEME_SCRIPT = `(function(){try{var t=localStorage.getItem('sibara-theme')||'system';var d=t==='dark'||(t==='system'&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d)document.documentElement.classList.add('dark');}catch(e){}})();`;
 
 export default function RootLayout({
   children,
@@ -15,6 +21,7 @@ export default function RootLayout({
   return (
     <html lang="id">
       <head>
+        <script dangerouslySetInnerHTML={{ __html: NO_FLASH_THEME_SCRIPT }} />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
           rel="preconnect"
@@ -27,7 +34,7 @@ export default function RootLayout({
         />
       </head>
       <body className="bg-paper text-slate-text font-sans antialiased">
-        {children}
+        <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>
   );

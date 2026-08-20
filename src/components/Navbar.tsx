@@ -5,6 +5,51 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { useTheme, type ThemeChoice } from "@/components/ThemeProvider";
+
+const THEME_OPTIONS: {
+  value: ThemeChoice;
+  label: string;
+  icon: React.ReactNode;
+}[] = [
+  {
+    value: "light",
+    label: "Terang",
+    icon: (
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+        <circle cx="12" cy="12" r="4.2" strokeLinecap="round" strokeLinejoin="round" />
+        <path
+          d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.55 1.55M17.85 17.85l1.55 1.55M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.55-1.55M17.85 6.15l1.55-1.55"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    ),
+  },
+  {
+    value: "dark",
+    label: "Gelap",
+    icon: (
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+        <path
+          d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7Z"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    ),
+  },
+  {
+    value: "system",
+    label: "Ikuti Sistem",
+    icon: (
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+        <rect x="3" y="4.5" width="18" height="12" rx="1.5" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M8.5 20.5h7M12 16.5v4" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    ),
+  },
+];
 
 const MENU_ITEMS = [
   { label: "Beranda", href: "/dashboard" },
@@ -20,6 +65,8 @@ export default function Navbar({ email }: { email?: string }) {
   const searchParams = useSearchParams();
   const supabase = createClient();
   const [helpOpen, setHelpOpen] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const { theme, setTheme } = useTheme();
 
   async function handleLogout() {
     await supabase.auth.signOut();
@@ -141,6 +188,60 @@ export default function Navbar({ email }: { email?: string }) {
                       Sumba Barat. Hubungi admin sistem untuk pembuatan akun
                       atau kendala teknis.
                     </p>
+                  </div>
+                </>
+              )}
+            </div>
+
+            <div className="relative">
+              <button
+                onClick={() => setSettingsOpen((v) => !v)}
+                className="inline-flex items-center gap-1.5 whitespace-nowrap px-4 py-3 text-sm text-paper-card/70 hover:text-paper-card transition-colors"
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                  <circle cx="12" cy="12" r="3" strokeLinecap="round" strokeLinejoin="round" />
+                  <path
+                    d="M19.4 13.5a1.7 1.7 0 0 0 .35 1.87l.06.06a2.06 2.06 0 1 1-2.92 2.92l-.06-.06a1.7 1.7 0 0 0-1.87-.35 1.7 1.7 0 0 0-1.03 1.56V19.6a2.06 2.06 0 1 1-4.12 0v-.09a1.7 1.7 0 0 0-1.11-1.56 1.7 1.7 0 0 0-1.87.35l-.06.06a2.06 2.06 0 1 1-2.92-2.92l.06-.06a1.7 1.7 0 0 0 .35-1.87 1.7 1.7 0 0 0-1.56-1.03H4.4a2.06 2.06 0 1 1 0-4.12h.09A1.7 1.7 0 0 0 6.05 8.8a1.7 1.7 0 0 0-.35-1.87l-.06-.06A2.06 2.06 0 1 1 8.56 3.95l.06.06a1.7 1.7 0 0 0 1.87.35H10.6a1.7 1.7 0 0 0 1.03-1.56V2.66a2.06 2.06 0 1 1 4.12 0v.09a1.7 1.7 0 0 0 1.03 1.56h.11a1.7 1.7 0 0 0 1.87-.35l.06-.06a2.06 2.06 0 1 1 2.92 2.92l-.06.06a1.7 1.7 0 0 0-.35 1.87V8.8a1.7 1.7 0 0 0 1.56 1.03h.09a2.06 2.06 0 1 1 0 4.12h-.09a1.7 1.7 0 0 0-1.56 1.03Z"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+                Pengaturan
+              </button>
+              {settingsOpen && (
+                <>
+                  <div
+                    className="fixed inset-0 z-10"
+                    onClick={() => setSettingsOpen(false)}
+                  />
+                  <div className="absolute right-0 top-full mt-1 w-64 rounded-lg bg-paper-card border border-paper-line shadow-2xl p-4 z-20 text-left">
+                    <p className="text-xs font-medium text-ink mb-3">Tema</p>
+                    <div className="space-y-1">
+                      {THEME_OPTIONS.map((opt) => {
+                        const active = theme === opt.value;
+                        return (
+                          <button
+                            key={opt.value}
+                            onClick={() => setTheme(opt.value)}
+                            className={`w-full flex items-center gap-2.5 rounded-md px-2.5 py-2 text-sm transition-colors ${
+                              active
+                                ? "bg-ink/5 text-ink font-medium"
+                                : "text-slate-muted hover:bg-ink/5 hover:text-ink"
+                            }`}
+                          >
+                            <span className={active ? "text-seal" : "text-slate-muted"}>
+                              {opt.icon}
+                            </span>
+                            <span className="flex-1 text-left">{opt.label}</span>
+                            {active && (
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+                                <path d="m5 12.5 4.5 4.5L19 7" strokeLinecap="round" strokeLinejoin="round" />
+                              </svg>
+                            )}
+                          </button>
+                        );
+                      })}
+                    </div>
                   </div>
                 </>
               )}

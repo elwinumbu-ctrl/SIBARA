@@ -43,3 +43,96 @@ body {
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
+/* ========================================================================
+   Tema Gelap
+   Diterapkan lewat kelas `dark` pada <html> (lihat ThemeProvider).
+   Ditulis sebagai override atas nama kelas Tailwind yang sudah dipakai di
+   seluruh komponen, supaya tema gelap otomatis berlaku di semua halaman
+   tanpa perlu mengubah setiap komponen satu per satu.
+   ========================================================================= */
+
+html.dark body {
+  background-color: #101b33;
+  background-image: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.18) 0%,
+    rgba(0, 0, 0, 0) 220px
+  );
+}
+
+html.dark ::selection {
+  background-color: #d3a758;
+  color: #101b33;
+}
+
+/* Permukaan kartu & panel */
+html.dark .bg-paper-card {
+  background-color: #1b2a4a;
+}
+html.dark .bg-paper-card\/90 {
+  background-color: rgba(27, 42, 74, 0.9);
+}
+html.dark .bg-paper-card\/75 {
+  background-color: rgba(27, 42, 74, 0.75);
+}
+
+/* Garis pembatas */
+html.dark .border-paper-line {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+html.dark .text-paper-line {
+  color: rgba(255, 255, 255, 0.18);
+}
+
+/* Teks judul & isi */
+html.dark .text-ink {
+  color: #fbf9f4;
+}
+html.dark .hover\:text-ink:hover {
+  color: #fbf9f4;
+}
+html.dark .text-ink-light {
+  color: #d3a758;
+}
+html.dark .text-slate-text {
+  color: rgba(251, 249, 244, 0.88);
+}
+html.dark .text-slate-muted {
+  color: rgba(251, 249, 244, 0.55);
+}
+
+/* Ikon chip & ring beraksen ink */
+html.dark .bg-ink\/5 {
+  background-color: rgba(251, 249, 244, 0.08);
+}
+html.dark .ring-ink\/10 {
+  --tw-ring-color: rgba(251, 249, 244, 0.16);
+}
+
+/* Input, select, textarea */
+html.dark .bg-white {
+  background-color: #16223d;
+}
+html.dark .focus\:border-ink:focus {
+  border-color: #d3a758;
+}
+html.dark input::placeholder,
+html.dark textarea::placeholder {
+  color: rgba(251, 249, 244, 0.32);
+}
+html.dark select option {
+  background-color: #16223d;
+  color: #fbf9f4;
+}
+
+body,
+.bg-paper-card,
+.border-paper-line,
+.bg-white,
+.text-ink,
+.text-slate-text,
+.text-slate-muted {
+  transition: background-color 0.15s ease, border-color 0.15s ease,
+    color 0.15s ease;
+}
