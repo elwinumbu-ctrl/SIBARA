@@ -37,6 +37,13 @@ export default function LoginPage() {
 
   return (
     <div className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-ink-dark px-4 py-12 text-paper-card">
+      {/* photo background */}
+      <div
+        className="pointer-events-none absolute inset-0 bg-cover bg-center"
+        style={{ backgroundImage: "url(/login-bg.png)" }}
+      />
+      {/* dark overlay for readability */}
+      <div className="pointer-events-none absolute inset-0 bg-ink-dark/80" />
       {/* decorative full-page background */}
       <div
         className="pointer-events-none absolute inset-0 opacity-[0.06]"
