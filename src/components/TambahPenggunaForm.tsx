@@ -2,10 +2,8 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { inputClass, labelClass } from "@/lib/form-styles";
 
-const inputClass =
-  "w-full rounded-lg border border-border bg-surface-muted px-3 py-2.5 text-sm text-ink focus:border-accent focus:bg-white focus:outline-none focus:ring-2 focus:ring-accent/10 transition-shadow";
-const labelClass = "block text-xs font-semibold text-ink-subtle mb-1.5";
 
 function generatePassword() {
   const chars =
@@ -63,7 +61,7 @@ export default function TambahPenggunaForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-white/95 backdrop-blur-sm border border-white/70 rounded-2xl shadow-panel p-5 sm:p-6 space-y-5"
+      className="surface-card p-5 sm:p-6 space-y-5"
     >
       <div>
         <label className={labelClass}>Nama lengkap *</label>

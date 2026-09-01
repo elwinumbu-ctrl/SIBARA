@@ -6,11 +6,9 @@ import { createClient } from "@/lib/supabase/client";
 import AppShell from "@/components/AppShell";
 import { JENIS_REGULASI, KATEGORI_REGULASI } from "@/lib/types";
 import { friendlyStorageError } from "@/lib/storage-error";
+import { inputClass, labelClass } from "@/lib/form-styles";
 import { UploadCloud } from "lucide-react";
 
-const inputClass =
-  "w-full rounded-lg border border-border bg-surface-muted px-3 py-2.5 text-sm text-ink focus:border-accent focus:bg-white focus:outline-none focus:ring-2 focus:ring-accent/10 transition-shadow";
-const labelClass = "block text-xs font-semibold text-ink-subtle mb-1.5";
 
 export default function TambahRegulasiPage() {
   const router = useRouter();
@@ -107,7 +105,7 @@ export default function TambahRegulasiPage() {
 
         <form
           onSubmit={handleSubmit}
-          className="bg-white/95 backdrop-blur-sm border border-white/70 rounded-2xl shadow-panel p-5 sm:p-6 space-y-5"
+          className="surface-card p-5 sm:p-6 space-y-5"
         >
           <div>
             <label className={labelClass}>Judul regulasi *</label>

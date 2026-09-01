@@ -21,7 +21,7 @@ export default function Loading() {
             {[0, 1, 2, 3].map((i) => (
               <div
                 key={i}
-                className="bg-white/95 backdrop-blur-sm border border-white/70 rounded-2xl shadow-panel px-5 py-5 animate-pulse"
+                className="surface-card px-5 py-5 animate-pulse"
               >
                 <div className="h-2.5 w-20 rounded-full bg-surface-subtle mb-4" />
                 <div className="h-8 w-14 rounded-lg bg-surface-subtle" />
@@ -33,7 +33,7 @@ export default function Loading() {
             {[0, 1, 2].map((i) => (
               <div
                 key={i}
-                className="h-20 bg-white/95 backdrop-blur-sm border border-white/70 rounded-2xl shadow-panel animate-pulse"
+                className="h-20 surface-card animate-pulse"
               />
             ))}
           </div>

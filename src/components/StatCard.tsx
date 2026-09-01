@@ -32,16 +32,7 @@ export default function StatCard({
   const hex = TONE_HEX[tone];
 
   return (
-    <div
-      className="group relative overflow-hidden rounded-2xl px-5 py-5 border transition-all duration-200 hover:-translate-y-0.5"
-      style={{
-        background: "rgba(255,255,255,0.06)",
-        borderColor: "rgba(255,255,255,0.08)",
-        boxShadow: "0 8px 30px rgba(0,0,0,0.15)",
-        backdropFilter: "blur(12px)",
-        WebkitBackdropFilter: "blur(12px)",
-      }}
-    >
+    <div className="surface-card-dark group relative overflow-hidden px-5 py-5 transition-all duration-200 hover:-translate-y-0.5">
       <span
         className="pointer-events-none absolute -top-8 -right-8 w-24 h-24 rounded-full blur-2xl opacity-30 transition-opacity group-hover:opacity-45"
         style={{ backgroundColor: hex }}

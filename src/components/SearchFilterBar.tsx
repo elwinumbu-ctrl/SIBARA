@@ -41,7 +41,7 @@ export default function SearchFilterBar({ tahunList }: { tahunList: number[] }) 
   }
 
   const selectClass =
-    "w-full rounded-lg border border-border bg-white pl-3 pr-8 py-2.5 text-sm text-ink appearance-none focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/10 transition-shadow";
+    "w-full rounded-lg border border-border bg-surface-muted pl-3 pr-8 py-2.5 text-sm text-ink appearance-none focus:border-accent focus:bg-white focus:outline-none focus:ring-2 focus:ring-accent/10 transition-shadow";
 
   return (
     <form

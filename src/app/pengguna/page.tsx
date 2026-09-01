@@ -87,7 +87,7 @@ export default async function PenggunaPage() {
       addLabel="Tambah Pengguna"
     >
       <div className="max-w-3xl space-y-4">
-        <div className="bg-white/95 backdrop-blur-sm border border-white/70 rounded-2xl shadow-panel p-5 sm:p-6">
+        <div className="surface-card p-5 sm:p-6">
           <div className="flex items-center gap-4 mb-5">
             <span className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-primary/10 text-primary font-display font-bold text-lg">
               {initials}
@@ -124,7 +124,7 @@ export default async function PenggunaPage() {
         </div>
 
         {isAdmin ? (
-          <div className="bg-white/95 backdrop-blur-sm border border-white/70 rounded-2xl shadow-panel p-5 sm:p-6">
+          <div className="surface-card p-5 sm:p-6">
             <div className="flex items-center justify-between gap-3 mb-4">
               <div className="flex items-center gap-2.5">
                 <span className="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-primary/8 text-primary">

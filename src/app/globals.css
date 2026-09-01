@@ -41,6 +41,32 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.6);
 }
 
+/* Canonical light-surface card — the base "container" every workspace page
+   (kategori, jenis, tahun, status, dokumen, laporan, rekapitulasi, pengaturan,
+   pengguna, regulasi list/detail/form, dashboard's "Regulasi Terbaru" rows,
+   loading skeletons, etc.) builds on. Defined once so every menu renders the
+   same card no matter how its internal layout differs. */
+.surface-card {
+  background-color: rgb(255 255 255 / 0.95);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border: 1px solid rgb(255 255 255 / 0.7);
+  border-radius: 18px; /* rounded-2xl */
+  box-shadow: 0 4px 16px rgba(16,36,72,0.07), 0 1px 3px rgba(16,24,40,0.05); /* shadow-panel */
+}
+
+/* Dark counterpart of .surface-card, for panels living on the cinematic navy
+   dashboard canvas (or any future dark-context page) — same shape/rhythm as
+   the light card so the two contexts still read as one design system. */
+.surface-card-dark {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
 ::selection {
   background-color: #155EEF;
   color: #FFFFFF;

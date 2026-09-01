@@ -174,16 +174,7 @@ export default async function DashboardPage() {
 
       <div className="grid lg:grid-cols-5 gap-4 mb-6">
         {/* Sebaran per Jenis Regulasi — donut chart, dark glass panel */}
-        <div
-          className="lg:col-span-2 rounded-2xl p-5 border"
-          style={{
-            background: "rgba(255,255,255,0.05)",
-            borderColor: "rgba(255,255,255,0.08)",
-            boxShadow: "0 8px 30px rgba(0,0,0,0.15)",
-            backdropFilter: "blur(12px)",
-            WebkitBackdropFilter: "blur(12px)",
-          }}
-        >
+        <div className="surface-card-dark lg:col-span-2 p-5">
           <div className="flex items-center justify-between mb-4">
             <h3 className="font-display font-semibold text-sm text-white">
               Sebaran per Jenis Regulasi
@@ -255,16 +246,7 @@ export default async function DashboardPage() {
         </div>
 
         {/* Regulasi Terbaru — dark glass panel */}
-        <div
-          className="lg:col-span-3 rounded-2xl p-5 border"
-          style={{
-            background: "rgba(255,255,255,0.05)",
-            borderColor: "rgba(255,255,255,0.08)",
-            boxShadow: "0 8px 30px rgba(0,0,0,0.15)",
-            backdropFilter: "blur(12px)",
-            WebkitBackdropFilter: "blur(12px)",
-          }}
-        >
+        <div className="surface-card-dark lg:col-span-3 p-5">
           <div className="flex items-center justify-between mb-4">
             <h3 className="font-display font-semibold text-sm text-white">
               Regulasi Terbaru
@@ -283,6 +265,7 @@ export default async function DashboardPage() {
               title="Belum ada regulasi terdaftar"
               actionLabel="Tambah Regulasi"
               actionHref="/regulasi/baru"
+              dark
             />
           ) : (
             <div className="flex flex-col gap-3">

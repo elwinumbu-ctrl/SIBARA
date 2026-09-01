@@ -63,7 +63,7 @@ function FolderSection({
   const [open, setOpen] = useState(defaultOpen);
 
   return (
-    <div className="bg-white/95 backdrop-blur-sm border border-white/70 rounded-2xl shadow-panel overflow-hidden">
+    <div className="surface-card overflow-hidden">
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}

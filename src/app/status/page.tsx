@@ -57,7 +57,7 @@ export default async function StatusPage() {
             <Link
               key={s.key}
               href={`/regulasi?status=${s.key}`}
-              className="group bg-white/95 backdrop-blur-sm border border-white/70 rounded-2xl shadow-panel hover:shadow-card-hover hover:border-accent/30 hover-lift p-5 flex flex-col"
+              className="group surface-card hover:shadow-card-hover hover:border-accent/30 hover-lift p-5 flex flex-col"
             >
               <div className="flex items-center justify-between mb-4">
                 <span className={`inline-flex items-center justify-center w-11 h-11 rounded-xl ${s.bg} ${s.text}`}>
