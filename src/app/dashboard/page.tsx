@@ -8,6 +8,8 @@ import Link from "next/link";
 import { Regulasi } from "@/lib/types";
 import { FileSearch, Plus } from "lucide-react";
 
+const KELOMPOK_UTAMA = ["Undang-Undang", "Peraturan Menteri", "Peraturan Daerah"];
+
 export const dynamic = "force-dynamic";
 
 export default async function DashboardPage({
@@ -30,7 +32,17 @@ export default async function DashboardPage({
       `judul.ilike.%${searchParams.q}%,nomor_regulasi.ilike.%${searchParams.q}%`
     );
   }
-  if (searchParams.jenis) query = query.eq("jenis", searchParams.jenis);
+  if (searchParams.jenis) {
+    if (searchParams.jenis === "__lainnya__") {
+      query = query.not(
+        "jenis",
+        "in",
+        `(${KELOMPOK_UTAMA.map((j) => `"${j}"`).join(",")})`
+      );
+    } else {
+      query = query.eq("jenis", searchParams.jenis);
+    }
+  }
   if (searchParams.kategori) query = query.eq("kategori", searchParams.kategori);
   if (searchParams.tahun) query = query.eq("tahun", Number(searchParams.tahun));
   if (searchParams.status) query = query.eq("status", searchParams.status);

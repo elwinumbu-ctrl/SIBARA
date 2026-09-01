@@ -24,6 +24,10 @@ const config: Config = {
           DEFAULT: "#B8862E",
           light: "#D3A758",
         },
+        perda: {
+          DEFAULT: "#2E6F72",
+          bg: "#EAF3F3",
+        },
         // Status semantik
         status: {
           berlaku: "#16A34A",
