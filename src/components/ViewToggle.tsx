@@ -21,7 +21,7 @@ export default function ViewToggle({ view }: { view: "grid" | "list" }) {
         onClick={() => setView("grid")}
         aria-label="Tampilan grid"
         className={`inline-flex items-center justify-center w-8 h-8 rounded-md transition-colors ${
-          view === "grid" ? "bg-primary text-white" : "text-ink-faint hover:text-ink hover:bg-surface-subtle"
+          view === "grid" ? "bg-accent text-white" : "text-ink-faint hover:text-ink hover:bg-surface-subtle"
         }`}
       >
         <LayoutGrid size={15} />
@@ -30,7 +30,7 @@ export default function ViewToggle({ view }: { view: "grid" | "list" }) {
         onClick={() => setView("list")}
         aria-label="Tampilan daftar"
         className={`inline-flex items-center justify-center w-8 h-8 rounded-md transition-colors ${
-          view === "list" ? "bg-primary text-white" : "text-ink-faint hover:text-ink hover:bg-surface-subtle"
+          view === "list" ? "bg-accent text-white" : "text-ink-faint hover:text-ink hover:bg-surface-subtle"
         }`}
       >
         <List size={15} />

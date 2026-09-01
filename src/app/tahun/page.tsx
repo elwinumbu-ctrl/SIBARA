@@ -38,24 +38,24 @@ export default async function TahunPage() {
               <Link
                 key={t}
                 href={`/regulasi?tahun=${t}`}
-                className="group flex items-center gap-4 rounded-xl px-3 py-3 hover:bg-surface-subtle transition-colors"
+                className="group flex items-center gap-4 rounded-xl px-3 py-3 hover:bg-accent/5 transition-colors"
               >
-                <span className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-primary/8 text-primary shrink-0">
+                <span className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-accent/8 text-accent shrink-0">
                   <CalendarRange size={17} strokeWidth={1.9} />
                 </span>
-                <span className="font-display font-semibold text-sm text-ink w-14 shrink-0">
+                <span className="font-display font-semibold text-sm text-ink w-14 shrink-0 group-hover:text-accent transition-colors">
                   {t}
                 </span>
                 <span className="flex-1 h-2 rounded-full bg-surface-subtle overflow-hidden">
                   <span
-                    className="block h-full rounded-full bg-primary/70"
+                    className="block h-full rounded-full bg-accent/70"
                     style={{ width: `${(counts[t] / maxCount) * 100}%` }}
                   />
                 </span>
                 <span className="text-xs text-ink-faint w-24 text-right shrink-0">
                   {counts[t]} regulasi
                 </span>
-                <ArrowUpRight size={15} className="text-ink-faint group-hover:text-primary transition-colors shrink-0" />
+                <ArrowUpRight size={15} className="text-ink-faint group-hover:text-accent group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0" />
               </Link>
             ))}
           </div>

@@ -3,9 +3,9 @@ import AppShell from "@/components/AppShell";
 import SearchFilterBar from "@/components/SearchFilterBar";
 import ViewToggle from "@/components/ViewToggle";
 import RegulasiFolderGroups from "@/components/RegulasiFolderGroups";
-import Link from "next/link";
+import EmptyState from "@/components/EmptyState";
 import { Regulasi } from "@/lib/types";
-import { FileSearch, Plus } from "lucide-react";
+import { FileSearch } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -76,25 +76,13 @@ export default async function RegulasiPage({
       )}
 
       {list.length === 0 && !error ? (
-        <div className="text-center py-16 bg-white border border-dashed border-border-strong rounded-2xl">
-          <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-primary/8 text-primary mb-4">
-            <FileSearch size={22} strokeWidth={1.7} />
-          </div>
-          <p className="font-display font-semibold text-lg text-ink mb-1">
-            Belum ada regulasi yang cocok
-          </p>
-          <p className="text-sm text-ink-subtle mb-4 max-w-sm mx-auto">
-            Ubah kata kunci atau filter, atau tambahkan regulasi baru ke
-            dalam bank regulasi.
-          </p>
-          <Link
-            href="/regulasi/baru"
-            className="inline-flex items-center gap-1.5 rounded-lg bg-primary text-white text-sm font-medium px-4 py-2 hover:bg-primary-600 transition-colors"
-          >
-            <Plus size={15} strokeWidth={2.2} />
-            Tambah Regulasi
-          </Link>
-        </div>
+        <EmptyState
+          icon={FileSearch}
+          title="Belum ada regulasi yang cocok"
+          description="Ubah kata kunci atau filter, atau tambahkan regulasi baru ke dalam bank regulasi."
+          actionLabel="Tambah Regulasi"
+          actionHref="/regulasi/baru"
+        />
       ) : (
         <RegulasiFolderGroups list={list} view={view} activeJenis={searchParams.jenis} />
       )}

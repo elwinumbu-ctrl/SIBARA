@@ -69,13 +69,13 @@ function FolderSection({
         onClick={() => setOpen((v) => !v)}
         className="w-full flex items-center gap-3 px-4 sm:px-5 py-3.5 hover:bg-surface-subtle transition-colors"
       >
-        <span className="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-primary/8 text-primary shrink-0">
+        <span className="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-accent/8 text-accent shrink-0">
           <Folder size={16} strokeWidth={1.9} />
         </span>
         <span className="font-display font-semibold text-sm text-ink flex-1 text-left truncate">
           {jenis}
         </span>
-        <span className="text-xs font-medium text-primary bg-primary/8 rounded-md px-2 py-0.5 shrink-0">
+        <span className="text-xs font-medium text-accent bg-accent/8 rounded-md px-2 py-0.5 shrink-0">
           {items.length}
         </span>
         <ChevronDown

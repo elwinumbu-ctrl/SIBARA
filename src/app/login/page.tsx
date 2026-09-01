@@ -53,11 +53,11 @@ export default function LoginPage() {
       />
       <div
         className="pointer-events-none absolute -top-32 -right-32 w-[480px] h-[480px] rounded-full opacity-20 blur-3xl"
-        style={{ backgroundColor: "#B8862E" }}
+        style={{ backgroundColor: "#155EEF" }}
       />
       <div
         className="pointer-events-none absolute -bottom-40 -left-32 w-[420px] h-[420px] rounded-full opacity-15 blur-3xl"
-        style={{ backgroundColor: "#3C5D8F" }}
+        style={{ backgroundColor: "#0EA5E9" }}
       />
 
       <div className="relative flex items-center gap-2.5 mb-10">
@@ -104,7 +104,7 @@ export default function LoginPage() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full rounded-lg border border-border bg-surface-muted pl-9 pr-3 py-2.5 text-sm text-ink focus:border-primary focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/10 transition-shadow"
+                className="w-full rounded-lg border border-border bg-surface-muted pl-9 pr-3 py-2.5 text-sm text-ink focus:border-accent focus:bg-white focus:outline-none focus:ring-2 focus:ring-accent/10 transition-shadow"
                 placeholder="nama@sumbabaratkab.go.id"
               />
             </div>
@@ -123,13 +123,13 @@ export default function LoginPage() {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full rounded-lg border border-border bg-surface-muted pl-9 pr-10 py-2.5 text-sm text-ink focus:border-primary focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/10 transition-shadow"
+                className="w-full rounded-lg border border-border bg-surface-muted pl-9 pr-10 py-2.5 text-sm text-ink focus:border-accent focus:bg-white focus:outline-none focus:ring-2 focus:ring-accent/10 transition-shadow"
                 placeholder="••••••••"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword((v) => !v)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-ink-faint hover:text-primary transition-colors"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-ink-faint hover:text-accent transition-colors"
                 aria-label={showPassword ? "Sembunyikan kata sandi" : "Tampilkan kata sandi"}
               >
                 {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
@@ -146,7 +146,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full inline-flex items-center justify-center gap-2 rounded-lg bg-primary text-white text-sm font-semibold py-2.5 hover:bg-primary-600 transition-colors disabled:opacity-60"
+            className="w-full inline-flex items-center justify-center gap-2 rounded-lg bg-accent text-white text-sm font-semibold py-2.5 hover:bg-accent-600 transition-colors disabled:opacity-60"
           >
             {loading ? (
               <>

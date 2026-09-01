@@ -95,7 +95,7 @@ export default async function RekapitulasiPage() {
                 <span className="text-xs text-ink-muted w-40 shrink-0 truncate">{k}</span>
                 <span className="flex-1 h-2 rounded-full bg-surface-subtle overflow-hidden">
                   <span
-                    className="block h-full rounded-full bg-primary/70"
+                    className="block h-full rounded-full bg-accent/70"
                     style={{ width: `${(kategoriCounts[k] / maxKategori) * 100}%` }}
                   />
                 </span>

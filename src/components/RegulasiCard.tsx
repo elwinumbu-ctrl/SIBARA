@@ -20,7 +20,7 @@ export default function RegulasiCard({
     return (
       <Link
         href={`/regulasi/${regulasi.id}`}
-        className="status-tab group flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5 bg-white border border-border rounded-2xl shadow-card hover:shadow-card-hover hover-lift p-4 sm:pl-6"
+        className="status-tab group flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5 bg-white border border-border rounded-2xl shadow-card hover:shadow-card-hover hover:border-accent/30 hover-lift p-4 sm:pl-6"
         style={{ "--tab-color": TAB_COLOR[regulasi.status] } as React.CSSProperties}
       >
         <div className="flex items-start gap-3 flex-1 min-w-0">
@@ -33,7 +33,7 @@ export default function RegulasiCard({
                 {regulasi.nomor_regulasi || "Tanpa nomor"} · {regulasi.tahun}
               </span>
             </div>
-            <h3 className="font-display font-semibold text-[15px] text-ink leading-snug truncate group-hover:text-primary transition-colors">
+            <h3 className="font-display font-semibold text-[15px] text-ink leading-snug truncate group-hover:text-accent transition-colors">
               {regulasi.judul}
             </h3>
             <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-ink-faint mt-1">
@@ -47,7 +47,7 @@ export default function RegulasiCard({
         </div>
 
         <div className="flex items-center gap-2 shrink-0 sm:ml-auto">
-          <span className="text-xs font-medium text-primary bg-primary/8 rounded-md px-2 py-1 hidden md:inline-block">
+          <span className="text-xs font-medium text-accent bg-accent/8 rounded-md px-2 py-1 hidden md:inline-block">
             {regulasi.kategori}
           </span>
           {regulasi.file_path && (
@@ -56,7 +56,7 @@ export default function RegulasiCard({
             </span>
           )}
           <StatusBadge status={regulasi.status} size="sm" />
-          <ArrowUpRight size={16} className="text-ink-faint group-hover:text-primary transition-colors" />
+          <ArrowUpRight size={16} className="text-ink-faint group-hover:text-accent group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
         </div>
       </Link>
     );
@@ -65,7 +65,7 @@ export default function RegulasiCard({
   return (
     <Link
       href={`/regulasi/${regulasi.id}`}
-      className="status-tab group block bg-white border border-border rounded-2xl shadow-card hover:shadow-card-hover hover-lift p-5"
+      className="status-tab group block bg-white border border-border rounded-2xl shadow-card hover:shadow-card-hover hover:border-accent/30 hover-lift p-5"
       style={{ "--tab-color": TAB_COLOR[regulasi.status] } as React.CSSProperties}
     >
       <div className="flex items-start justify-between gap-3 mb-3 pl-2.5">
@@ -75,7 +75,7 @@ export default function RegulasiCard({
         <StatusBadge status={regulasi.status} size="sm" />
       </div>
 
-      <h3 className="font-display font-semibold text-[15px] text-ink leading-snug mb-2 line-clamp-2 pl-2.5 group-hover:text-primary transition-colors">
+      <h3 className="font-display font-semibold text-[15px] text-ink leading-snug mb-2 line-clamp-2 pl-2.5 group-hover:text-accent transition-colors">
         {regulasi.judul}
       </h3>
 
@@ -88,7 +88,7 @@ export default function RegulasiCard({
       </div>
 
       <div className="mt-3 pt-3 border-t border-border flex items-center justify-between pl-2.5">
-        <span className="text-xs font-medium text-primary bg-primary/8 rounded-md px-2 py-0.5 truncate max-w-[65%]">
+        <span className="text-xs font-medium text-accent bg-accent/8 rounded-md px-2 py-0.5 truncate max-w-[65%]">
           {regulasi.kategori}
         </span>
         <span className="flex items-center gap-2 shrink-0">
@@ -97,7 +97,7 @@ export default function RegulasiCard({
               <Paperclip size={12} /> Dokumen
             </span>
           )}
-          <ArrowUpRight size={15} className="text-ink-faint group-hover:text-primary transition-colors" />
+          <ArrowUpRight size={15} className="text-ink-faint group-hover:text-accent group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
         </span>
       </div>
     </Link>

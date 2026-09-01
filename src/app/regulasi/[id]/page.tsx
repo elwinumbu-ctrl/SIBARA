@@ -20,7 +20,7 @@ import {
 } from "lucide-react";
 
 const inputClass =
-  "w-full rounded-lg border border-border bg-surface-muted px-3 py-2.5 text-sm text-ink focus:border-primary focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/10 transition-shadow";
+  "w-full rounded-lg border border-border bg-surface-muted px-3 py-2.5 text-sm text-ink focus:border-accent focus:bg-white focus:outline-none focus:ring-2 focus:ring-accent/10 transition-shadow";
 const labelClass = "block text-xs font-semibold text-ink-subtle mb-1.5";
 
 export default function DetailRegulasiPage() {
@@ -247,7 +247,7 @@ export default function DetailRegulasiPage() {
                     href={regulasi.link_resmi}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 text-sm text-primary font-medium hover:text-primary-600"
+                    className="inline-flex items-center gap-1.5 text-sm text-accent font-medium hover:text-accent-600"
                   >
                     Buka sumber resmi <ExternalLink size={13} />
                   </a>
@@ -257,7 +257,7 @@ export default function DetailRegulasiPage() {
                     href={fileUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 text-sm text-primary font-medium hover:text-primary-600 bg-primary/8 rounded-lg px-3 py-1.5"
+                    className="inline-flex items-center gap-1.5 text-sm text-accent font-medium hover:text-accent-600 bg-accent/8 rounded-lg px-3 py-1.5"
                   >
                     <FileDown size={14} /> Unduh {regulasi.file_nama || "dokumen"}
                   </a>
@@ -270,7 +270,7 @@ export default function DetailRegulasiPage() {
                     setNewFile(null);
                     setEditing(true);
                   }}
-                  className="inline-flex items-center gap-1.5 rounded-lg bg-primary text-white text-sm font-semibold px-4 py-2.5 hover:bg-primary-600 transition-colors"
+                  className="inline-flex items-center gap-1.5 rounded-lg bg-accent text-white text-sm font-semibold px-4 py-2.5 hover:bg-accent-600 transition-colors"
                 >
                   <Pencil size={14} />
                   Ubah Data
@@ -394,8 +394,8 @@ export default function DetailRegulasiPage() {
                     <FileDown size={12} /> Saat ini: {regulasi.file_nama}
                   </p>
                 )}
-                <label className="flex items-center gap-3 rounded-lg border border-dashed border-border-strong bg-surface-muted px-4 py-3.5 cursor-pointer hover:border-primary hover:bg-primary/5 transition-colors">
-                  <span className="inline-flex items-center justify-center w-9 h-9 rounded-lg bg-primary/8 text-primary shrink-0">
+                <label className="flex items-center gap-3 rounded-lg border border-dashed border-border-strong bg-surface-muted px-4 py-3.5 cursor-pointer hover:border-accent hover:bg-accent/5 transition-colors">
+                  <span className="inline-flex items-center justify-center w-9 h-9 rounded-lg bg-accent/8 text-accent shrink-0">
                     <UploadCloud size={16} />
                   </span>
                   <span className="min-w-0">
@@ -425,7 +425,7 @@ export default function DetailRegulasiPage() {
                 <button
                   onClick={handleSave}
                   disabled={saving}
-                  className="rounded-lg bg-primary text-white text-sm font-semibold px-5 py-2.5 hover:bg-primary-600 transition-colors disabled:opacity-60 mt-4"
+                  className="rounded-lg bg-accent text-white text-sm font-semibold px-5 py-2.5 hover:bg-accent-600 transition-colors disabled:opacity-60 mt-4"
                 >
                   {saving ? "Menyimpan..." : "Simpan Perubahan"}
                 </button>

@@ -43,7 +43,7 @@ export default async function LaporanPage() {
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="bg-surface-muted text-left text-[11px] uppercase tracking-wide text-ink-subtle">
+              <tr className="bg-accent/5 text-left text-[11px] font-semibold uppercase tracking-wide text-ink-subtle">
                 <th className="px-4 py-3 font-semibold">Nomor / Tahun</th>
                 <th className="px-4 py-3 font-semibold">Judul Regulasi</th>
                 <th className="px-4 py-3 font-semibold hidden md:table-cell">Jenis</th>
@@ -53,7 +53,7 @@ export default async function LaporanPage() {
             </thead>
             <tbody className="divide-y divide-border">
               {list.map((r) => (
-                <tr key={r.id} className="hover:bg-surface-muted transition-colors">
+                <tr key={r.id} className="hover:bg-accent/5 transition-colors">
                   <td className="px-4 py-3 font-mono text-xs text-ink-faint whitespace-nowrap">
                     {r.nomor_regulasi || "—"} · {r.tahun}
                   </td>

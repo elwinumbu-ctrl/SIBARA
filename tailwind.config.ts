@@ -20,9 +20,20 @@ const config: Config = {
           900: "#0D1526",
           DEFAULT: "#1B2A4A",
         },
+        // Royal blue — CTA, active states, links, focus
         accent: {
-          DEFAULT: "#B8862E",
-          light: "#D3A758",
+          DEFAULT: "#155EEF",
+          50: "#EDF3FF",
+          100: "#DCE8FF",
+          400: "#3B7BFA",
+          500: "#155EEF",
+          600: "#2563EB",
+          light: "#5B93FF",
+        },
+        // Cyan — secondary highlight, used sparingly for gradients/glow
+        cyan: {
+          DEFAULT: "#0EA5E9",
+          50: "#EBF9FF",
         },
         // Status semantik
         status: {
@@ -64,6 +75,7 @@ const config: Config = {
         card: "0 1px 2px rgba(16,24,40,0.04), 0 1px 3px rgba(16,24,40,0.06)",
         "card-hover": "0 4px 10px rgba(16,24,40,0.06), 0 2px 4px rgba(16,24,40,0.05)",
         panel: "0 2px 8px rgba(16,24,40,0.05), 0 1px 2px rgba(16,24,40,0.04)",
+        glow: "0 0 0 1px rgba(21,94,239,0.35), 0 4px 14px rgba(21,94,239,0.25)",
       },
       transitionTimingFunction: {
         smooth: "cubic-bezier(0.4, 0, 0.2, 1)",

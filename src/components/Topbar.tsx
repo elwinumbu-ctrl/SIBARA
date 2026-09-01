@@ -69,7 +69,7 @@ export default function Topbar({
         {showAddButton && (
           <Link
             href="/regulasi/baru"
-            className="hidden sm:inline-flex items-center gap-1.5 rounded-lg bg-primary hover:bg-primary-600 text-white text-sm font-semibold px-4 py-2.5 shadow-xs transition-colors"
+            className="hidden sm:inline-flex items-center gap-1.5 rounded-lg bg-accent hover:bg-accent-600 text-white text-sm font-semibold px-4 py-2.5 shadow-xs transition-colors"
           >
             <Plus size={16} strokeWidth={2.4} />
             Tambah Regulasi
@@ -79,7 +79,7 @@ export default function Topbar({
           <Link
             href="/regulasi/baru"
             aria-label="Tambah Regulasi"
-            className="sm:hidden inline-flex items-center justify-center w-9 h-9 rounded-lg bg-primary text-white shadow-xs"
+            className="sm:hidden inline-flex items-center justify-center w-9 h-9 rounded-lg bg-accent text-white shadow-xs"
           >
             <Plus size={18} strokeWidth={2.4} />
           </Link>

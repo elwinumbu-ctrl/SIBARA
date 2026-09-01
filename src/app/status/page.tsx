@@ -57,13 +57,13 @@ export default async function StatusPage() {
             <Link
               key={s.key}
               href={`/regulasi?status=${s.key}`}
-              className="group bg-white border border-border rounded-2xl shadow-card hover:shadow-card-hover hover-lift p-5 flex flex-col"
+              className="group bg-white border border-border rounded-2xl shadow-card hover:shadow-card-hover hover:border-accent/30 hover-lift p-5 flex flex-col"
             >
               <div className="flex items-center justify-between mb-4">
                 <span className={`inline-flex items-center justify-center w-11 h-11 rounded-xl ${s.bg} ${s.text}`}>
                   <Icon size={20} strokeWidth={1.9} />
                 </span>
-                <ArrowUpRight size={16} className="text-ink-faint group-hover:text-primary transition-colors" />
+                <ArrowUpRight size={16} className="text-ink-faint group-hover:text-accent group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
               </div>
               <p className="font-display text-3xl font-bold text-ink leading-none mb-1">
                 {counts[s.key] ?? 0}

@@ -29,20 +29,20 @@ export default async function KategoriPage() {
           <Link
             key={k}
             href={`/regulasi?kategori=${encodeURIComponent(k)}`}
-            className="group bg-white border border-border rounded-2xl shadow-card hover:shadow-card-hover hover-lift p-5 flex items-start gap-4"
+            className="group bg-white border border-border rounded-2xl shadow-card hover:shadow-card-hover hover:border-accent/30 hover-lift p-5 flex items-start gap-4"
           >
-            <span className="inline-flex items-center justify-center w-11 h-11 rounded-xl bg-primary/8 text-primary shrink-0">
+            <span className="inline-flex items-center justify-center w-11 h-11 rounded-xl bg-accent/8 text-accent shrink-0">
               <Tags size={19} strokeWidth={1.9} />
             </span>
             <div className="min-w-0 flex-1">
-              <h3 className="font-display font-semibold text-[15px] text-ink group-hover:text-primary transition-colors">
+              <h3 className="font-display font-semibold text-[15px] text-ink group-hover:text-accent transition-colors">
                 {k}
               </h3>
               <p className="text-xs text-ink-faint mt-1">
                 {counts[k] ?? 0} regulasi terdaftar
               </p>
             </div>
-            <ArrowUpRight size={16} className="text-ink-faint group-hover:text-primary transition-colors shrink-0 mt-1" />
+            <ArrowUpRight size={16} className="text-ink-faint group-hover:text-accent group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0 mt-1" />
           </Link>
         ))}
       </div>

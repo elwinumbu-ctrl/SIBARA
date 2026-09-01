@@ -2,6 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import AppShell from "@/components/AppShell";
 import StatCard from "@/components/StatCard";
 import RegulasiCard from "@/components/RegulasiCard";
+import EmptyState from "@/components/EmptyState";
 import Link from "next/link";
 import { Regulasi } from "@/lib/types";
 import { ArrowUpRight, FileSearch, Plus } from "lucide-react";
@@ -62,7 +63,7 @@ export default async function DashboardPage() {
         />
         <div
           className="pointer-events-none absolute -top-16 right-0 w-72 h-72 rounded-full opacity-20 blur-3xl"
-          style={{ backgroundColor: "#B8862E" }}
+          style={{ backgroundColor: "#155EEF" }}
         />
         <div className="relative px-5 sm:px-8 py-7 sm:py-9">
           <p className="text-xs tracking-[0.15em] uppercase text-white/55 mb-2">
@@ -105,7 +106,7 @@ export default async function DashboardPage() {
             </h3>
             <Link
               href="/regulasi"
-              className="text-xs font-medium text-primary hover:text-primary-600 flex items-center gap-1"
+              className="text-xs font-medium text-accent hover:text-accent-600 flex items-center gap-1"
             >
               Lihat semua <ArrowUpRight size={13} />
             </Link>
@@ -120,12 +121,12 @@ export default async function DashboardPage() {
                   href={`/regulasi?jenis=${encodeURIComponent(jenis)}`}
                   className="group flex items-center gap-3"
                 >
-                  <span className="text-xs text-ink-muted w-32 sm:w-36 shrink-0 truncate group-hover:text-primary transition-colors">
+                  <span className="text-xs text-ink-muted w-32 sm:w-36 shrink-0 truncate group-hover:text-accent transition-colors">
                     {jenis}
                   </span>
                   <span className="flex-1 h-2 rounded-full bg-surface-subtle overflow-hidden">
                     <span
-                      className="block h-full rounded-full bg-primary/70"
+                      className="block h-full rounded-full bg-accent/70"
                       style={{ width: `${(count / maxJenisCount) * 100}%` }}
                     />
                   </span>
@@ -144,25 +145,18 @@ export default async function DashboardPage() {
             </h3>
             <Link
               href="/regulasi"
-              className="text-xs font-medium text-primary hover:text-primary-600 flex items-center gap-1"
+              className="text-xs font-medium text-accent hover:text-accent-600 flex items-center gap-1"
             >
               Lihat semua <ArrowUpRight size={13} />
             </Link>
           </div>
           {recentList.length === 0 ? (
-            <div className="text-center py-10">
-              <div className="inline-flex items-center justify-center w-11 h-11 rounded-full bg-primary/8 text-primary mb-3">
-                <FileSearch size={19} strokeWidth={1.7} />
-              </div>
-              <p className="text-sm text-ink-subtle mb-3">Belum ada regulasi terdaftar.</p>
-              <Link
-                href="/regulasi/baru"
-                className="inline-flex items-center gap-1.5 rounded-lg bg-primary text-white text-sm font-medium px-4 py-2 hover:bg-primary-600 transition-colors"
-              >
-                <Plus size={15} strokeWidth={2.2} />
-                Tambah Regulasi
-              </Link>
-            </div>
+            <EmptyState
+              icon={FileSearch}
+              title="Belum ada regulasi terdaftar"
+              actionLabel="Tambah Regulasi"
+              actionHref="/regulasi/baru"
+            />
           ) : (
             <div className="flex flex-col gap-3">
               {recentList.map((r) => (

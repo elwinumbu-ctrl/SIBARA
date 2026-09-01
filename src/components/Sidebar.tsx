@@ -29,13 +29,19 @@ export default function Sidebar({
       )}
 
       <aside
-        className={`fixed z-40 inset-y-0 left-0 flex flex-col bg-primary text-white transition-all duration-200 ease-smooth
+        className={`fixed z-40 inset-y-0 left-0 flex flex-col text-white transition-all duration-200 ease-smooth overflow-hidden
+          bg-gradient-to-b from-primary-800 via-primary to-primary-900
           ${collapsed ? "lg:w-[76px]" : "lg:w-[264px]"}
           ${mobileOpen ? "w-[264px] translate-x-0" : "w-[264px] -translate-x-full lg:translate-x-0"}
         `}
       >
+        {/* Ambient background pattern + glow */}
+        <div className="pointer-events-none absolute inset-0 pattern-dots opacity-[0.04]" />
+        <div className="pointer-events-none absolute -top-24 -left-16 w-56 h-56 rounded-full bg-accent/20 blur-3xl" />
+        <div className="pointer-events-none absolute bottom-0 -right-16 w-56 h-56 rounded-full bg-cyan/10 blur-3xl" />
+
         {/* Brand */}
-        <div className={`flex items-center h-16 shrink-0 ${collapsed ? "justify-center px-2" : "justify-between px-4"}`}>
+        <div className={`relative flex items-center h-16 shrink-0 ${collapsed ? "justify-center px-2" : "justify-between px-4"}`}>
           <Link href="/dashboard" className="flex items-center gap-2.5 min-w-0">
             <span className="relative inline-flex items-center justify-center w-9 h-9 rounded-lg bg-white p-1.5 shrink-0 overflow-hidden">
               <Image
@@ -66,10 +72,10 @@ export default function Sidebar({
           </button>
         </div>
 
-        <div className="h-px bg-white/10 mx-4 mb-2" />
+        <div className="relative h-px bg-white/10 mx-4 mb-2" />
 
         {/* Nav */}
-        <nav className="flex-1 overflow-y-auto thin-scrollbar px-3 py-2 space-y-0.5">
+        <nav className="relative flex-1 overflow-y-auto thin-scrollbar px-3 py-2.5 space-y-1">
           {NAV_ITEMS.map((item) => {
             const isActive = active === item.key;
             const Icon = item.icon;
@@ -79,16 +85,16 @@ export default function Sidebar({
                 href={item.href}
                 onClick={onCloseMobile}
                 title={collapsed ? item.label : undefined}
-                className={`group relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-[13.5px] transition-colors
+                className={`group relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-[13.5px] transition-all duration-150
                   ${collapsed ? "lg:justify-center lg:px-0" : ""}
                   ${
                     isActive
-                      ? "bg-white/12 text-white font-medium"
+                      ? "bg-accent/90 text-white font-semibold shadow-glow"
                       : "text-white/65 hover:text-white hover:bg-white/8"
                   }`}
               >
-                {isActive && (
-                  <span className="absolute left-0 top-1.5 bottom-1.5 w-[3px] rounded-r-full bg-accent-light" />
+                {isActive && !collapsed && (
+                  <span className="absolute left-0 top-1.5 bottom-1.5 w-[3px] rounded-r-full bg-cyan" />
                 )}
                 <Icon size={18} strokeWidth={1.9} className="shrink-0" />
                 {!collapsed && <span className="truncate">{item.label}</span>}
@@ -97,10 +103,10 @@ export default function Sidebar({
           })}
         </nav>
 
-        <div className="h-px bg-white/10 mx-4" />
+        <div className="relative h-px bg-white/10 mx-4" />
 
         {/* Footer: collapse toggle + identity */}
-        <div className="p-3 shrink-0">
+        <div className="relative p-3 shrink-0">
           {!collapsed && (
             <div className="hidden lg:flex items-center gap-2 rounded-lg px-3 py-2.5 mb-1 text-white/45 text-[11px]">
               <ShieldCheck size={14} />

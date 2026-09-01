@@ -41,7 +41,7 @@ export default function SearchFilterBar({ tahunList }: { tahunList: number[] }) 
   }
 
   const selectClass =
-    "w-full rounded-lg border border-border bg-white pl-3 pr-8 py-2.5 text-sm text-ink appearance-none focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/10 transition-shadow";
+    "w-full rounded-lg border border-border bg-white pl-3 pr-8 py-2.5 text-sm text-ink appearance-none focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/10 transition-shadow";
 
   return (
     <form
@@ -58,7 +58,7 @@ export default function SearchFilterBar({ tahunList }: { tahunList: number[] }) 
           value={q}
           onChange={(e) => setQ(e.target.value)}
           placeholder="Cari judul atau nomor regulasi..."
-          className="w-full rounded-lg border border-border bg-surface-muted pl-10 pr-3 py-2.5 text-sm text-ink placeholder:text-ink-faint focus:border-primary focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/10 transition-shadow"
+          className="w-full rounded-lg border border-border bg-surface-muted pl-10 pr-3 py-2.5 text-sm text-ink placeholder:text-ink-faint focus:border-accent focus:bg-white focus:outline-none focus:ring-2 focus:ring-accent/10 transition-shadow"
         />
       </div>
 
@@ -95,7 +95,7 @@ export default function SearchFilterBar({ tahunList }: { tahunList: number[] }) 
       <div className="flex items-center gap-2.5">
         <button
           type="submit"
-          className="inline-flex items-center gap-1.5 rounded-lg bg-primary hover:bg-primary-600 text-white text-sm font-semibold px-4 py-2.5 transition-colors"
+          className="inline-flex items-center gap-1.5 rounded-lg bg-accent hover:bg-accent-600 text-white text-sm font-semibold px-4 py-2.5 transition-colors"
         >
           <SlidersHorizontal size={15} />
           Filter

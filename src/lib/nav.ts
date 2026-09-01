@@ -1,6 +1,7 @@
 import {
   LayoutDashboard,
   FileText,
+  Layers,
   Tags,
   CalendarRange,
   Activity,
@@ -22,6 +23,7 @@ export interface NavItem {
 export const NAV_ITEMS: NavItem[] = [
   { key: "dashboard", label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
   { key: "regulasi", label: "Regulasi", href: "/regulasi", icon: FileText },
+  { key: "jenis", label: "Jenis Regulasi", href: "/jenis", icon: Layers },
   { key: "kategori", label: "Kategori", href: "/kategori", icon: Tags },
   { key: "tahun", label: "Tahun", href: "/tahun", icon: CalendarRange },
   { key: "status", label: "Status", href: "/status", icon: Activity },
