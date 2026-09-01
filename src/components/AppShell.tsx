@@ -25,7 +25,7 @@ export default function AppShell({
   /** Tujuan & label tombol "Tambah" di topbar. Default: Tambah Regulasi. */
   addHref?: string;
   addLabel?: string;
-  /** Cinematic deep-navy background + glass topbar, reserved for /dashboard. */
+  /** Cinematic deep-navy background + glass topbar, used across all menu pages. */
   dark?: boolean;
   children: React.ReactNode;
 }) {

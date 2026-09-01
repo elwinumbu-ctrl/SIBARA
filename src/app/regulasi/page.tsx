@@ -1,11 +1,12 @@
 import { createClient } from "@/lib/supabase/server";
 import AppShell from "@/components/AppShell";
+import PageHero from "@/components/PageHero";
 import SearchFilterBar from "@/components/SearchFilterBar";
 import ViewToggle from "@/components/ViewToggle";
 import RegulasiFolderGroups from "@/components/RegulasiFolderGroups";
 import EmptyState from "@/components/EmptyState";
 import { Regulasi } from "@/lib/types";
-import { FileSearch } from "lucide-react";
+import { FileSearch, FileText } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -54,24 +55,34 @@ export default async function RegulasiPage({
       active="regulasi"
       email={user?.email}
       subtitle="Seluruh regulasi, dikelompokkan per jenis"
+      dark
     >
-      <SearchFilterBar tahunList={tahunList} />
+      <PageHero
+        icon={FileText}
+        eyebrow="Bank Regulasi"
+        title="Seluruh Regulasi"
+        description="Telusuri, saring, dan kelola seluruh regulasi Dana BOSP yang terdaftar."
+        actionHref="/regulasi/baru"
+        actionLabel="Tambah Regulasi"
+      />
+
+      <SearchFilterBar tahunList={tahunList} dark />
 
       {error && (
-        <p className="text-sm text-status-dicabut bg-status-dicabut-bg rounded-lg px-4 py-3 mb-4">
+        <p className="text-sm text-status-dicabut bg-status-dicabut/10 border border-status-dicabut/20 rounded-lg px-4 py-3 mb-4">
           Gagal memuat data: {error.message}
         </p>
       )}
 
       {!error && (
         <div className="flex items-center justify-between mb-4">
-          <p className="text-xs text-ink-subtle">
+          <p className="text-xs text-white/50">
             Menampilkan{" "}
-            <span className="font-semibold text-ink">{list.length}</span>{" "}
-            dari <span className="font-semibold text-ink">{total}</span> regulasi
+            <span className="font-semibold text-white">{list.length}</span>{" "}
+            dari <span className="font-semibold text-white">{total}</span> regulasi
             {isFiltered ? " (terfilter)" : ""}
           </p>
-          <ViewToggle view={view} />
+          <ViewToggle view={view} dark />
         </div>
       )}
 
@@ -82,9 +93,10 @@ export default async function RegulasiPage({
           description="Ubah kata kunci atau filter, atau tambahkan regulasi baru ke dalam bank regulasi."
           actionLabel="Tambah Regulasi"
           actionHref="/regulasi/baru"
+          dark
         />
       ) : (
-        <RegulasiFolderGroups list={list} view={view} activeJenis={searchParams.jenis} />
+        <RegulasiFolderGroups list={list} view={view} activeJenis={searchParams.jenis} dark />
       )}
     </AppShell>
   );

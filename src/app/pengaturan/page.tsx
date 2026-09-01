@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import AppShell from "@/components/AppShell";
-import { LogOut, Palette, ShieldCheck, Info } from "lucide-react";
+import PageHero from "@/components/PageHero";
+import { LogOut, Palette, ShieldCheck, Info, Settings } from "lucide-react";
 
 export default function PengaturanPage() {
   const router = useRouter();
@@ -22,37 +23,43 @@ export default function PengaturanPage() {
   }
 
   return (
-    <AppShell active="pengaturan" email={email} subtitle="Preferensi aplikasi" showAddButton={false}>
+    <AppShell active="pengaturan" email={email} subtitle="Preferensi aplikasi" showAddButton={false} dark>
+      <PageHero
+        icon={Settings}
+        eyebrow="Preferensi"
+        title="Pengaturan"
+        description="Kelola tampilan aplikasi dan akun Anda di SIBARA."
+      />
       <div className="max-w-2xl space-y-4">
-        <section className="surface-card p-5 sm:p-6">
+        <section className="surface-card-dark p-5 sm:p-6">
           <div className="flex items-center gap-2.5 mb-4">
-            <span className="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-primary/8 text-primary">
+            <span className="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-cyan/10 text-cyan">
               <Palette size={16} />
             </span>
-            <h3 className="font-display font-semibold text-sm text-ink">Tampilan</h3>
+            <h3 className="font-display font-semibold text-sm text-white">Tampilan</h3>
           </div>
-          <p className="text-sm text-ink-subtle leading-relaxed">
+          <p className="text-sm text-white/55 leading-relaxed">
             SIBARA menggunakan tema navy profesional yang konsisten untuk
             memastikan keterbacaan dan kenyamanan penggunaan di lingkungan
             Inspektorat.
           </p>
         </section>
 
-        <section className="surface-card p-5 sm:p-6">
+        <section className="surface-card-dark p-5 sm:p-6">
           <div className="flex items-center gap-2.5 mb-4">
-            <span className="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-primary/8 text-primary">
+            <span className="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-cyan/10 text-cyan">
               <ShieldCheck size={16} />
             </span>
-            <h3 className="font-display font-semibold text-sm text-ink">Akun</h3>
+            <h3 className="font-display font-semibold text-sm text-white">Akun</h3>
           </div>
           <div className="flex items-center justify-between gap-4">
             <div className="min-w-0">
-              <p className="text-sm text-ink font-medium truncate">{email ?? "Administrator"}</p>
-              <p className="text-xs text-ink-faint">Auditor Inspektorat Kabupaten Sumba Barat</p>
+              <p className="text-sm text-white font-medium truncate">{email ?? "Administrator"}</p>
+              <p className="text-xs text-white/40">Auditor Inspektorat Kabupaten Sumba Barat</p>
             </div>
             <button
               onClick={handleLogout}
-              className="inline-flex items-center gap-1.5 shrink-0 rounded-lg border border-status-dicabut/30 text-status-dicabut hover:bg-status-dicabut-bg text-sm font-medium px-3.5 py-2 transition-colors"
+              className="inline-flex items-center gap-1.5 shrink-0 rounded-lg border border-status-dicabut/30 text-status-dicabut hover:bg-status-dicabut/10 text-sm font-medium px-3.5 py-2 transition-colors"
             >
               <LogOut size={14} />
               Keluar
@@ -60,9 +67,9 @@ export default function PengaturanPage() {
           </div>
         </section>
 
-        <section className="flex items-start gap-3 bg-primary/5 border border-primary/10 rounded-2xl p-4">
-          <Info size={16} className="text-primary shrink-0 mt-0.5" />
-          <p className="text-xs text-ink-subtle leading-relaxed">
+        <section className="flex items-start gap-3 bg-white/5 border border-white/10 rounded-2xl p-4">
+          <Info size={16} className="text-cyan shrink-0 mt-0.5" />
+          <p className="text-xs text-white/55 leading-relaxed">
             SIBARA — Sistem Informasi Bank Regulasi Dana BOSP. Dikembangkan
             untuk mendukung pengawasan Inspektur Pembantu Wilayah IV,
             Inspektorat Kabupaten Sumba Barat.

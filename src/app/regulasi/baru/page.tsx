@@ -4,10 +4,11 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import AppShell from "@/components/AppShell";
+import PageHero from "@/components/PageHero";
 import { JENIS_REGULASI, KATEGORI_REGULASI } from "@/lib/types";
 import { friendlyStorageError } from "@/lib/storage-error";
-import { inputClass, labelClass } from "@/lib/form-styles";
-import { UploadCloud } from "lucide-react";
+import { inputClassDark, labelClassDark } from "@/lib/form-styles";
+import { UploadCloud, FilePlus2 } from "lucide-react";
 
 
 export default function TambahRegulasiPage() {
@@ -94,42 +95,41 @@ export default function TambahRegulasiPage() {
   }
 
   return (
-    <AppShell active="regulasi" title="Tambah Regulasi" showAddButton={false}>
+    <AppShell active="regulasi" title="Tambah Regulasi" showAddButton={false} dark>
+      <PageHero
+        icon={FilePlus2}
+        eyebrow="Bank Regulasi"
+        title="Tambah Regulasi"
+        description="Lengkapi data regulasi agar mudah ditemukan dan dikelola auditor lain."
+      />
       <div className="max-w-2xl mx-auto">
-        <h2 className="font-display text-xl font-bold text-ink mb-1">
-          Tambah Regulasi
-        </h2>
-        <p className="text-sm text-ink-subtle mb-6">
-          Lengkapi data regulasi agar mudah ditemukan dan dikelola auditor lain.
-        </p>
-
         <form
           onSubmit={handleSubmit}
-          className="surface-card p-5 sm:p-6 space-y-5"
+          className="surface-card-dark p-5 sm:p-6 space-y-5"
         >
           <div>
-            <label className={labelClass}>Judul regulasi *</label>
+            <label className={labelClassDark}>Judul regulasi *</label>
             <input
               required
               value={judul}
               onChange={(e) => setJudul(e.target.value)}
               placeholder='Contoh: "Petunjuk Teknis Pengelolaan Dana BOS Reguler Tahun 2026"'
-              className={inputClass}
+              className={inputClassDark}
             />
           </div>
 
           <div className="grid sm:grid-cols-2 gap-4">
             <div>
-              <label className={labelClass}>Nomor regulasi</label>
+              <label className={labelClassDark}>Nomor regulasi</label>
               <input
                 value={nomorRegulasi}
                 onChange={(e) => setNomorRegulasi(e.target.value)}
                 placeholder="Contoh: Permendikbudristek No. 63 Tahun 2023"
-                className={`${inputClass} font-mono`}
+                className={`${inputClassDark} font-mono`}
               />
             </div>
             <div>
-              <label className={labelClass}>Tahun terbit *</label>
+              <label className={labelClassDark}>Tahun terbit *</label>
               <input
                 type="number"
                 required
@@ -137,23 +137,23 @@ export default function TambahRegulasiPage() {
                 max={2100}
                 value={tahun}
                 onChange={(e) => setTahun(Number(e.target.value))}
-                className={inputClass}
+                className={inputClassDark}
               />
             </div>
           </div>
 
           <div className="grid sm:grid-cols-2 gap-4">
             <div>
-              <label className={labelClass}>Jenis regulasi *</label>
-              <select value={jenis} onChange={(e) => setJenis(e.target.value)} className={inputClass}>
+              <label className={labelClassDark}>Jenis regulasi *</label>
+              <select value={jenis} onChange={(e) => setJenis(e.target.value)} className={inputClassDark}>
                 {JENIS_REGULASI.map((j) => (
                   <option key={j} value={j}>{j}</option>
                 ))}
               </select>
             </div>
             <div>
-              <label className={labelClass}>Kategori *</label>
-              <select value={kategori} onChange={(e) => setKategori(e.target.value)} className={inputClass}>
+              <label className={labelClassDark}>Kategori *</label>
+              <select value={kategori} onChange={(e) => setKategori(e.target.value)} className={inputClassDark}>
                 {KATEGORI_REGULASI.map((k) => (
                   <option key={k} value={k}>{k}</option>
                 ))}
@@ -163,18 +163,18 @@ export default function TambahRegulasiPage() {
 
           <div className="grid sm:grid-cols-2 gap-4">
             <div>
-              <label className={labelClass}>Instansi penerbit *</label>
+              <label className={labelClassDark}>Instansi penerbit *</label>
               <input
                 required
                 value={instansi}
                 onChange={(e) => setInstansi(e.target.value)}
                 placeholder="Contoh: Kemendikbudristek"
-                className={inputClass}
+                className={inputClassDark}
               />
             </div>
             <div>
-              <label className={labelClass}>Status keberlakuan *</label>
-              <select value={status} onChange={(e) => setStatus(e.target.value)} className={inputClass}>
+              <label className={labelClassDark}>Status keberlakuan *</label>
+              <select value={status} onChange={(e) => setStatus(e.target.value)} className={inputClassDark}>
                 <option value="berlaku">Berlaku</option>
                 <option value="ditinjau">Ditinjau</option>
                 <option value="dicabut">Dicabut</option>
@@ -183,38 +183,38 @@ export default function TambahRegulasiPage() {
           </div>
 
           <div>
-            <label className={labelClass}>Ringkasan / deskripsi</label>
+            <label className={labelClassDark}>Ringkasan / deskripsi</label>
             <textarea
               value={deskripsi}
               onChange={(e) => setDeskripsi(e.target.value)}
               rows={3}
               placeholder="Ringkasan singkat isi regulasi dan relevansinya dengan audit Dana BOSP..."
-              className={inputClass}
+              className={inputClassDark}
             />
           </div>
 
           <div>
-            <label className={labelClass}>Tautan sumber resmi</label>
+            <label className={labelClassDark}>Tautan sumber resmi</label>
             <input
               type="url"
               value={linkResmi}
               onChange={(e) => setLinkResmi(e.target.value)}
               placeholder="https://jdih.kemendikbud.go.id/..."
-              className={inputClass}
+              className={inputClassDark}
             />
           </div>
 
           <div>
-            <label className={labelClass}>Unggah dokumen (PDF)</label>
-            <label className="flex items-center gap-3 rounded-lg border border-dashed border-border-strong bg-surface-muted px-4 py-4 cursor-pointer hover:border-accent hover:bg-accent/5 transition-colors">
-              <span className="inline-flex items-center justify-center w-9 h-9 rounded-lg bg-accent/8 text-accent shrink-0">
+            <label className={labelClassDark}>Unggah dokumen (PDF)</label>
+            <label className="flex items-center gap-3 rounded-lg border border-dashed border-white/15 bg-white/5 px-4 py-4 cursor-pointer hover:border-cyan/50 hover:bg-white/10 transition-colors">
+              <span className="inline-flex items-center justify-center w-9 h-9 rounded-lg bg-cyan/10 text-cyan shrink-0">
                 <UploadCloud size={17} />
               </span>
               <span className="min-w-0">
-                <span className="block text-sm font-medium text-ink truncate">
+                <span className="block text-sm font-medium text-white truncate">
                   {file ? file.name : "Klik untuk memilih file"}
                 </span>
-                <span className="block text-xs text-ink-faint">PDF, DOC, atau DOCX — maks. 10 MB</span>
+                <span className="block text-xs text-white/40">PDF, DOC, atau DOCX — maks. 10 MB</span>
               </span>
               <input
                 type="file"
@@ -226,23 +226,23 @@ export default function TambahRegulasiPage() {
           </div>
 
           {error && (
-            <p className="text-sm text-status-dicabut bg-status-dicabut-bg rounded-lg px-3 py-2.5">
+            <p className="text-sm text-status-dicabut bg-status-dicabut/10 border border-status-dicabut/20 rounded-lg px-3 py-2.5">
               {error}
             </p>
           )}
 
-          <div className="flex items-center gap-3 pt-2 border-t border-border">
+          <div className="flex items-center gap-3 pt-2 border-t border-white/10">
             <button
               type="submit"
               disabled={loading}
-              className="rounded-lg bg-accent text-white text-sm font-semibold px-5 py-2.5 hover:bg-accent-600 transition-colors disabled:opacity-60 mt-4"
+              className="rounded-lg bg-gradient-to-r from-accent to-cyan text-white text-sm font-semibold px-5 py-2.5 shadow-glow hover:brightness-110 transition-all disabled:opacity-60 mt-4"
             >
               {loading ? "Menyimpan..." : "Simpan Regulasi"}
             </button>
             <button
               type="button"
               onClick={() => router.back()}
-              className="text-sm text-ink-subtle hover:text-ink mt-4"
+              className="text-sm text-white/50 hover:text-white mt-4"
             >
               Batal
             </button>

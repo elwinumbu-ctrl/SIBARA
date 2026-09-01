@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import AppShell from "@/components/AppShell";
+import PageHero from "@/components/PageHero";
 import Link from "next/link";
 import {
   ShieldCheck,
@@ -85,58 +86,72 @@ export default async function PenggunaPage() {
       showAddButton={isAdmin}
       addHref="/pengguna/baru"
       addLabel="Tambah Pengguna"
+      dark
     >
+      <PageHero
+        icon={UsersIcon}
+        eyebrow="Manajemen Akun"
+        title="Pengguna SIBARA"
+        description={
+          isAdmin
+            ? "Kelola profil akun Anda serta buat dan pantau akun auditor/admin lain."
+            : "Profil akun Anda yang aktif saat ini di SIBARA."
+        }
+        actionHref={isAdmin ? "/pengguna/baru" : undefined}
+        actionLabel={isAdmin ? "Tambah Pengguna" : undefined}
+      />
+
       <div className="max-w-3xl space-y-4">
-        <div className="surface-card p-5 sm:p-6">
+        <div className="surface-card-dark p-5 sm:p-6">
           <div className="flex items-center gap-4 mb-5">
-            <span className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-primary/10 text-primary font-display font-bold text-lg">
+            <span className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-white/10 text-cyan font-display font-bold text-lg">
               {initials}
             </span>
             <div>
-              <h2 className="font-display font-bold text-lg text-ink">
+              <h2 className="font-display font-bold text-lg text-white">
                 {myProfile?.nama_lengkap || user?.email?.split("@")[0] || "Administrator"}
               </h2>
-              <p className="text-sm text-ink-subtle">{user?.email}</p>
+              <p className="text-sm text-white/55">{user?.email}</p>
             </div>
           </div>
 
-          <div className="grid sm:grid-cols-2 gap-4 pt-4 border-t border-border">
+          <div className="grid sm:grid-cols-2 gap-4 pt-4 border-t border-white/10">
             <div>
-              <p className="text-xs font-semibold text-ink-faint uppercase tracking-wide mb-1">Peran</p>
-              <p className="text-sm text-ink flex items-center gap-1.5">
-                <ShieldCheck size={14} className="text-primary" />
+              <p className="text-xs font-semibold text-white/40 uppercase tracking-wide mb-1">Peran</p>
+              <p className="text-sm text-white flex items-center gap-1.5">
+                <ShieldCheck size={14} className="text-cyan" />
                 {isAdmin ? "Admin Utama" : "Auditor Inspektorat"}
               </p>
             </div>
             <div>
-              <p className="text-xs font-semibold text-ink-faint uppercase tracking-wide mb-1">Wilayah Kerja</p>
-              <p className="text-sm text-ink">Inspektur Pembantu Wilayah IV</p>
+              <p className="text-xs font-semibold text-white/40 uppercase tracking-wide mb-1">Wilayah Kerja</p>
+              <p className="text-sm text-white">Inspektur Pembantu Wilayah IV</p>
             </div>
             <div>
-              <p className="text-xs font-semibold text-ink-faint uppercase tracking-wide mb-1">Bergabung sejak</p>
-              <p className="text-sm text-ink">{joined}</p>
+              <p className="text-xs font-semibold text-white/40 uppercase tracking-wide mb-1">Bergabung sejak</p>
+              <p className="text-sm text-white">{joined}</p>
             </div>
             <div>
-              <p className="text-xs font-semibold text-ink-faint uppercase tracking-wide mb-1">Status Akun</p>
+              <p className="text-xs font-semibold text-white/40 uppercase tracking-wide mb-1">Status Akun</p>
               <p className="text-sm text-status-berlaku font-medium">Aktif</p>
             </div>
           </div>
         </div>
 
         {isAdmin ? (
-          <div className="surface-card p-5 sm:p-6">
+          <div className="surface-card-dark p-5 sm:p-6">
             <div className="flex items-center justify-between gap-3 mb-4">
               <div className="flex items-center gap-2.5">
-                <span className="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-primary/8 text-primary">
+                <span className="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-cyan/10 text-cyan">
                   <UsersIcon size={16} />
                 </span>
-                <h3 className="font-display font-semibold text-sm text-ink">
+                <h3 className="font-display font-semibold text-sm text-white">
                   Daftar Pengguna ({daftarPengguna.length})
                 </h3>
               </div>
               <Link
                 href="/pengguna/baru"
-                className="hidden sm:inline-flex items-center gap-1.5 rounded-lg bg-accent hover:bg-accent-600 text-white text-sm font-semibold px-3.5 py-2 transition-colors"
+                className="hidden sm:inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-accent to-cyan text-white text-sm font-semibold px-3.5 py-2 shadow-glow hover:brightness-110 transition-all"
               >
                 <Plus size={14} strokeWidth={2.4} />
                 Tambah Pengguna
@@ -144,7 +159,7 @@ export default async function PenggunaPage() {
             </div>
 
             {listError && (
-              <p className="text-sm text-status-dicabut bg-status-dicabut-bg rounded-lg px-3 py-2.5 mb-3">
+              <p className="text-sm text-status-dicabut bg-status-dicabut/10 border border-status-dicabut/20 rounded-lg px-3 py-2.5 mb-3">
                 {listError}
               </p>
             )}
@@ -152,7 +167,7 @@ export default async function PenggunaPage() {
             <div className="overflow-x-auto -mx-1">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="text-left text-xs font-semibold text-ink-faint uppercase tracking-wide border-b border-border">
+                  <tr className="text-left text-xs font-semibold text-white/40 uppercase tracking-wide border-b border-white/10">
                     <th className="px-1 py-2 font-semibold">Nama</th>
                     <th className="px-1 py-2 font-semibold">Email</th>
                     <th className="px-1 py-2 font-semibold">Peran</th>
@@ -161,23 +176,23 @@ export default async function PenggunaPage() {
                 </thead>
                 <tbody>
                   {daftarPengguna.map((p) => (
-                    <tr key={p.id} className="border-b border-border/60 last:border-0">
-                      <td className="px-1 py-2.5 text-ink font-medium whitespace-nowrap">
+                    <tr key={p.id} className="border-b border-white/[0.06] last:border-0">
+                      <td className="px-1 py-2.5 text-white font-medium whitespace-nowrap">
                         {p.nama_lengkap || "—"}
                       </td>
-                      <td className="px-1 py-2.5 text-ink-subtle whitespace-nowrap">{p.email}</td>
+                      <td className="px-1 py-2.5 text-white/55 whitespace-nowrap">{p.email}</td>
                       <td className="px-1 py-2.5">
                         <span
                           className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium ${
                             p.role === "admin"
-                              ? "bg-primary/10 text-primary"
-                              : "bg-surface-subtle text-ink-subtle"
+                              ? "bg-cyan/10 text-cyan"
+                              : "bg-white/8 text-white/60"
                           }`}
                         >
                           {p.role === "admin" ? "Admin Utama" : "Auditor"}
                         </span>
                       </td>
-                      <td className="px-1 py-2.5 text-ink-subtle whitespace-nowrap">
+                      <td className="px-1 py-2.5 text-white/55 whitespace-nowrap">
                         {new Date(p.created_at).toLocaleDateString("id-ID", {
                           day: "numeric",
                           month: "short",
@@ -188,7 +203,7 @@ export default async function PenggunaPage() {
                   ))}
                   {daftarPengguna.length === 0 && !listError && (
                     <tr>
-                      <td colSpan={4} className="px-1 py-6 text-center text-ink-faint">
+                      <td colSpan={4} className="px-1 py-6 text-center text-white/40">
                         Belum ada pengguna terdaftar.
                       </td>
                     </tr>
@@ -199,16 +214,16 @@ export default async function PenggunaPage() {
 
             <Link
               href="/pengguna/baru"
-              className="sm:hidden mt-4 inline-flex w-full items-center justify-center gap-1.5 rounded-lg bg-accent hover:bg-accent-600 text-white text-sm font-semibold px-3.5 py-2.5 transition-colors"
+              className="sm:hidden mt-4 inline-flex w-full items-center justify-center gap-1.5 rounded-lg bg-gradient-to-r from-accent to-cyan text-white text-sm font-semibold px-3.5 py-2.5 shadow-glow transition-all"
             >
               <Plus size={14} strokeWidth={2.4} />
               Tambah Pengguna
             </Link>
           </div>
         ) : (
-          <div className="flex items-start gap-3 bg-primary/5 border border-primary/10 rounded-2xl p-4">
-            <Info size={16} className="text-primary shrink-0 mt-0.5" />
-            <p className="text-xs text-ink-subtle leading-relaxed">
+          <div className="flex items-start gap-3 bg-white/5 border border-white/10 rounded-2xl p-4">
+            <Info size={16} className="text-cyan shrink-0 mt-0.5" />
+            <p className="text-xs text-white/55 leading-relaxed">
               Manajemen pengguna lain (tambah/nonaktifkan akun auditor) hanya
               dapat dilakukan oleh admin utama. Hubungi admin aplikasi untuk
               permintaan pembuatan akun baru.

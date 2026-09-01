@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import AppShell from "@/components/AppShell";
+import PageHero from "@/components/PageHero";
 import StatusBadge from "@/components/StatusBadge";
 import EmptyState from "@/components/EmptyState";
 import { Regulasi } from "@/lib/types";
@@ -27,10 +28,17 @@ export default async function DokumenPage() {
       active="dokumen"
       email={user?.email}
       subtitle="Seluruh dokumen fisik regulasi yang telah diunggah"
+      dark
     >
+      <PageHero
+        icon={Paperclip}
+        eyebrow="Arsip"
+        title="Dokumen Pendukung"
+        description="Seluruh dokumen fisik regulasi yang telah diunggah ke SIBARA."
+      />
       <div className="flex items-center justify-between mb-4">
-        <p className="text-xs text-ink-subtle">
-          <span className="font-semibold text-ink">{list.length}</span> regulasi memiliki dokumen pendukung
+        <p className="text-xs text-white/50">
+          <span className="font-semibold text-white">{list.length}</span> regulasi memiliki dokumen pendukung
         </p>
       </div>
 
@@ -39,6 +47,7 @@ export default async function DokumenPage() {
           icon={Paperclip}
           title="Belum ada dokumen pendukung"
           description="Dokumen akan muncul di sini setelah diunggah pada halaman detail regulasi."
+          dark
         />
       ) : (
         <div className="flex flex-col gap-3">
@@ -46,20 +55,20 @@ export default async function DokumenPage() {
             <Link
               key={r.id}
               href={`/regulasi/${r.id}`}
-              className="group flex items-center gap-4 surface-card hover:shadow-card-hover hover:border-accent/30 hover-lift p-4 sm:p-5"
+              className="group flex items-center gap-4 surface-card-dark hover:border-cyan/30 hover-lift p-4 sm:p-5"
             >
-              <span className="inline-flex items-center justify-center w-11 h-11 rounded-xl bg-accent/8 text-accent shrink-0">
+              <span className="inline-flex items-center justify-center w-11 h-11 rounded-xl bg-cyan/10 text-cyan shrink-0">
                 <FileDown size={18} />
               </span>
               <div className="min-w-0 flex-1">
-                <h3 className="font-display font-semibold text-sm text-ink truncate group-hover:text-accent transition-colors">
+                <h3 className="font-display font-semibold text-sm text-white truncate group-hover:text-cyan transition-colors">
                   {r.judul}
                 </h3>
-                <p className="text-xs text-ink-faint truncate mt-0.5">
+                <p className="text-xs text-white/40 truncate mt-0.5">
                   {r.file_nama} · {r.nomor_regulasi || "Tanpa nomor"} · {r.tahun}
                 </p>
               </div>
-              <StatusBadge status={r.status} size="sm" />
+              <StatusBadge status={r.status} size="sm" dark />
             </Link>
           ))}
         </div>

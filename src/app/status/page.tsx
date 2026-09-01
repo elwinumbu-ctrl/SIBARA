@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import AppShell from "@/components/AppShell";
-import { CheckCircle2, Clock, XCircle, ArrowUpRight } from "lucide-react";
+import PageHero from "@/components/PageHero";
+import { CheckCircle2, Clock, XCircle, ArrowUpRight, Activity } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -11,24 +12,21 @@ const STATUS_INFO = [
     label: "Berlaku",
     desc: "Regulasi yang masih berlaku aktif dan menjadi acuan pengawasan Dana BOSP saat ini.",
     icon: CheckCircle2,
-    text: "text-status-berlaku",
-    bg: "bg-status-berlaku-bg",
+    hex: "#22C55E",
   },
   {
     key: "ditinjau",
     label: "Ditinjau",
     desc: "Regulasi yang sedang dalam proses peninjauan ulang atau berpotensi diperbarui.",
     icon: Clock,
-    text: "text-status-ditinjau",
-    bg: "bg-status-ditinjau-bg",
+    hex: "#F59E0B",
   },
   {
     key: "dicabut",
     label: "Dicabut",
     desc: "Regulasi yang sudah tidak berlaku, disimpan sebagai arsip riwayat regulasi.",
     icon: XCircle,
-    text: "text-status-dicabut",
-    bg: "bg-status-dicabut-bg",
+    hex: "#EF4444",
   },
 ] as const;
 
@@ -49,7 +47,14 @@ export default async function StatusPage() {
       active="status"
       email={user?.email}
       subtitle="Ringkasan regulasi berdasarkan status keberlakuan"
+      dark
     >
+      <PageHero
+        icon={Activity}
+        eyebrow="Master Data"
+        title="Status Keberlakuan"
+        description="Telusuri regulasi berdasarkan status keberlakuannya."
+      />
       <div className="grid sm:grid-cols-3 gap-4">
         {STATUS_INFO.map((s) => {
           const Icon = s.icon;
@@ -57,19 +62,22 @@ export default async function StatusPage() {
             <Link
               key={s.key}
               href={`/regulasi?status=${s.key}`}
-              className="group surface-card hover:shadow-card-hover hover:border-accent/30 hover-lift p-5 flex flex-col"
+              className="group surface-card-dark hover:border-cyan/30 hover-lift p-5 flex flex-col"
             >
               <div className="flex items-center justify-between mb-4">
-                <span className={`inline-flex items-center justify-center w-11 h-11 rounded-xl ${s.bg} ${s.text}`}>
+                <span
+                  className="inline-flex items-center justify-center w-11 h-11 rounded-xl"
+                  style={{ backgroundColor: `${s.hex}22`, color: s.hex, border: `1px solid ${s.hex}33` }}
+                >
                   <Icon size={20} strokeWidth={1.9} />
                 </span>
-                <ArrowUpRight size={16} className="text-ink-faint group-hover:text-accent group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+                <ArrowUpRight size={16} className="text-white/30 group-hover:text-cyan group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
               </div>
-              <p className="font-display text-3xl font-bold text-ink leading-none mb-1">
+              <p className="font-display text-3xl font-bold text-white leading-none mb-1">
                 {counts[s.key] ?? 0}
               </p>
-              <h3 className="font-display font-semibold text-sm text-ink mb-1.5">{s.label}</h3>
-              <p className="text-xs text-ink-faint leading-relaxed">{s.desc}</p>
+              <h3 className="font-display font-semibold text-sm text-white mb-1.5">{s.label}</h3>
+              <p className="text-xs text-white/40 leading-relaxed">{s.desc}</p>
             </Link>
           );
         })}

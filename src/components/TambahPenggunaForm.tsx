@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { inputClass, labelClass } from "@/lib/form-styles";
+import { inputClass, labelClass, inputClassDark, labelClassDark } from "@/lib/form-styles";
 
 
 function generatePassword() {
@@ -15,7 +15,7 @@ function generatePassword() {
   return out;
 }
 
-export default function TambahPenggunaForm() {
+export default function TambahPenggunaForm({ dark = false }: { dark?: boolean }) {
   const router = useRouter();
 
   const [namaLengkap, setNamaLengkap] = useState("");
@@ -25,6 +25,9 @@ export default function TambahPenggunaForm() {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const field = dark ? inputClassDark : inputClass;
+  const label = dark ? labelClassDark : labelClass;
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -61,33 +64,33 @@ export default function TambahPenggunaForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="surface-card p-5 sm:p-6 space-y-5"
+      className={`p-5 sm:p-6 space-y-5 ${dark ? "surface-card-dark" : "surface-card"}`}
     >
       <div>
-        <label className={labelClass}>Nama lengkap *</label>
+        <label className={label}>Nama lengkap *</label>
         <input
           required
           value={namaLengkap}
           onChange={(e) => setNamaLengkap(e.target.value)}
           placeholder="Contoh: Maria Goreti Bili"
-          className={inputClass}
+          className={field}
         />
       </div>
 
       <div>
-        <label className={labelClass}>Alamat email *</label>
+        <label className={label}>Alamat email *</label>
         <input
           type="email"
           required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="nama@instansi.go.id"
-          className={inputClass}
+          className={field}
         />
       </div>
 
       <div>
-        <label className={labelClass}>Kata sandi awal *</label>
+        <label className={label}>Kata sandi awal *</label>
         <div className="flex gap-2">
           <input
             required
@@ -95,56 +98,68 @@ export default function TambahPenggunaForm() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Minimal 6 karakter"
-            className={inputClass}
+            className={field}
           />
           <button
             type="button"
             onClick={() => setPassword(generatePassword())}
-            className="shrink-0 rounded-lg border border-border bg-surface-muted px-3 text-xs font-semibold text-ink-subtle hover:bg-surface-subtle transition-colors"
+            className={`shrink-0 rounded-lg border px-3 text-xs font-semibold transition-colors ${
+              dark
+                ? "border-white/10 bg-white/5 text-white/60 hover:bg-white/10 hover:text-white"
+                : "border-border bg-surface-muted text-ink-subtle hover:bg-surface-subtle"
+            }`}
           >
             Buat otomatis
           </button>
         </div>
-        <p className="text-xs text-ink-faint mt-1.5">
+        <p className={`text-xs mt-1.5 ${dark ? "text-white/40" : "text-ink-faint"}`}>
           Sampaikan kata sandi ini kepada pengguna secara langsung; ia dapat
           menggantinya setelah masuk pertama kali.
         </p>
       </div>
 
       <div>
-        <label className={labelClass}>Peran *</label>
+        <label className={label}>Peran *</label>
         <select
           value={role}
           onChange={(e) => setRole(e.target.value as "auditor" | "admin")}
-          className={inputClass}
+          className={field}
         >
           <option value="auditor">Auditor</option>
           <option value="admin">Admin Utama</option>
         </select>
-        <p className="text-xs text-ink-faint mt-1.5">
+        <p className={`text-xs mt-1.5 ${dark ? "text-white/40" : "text-ink-faint"}`}>
           Admin utama dapat mengelola daftar pengguna; auditor hanya
           mengakses data regulasi.
         </p>
       </div>
 
       {error && (
-        <p className="text-sm text-status-dicabut bg-status-dicabut-bg rounded-lg px-3 py-2.5">
+        <p
+          className={`text-sm rounded-lg px-3 py-2.5 ${
+            dark ? "text-status-dicabut bg-status-dicabut/10 border border-status-dicabut/20" : "text-status-dicabut bg-status-dicabut-bg"
+          }`}
+        >
           {error}
         </p>
       )}
 
-      <div className="flex items-center gap-3 pt-2 border-t border-border">
+      <div className={`flex items-center gap-3 pt-2 border-t ${dark ? "border-white/10" : "border-border"}`}>
         <button
           type="submit"
           disabled={loading}
-          className="rounded-lg bg-accent text-white text-sm font-semibold px-5 py-2.5 hover:bg-accent-600 transition-colors disabled:opacity-60 mt-4"
+          className={`rounded-lg text-sm font-semibold px-5 py-2.5 transition-colors disabled:opacity-60 mt-4 ${
+            dark
+              ? "bg-gradient-to-r from-accent to-cyan text-white shadow-glow hover:brightness-110"
+              : "bg-accent text-white hover:bg-accent-600"
+          }`}
         >
           {loading ? "Menyimpan..." : "Buat Pengguna"}
         </button>
         <button
           type="button"
           onClick={() => router.back()}
-          className="text-sm text-ink-subtle hover:text-ink mt-4"
+          className={`text-sm mt-4 ${dark ? "text-white/50 hover:text-white" : "text-ink-subtle hover:text-ink"}`}
         >
           Batal
         </button>
