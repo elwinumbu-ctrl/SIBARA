@@ -86,7 +86,7 @@ export default function TambahRegulasiPage() {
 
       if (insertError) throw insertError;
 
-      router.push("/dashboard");
+      router.push("/regulasi");
       router.refresh();
     } catch (err: any) {
       setError(err.message || "Terjadi kesalahan saat menyimpan regulasi.");

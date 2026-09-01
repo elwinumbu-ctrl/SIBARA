@@ -166,7 +166,7 @@ export default function DetailRegulasiPage() {
       setError(error.message);
       return;
     }
-    router.push("/dashboard");
+    router.push("/regulasi");
     router.refresh();
   }
 
@@ -199,7 +199,7 @@ export default function DetailRegulasiPage() {
     <AppShell active="regulasi" title="Detail Regulasi" showAddButton={false}>
       <div className="max-w-2xl mx-auto">
         <button
-          onClick={() => router.push("/dashboard")}
+          onClick={() => router.push("/regulasi")}
           className="inline-flex items-center gap-1.5 text-sm text-ink-subtle hover:text-ink mb-4"
         >
           <ArrowLeft size={15} />

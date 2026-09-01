@@ -25,6 +25,7 @@ export const JENIS_REGULASI = [
   "Peraturan Menteri",
   "Peraturan Daerah",
   "Peraturan Bupati",
+  "Peraturan Gubernur",
   "Surat Edaran",
   "Petunjuk Teknis",
   "Lainnya",

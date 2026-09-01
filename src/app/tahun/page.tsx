@@ -37,7 +37,7 @@ export default async function TahunPage() {
             {tahunList.map((t) => (
               <Link
                 key={t}
-                href={`/dashboard?tahun=${t}`}
+                href={`/regulasi?tahun=${t}`}
                 className="group flex items-center gap-4 rounded-xl px-3 py-3 hover:bg-surface-subtle transition-colors"
               >
                 <span className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-primary/8 text-primary shrink-0">

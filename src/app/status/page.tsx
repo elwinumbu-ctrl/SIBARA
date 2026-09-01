@@ -56,7 +56,7 @@ export default async function StatusPage() {
           return (
             <Link
               key={s.key}
-              href={`/dashboard?status=${s.key}`}
+              href={`/regulasi?status=${s.key}`}
               className="group bg-white border border-border rounded-2xl shadow-card hover:shadow-card-hover hover-lift p-5 flex flex-col"
             >
               <div className="flex items-center justify-between mb-4">

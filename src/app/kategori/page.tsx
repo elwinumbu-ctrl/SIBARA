@@ -28,7 +28,7 @@ export default async function KategoriPage() {
         {KATEGORI_REGULASI.map((k) => (
           <Link
             key={k}
-            href={`/dashboard?kategori=${encodeURIComponent(k)}`}
+            href={`/regulasi?kategori=${encodeURIComponent(k)}`}
             className="group bg-white border border-border rounded-2xl shadow-card hover:shadow-card-hover hover-lift p-5 flex items-start gap-4"
           >
             <span className="inline-flex items-center justify-center w-11 h-11 rounded-xl bg-primary/8 text-primary shrink-0">

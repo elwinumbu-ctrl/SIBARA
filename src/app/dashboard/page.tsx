@@ -1,72 +1,42 @@
 import { createClient } from "@/lib/supabase/server";
 import AppShell from "@/components/AppShell";
-import SearchFilterBar from "@/components/SearchFilterBar";
 import StatCard from "@/components/StatCard";
 import RegulasiCard from "@/components/RegulasiCard";
-import ViewToggle from "@/components/ViewToggle";
 import Link from "next/link";
 import { Regulasi } from "@/lib/types";
-import { FileSearch, Plus } from "lucide-react";
-
-const KELOMPOK_UTAMA = ["Undang-Undang", "Peraturan Menteri", "Peraturan Daerah"];
+import { ArrowUpRight, FileSearch, Plus } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
-export default async function DashboardPage({
-  searchParams,
-}: {
-  searchParams: { [key: string]: string | undefined };
-}) {
+export default async function DashboardPage() {
   const supabase = createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
-  let query = supabase
-    .from("regulasi")
-    .select("*")
-    .order("created_at", { ascending: false });
-
-  if (searchParams.q) {
-    query = query.or(
-      `judul.ilike.%${searchParams.q}%,nomor_regulasi.ilike.%${searchParams.q}%`
-    );
-  }
-  if (searchParams.jenis) {
-    if (searchParams.jenis === "__lainnya__") {
-      query = query.not(
-        "jenis",
-        "in",
-        `(${KELOMPOK_UTAMA.map((j) => `"${j}"`).join(",")})`
-      );
-    } else {
-      query = query.eq("jenis", searchParams.jenis);
-    }
-  }
-  if (searchParams.kategori) query = query.eq("kategori", searchParams.kategori);
-  if (searchParams.tahun) query = query.eq("tahun", Number(searchParams.tahun));
-  if (searchParams.status) query = query.eq("status", searchParams.status);
-
-  const { data: regulasiList, error } = await query;
-
   const { data: allRegulasi } = await supabase
     .from("regulasi")
-    .select("tahun, status");
+    .select("tahun, status, jenis");
 
-  const tahunList = Array.from(
-    new Set((allRegulasi ?? []).map((r) => r.tahun))
-  ).sort((a, b) => b - a);
+  const { data: recent } = await supabase
+    .from("regulasi")
+    .select("*")
+    .order("created_at", { ascending: false })
+    .limit(5);
 
   const total = allRegulasi?.length ?? 0;
   const berlaku = (allRegulasi ?? []).filter((r) => r.status === "berlaku").length;
   const ditinjau = (allRegulasi ?? []).filter((r) => r.status === "ditinjau").length;
   const dicabut = (allRegulasi ?? []).filter((r) => r.status === "dicabut").length;
 
-  const list = (regulasiList ?? []) as Regulasi[];
-  const isFiltered = Boolean(
-    searchParams.q || searchParams.jenis || searchParams.kategori || searchParams.tahun || searchParams.status
-  );
-  const view = searchParams.view === "list" ? "list" : "grid";
+  const jenisCounts: Record<string, number> = {};
+  (allRegulasi ?? []).forEach((r) => {
+    jenisCounts[r.jenis] = (jenisCounts[r.jenis] ?? 0) + 1;
+  });
+  const jenisBreakdown = Object.entries(jenisCounts).sort((a, b) => b[1] - a[1]);
+  const maxJenisCount = Math.max(1, ...jenisBreakdown.map(([, c]) => c));
+
+  const recentList = (recent ?? []) as Regulasi[];
 
   const displayName = user?.email?.split("@")[0] ?? "Auditor";
   const hour = new Date().getHours();
@@ -126,59 +96,82 @@ export default async function DashboardPage({
         <StatCard label="Dicabut" value={dicabut} tone="dicabut" caption="Sudah tidak berlaku" />
       </div>
 
-      <SearchFilterBar tahunList={tahunList} />
-
-      {error && (
-        <p className="text-sm text-status-dicabut bg-status-dicabut-bg rounded-lg px-4 py-3 mb-4">
-          Gagal memuat data: {error.message}
-        </p>
-      )}
-
-      {!error && (
-        <div className="flex items-center justify-between mb-4">
-          <p className="text-xs text-ink-subtle">
-            Menampilkan{" "}
-            <span className="font-semibold text-ink">{list.length}</span>{" "}
-            dari <span className="font-semibold text-ink">{total}</span> regulasi
-            {isFiltered ? " (terfilter)" : ""}
-          </p>
-          <ViewToggle view={view} />
-        </div>
-      )}
-
-      {list.length === 0 && !error ? (
-        <div className="text-center py-16 bg-white border border-dashed border-border-strong rounded-2xl">
-          <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-primary/8 text-primary mb-4">
-            <FileSearch size={22} strokeWidth={1.7} />
+      <div className="grid lg:grid-cols-5 gap-4 mb-6">
+        {/* Breakdown per jenis */}
+        <div className="lg:col-span-2 bg-white border border-border rounded-2xl shadow-card p-5">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="font-display font-semibold text-sm text-ink">
+              Sebaran per Jenis Regulasi
+            </h3>
+            <Link
+              href="/regulasi"
+              className="text-xs font-medium text-primary hover:text-primary-600 flex items-center gap-1"
+            >
+              Lihat semua <ArrowUpRight size={13} />
+            </Link>
           </div>
-          <p className="font-display font-semibold text-lg text-ink mb-1">
-            Belum ada regulasi yang cocok
-          </p>
-          <p className="text-sm text-ink-subtle mb-4 max-w-sm mx-auto">
-            Ubah kata kunci atau filter, atau tambahkan regulasi baru ke
-            dalam bank regulasi.
-          </p>
-          <Link
-            href="/regulasi/baru"
-            className="inline-flex items-center gap-1.5 rounded-lg bg-primary text-white text-sm font-medium px-4 py-2 hover:bg-primary-600 transition-colors"
-          >
-            <Plus size={15} strokeWidth={2.2} />
-            Tambah Regulasi
-          </Link>
+          {jenisBreakdown.length === 0 ? (
+            <p className="text-sm text-ink-faint py-6 text-center">Belum ada data.</p>
+          ) : (
+            <div className="space-y-3">
+              {jenisBreakdown.map(([jenis, count]) => (
+                <Link
+                  key={jenis}
+                  href={`/regulasi?jenis=${encodeURIComponent(jenis)}`}
+                  className="group flex items-center gap-3"
+                >
+                  <span className="text-xs text-ink-muted w-32 sm:w-36 shrink-0 truncate group-hover:text-primary transition-colors">
+                    {jenis}
+                  </span>
+                  <span className="flex-1 h-2 rounded-full bg-surface-subtle overflow-hidden">
+                    <span
+                      className="block h-full rounded-full bg-primary/70"
+                      style={{ width: `${(count / maxJenisCount) * 100}%` }}
+                    />
+                  </span>
+                  <span className="text-xs text-ink-faint w-6 text-right shrink-0">{count}</span>
+                </Link>
+              ))}
+            </div>
+          )}
         </div>
-      ) : view === "grid" ? (
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {list.map((r) => (
-            <RegulasiCard key={r.id} regulasi={r} view="grid" />
-          ))}
+
+        {/* Recent regulasi */}
+        <div className="lg:col-span-3 bg-white border border-border rounded-2xl shadow-card p-5">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="font-display font-semibold text-sm text-ink">
+              Regulasi Terbaru
+            </h3>
+            <Link
+              href="/regulasi"
+              className="text-xs font-medium text-primary hover:text-primary-600 flex items-center gap-1"
+            >
+              Lihat semua <ArrowUpRight size={13} />
+            </Link>
+          </div>
+          {recentList.length === 0 ? (
+            <div className="text-center py-10">
+              <div className="inline-flex items-center justify-center w-11 h-11 rounded-full bg-primary/8 text-primary mb-3">
+                <FileSearch size={19} strokeWidth={1.7} />
+              </div>
+              <p className="text-sm text-ink-subtle mb-3">Belum ada regulasi terdaftar.</p>
+              <Link
+                href="/regulasi/baru"
+                className="inline-flex items-center gap-1.5 rounded-lg bg-primary text-white text-sm font-medium px-4 py-2 hover:bg-primary-600 transition-colors"
+              >
+                <Plus size={15} strokeWidth={2.2} />
+                Tambah Regulasi
+              </Link>
+            </div>
+          ) : (
+            <div className="flex flex-col gap-3">
+              {recentList.map((r) => (
+                <RegulasiCard key={r.id} regulasi={r} view="list" />
+              ))}
+            </div>
+          )}
         </div>
-      ) : (
-        <div className="flex flex-col gap-3">
-          {list.map((r) => (
-            <RegulasiCard key={r.id} regulasi={r} view="list" />
-          ))}
-        </div>
-      )}
+      </div>
     </AppShell>
   );
 }
