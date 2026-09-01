@@ -15,7 +15,7 @@ export default function EmptyState({
   actionHref?: string;
 }) {
   return (
-    <div className="text-center py-16 px-6 bg-white border border-dashed border-border-strong rounded-2xl">
+    <div className="text-center py-16 px-6 bg-white/70 backdrop-blur-sm border border-dashed border-border-strong rounded-2xl">
       <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-accent/8 text-accent mb-4">
         <Icon size={22} strokeWidth={1.7} />
       </div>

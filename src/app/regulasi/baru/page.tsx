@@ -107,7 +107,7 @@ export default function TambahRegulasiPage() {
 
         <form
           onSubmit={handleSubmit}
-          className="bg-white border border-border rounded-2xl shadow-card p-5 sm:p-6 space-y-5"
+          className="bg-white/95 backdrop-blur-sm border border-white/70 rounded-2xl shadow-panel p-5 sm:p-6 space-y-5"
         >
           <div>
             <label className={labelClass}>Judul regulasi *</label>

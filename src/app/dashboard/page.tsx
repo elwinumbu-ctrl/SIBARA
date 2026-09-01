@@ -99,7 +99,7 @@ export default async function DashboardPage() {
 
       <div className="grid lg:grid-cols-5 gap-4 mb-6">
         {/* Breakdown per jenis */}
-        <div className="lg:col-span-2 bg-white border border-border rounded-2xl shadow-card p-5">
+        <div className="lg:col-span-2 bg-white/95 backdrop-blur-sm border border-white/70 rounded-2xl shadow-panel p-5">
           <div className="flex items-center justify-between mb-4">
             <h3 className="font-display font-semibold text-sm text-ink">
               Sebaran per Jenis Regulasi
@@ -138,7 +138,7 @@ export default async function DashboardPage() {
         </div>
 
         {/* Recent regulasi */}
-        <div className="lg:col-span-3 bg-white border border-border rounded-2xl shadow-card p-5">
+        <div className="lg:col-span-3 bg-white/95 backdrop-blur-sm border border-white/70 rounded-2xl shadow-panel p-5">
           <div className="flex items-center justify-between mb-4">
             <h3 className="font-display font-semibold text-sm text-ink">
               Regulasi Terbaru

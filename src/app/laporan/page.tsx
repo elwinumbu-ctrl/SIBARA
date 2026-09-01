@@ -39,7 +39,7 @@ export default async function LaporanPage() {
         </button>
       </div>
 
-      <div className="bg-white border border-border rounded-2xl shadow-card overflow-hidden">
+      <div className="bg-white/95 backdrop-blur-sm border border-white/70 rounded-2xl shadow-panel overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>

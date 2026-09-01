@@ -16,7 +16,7 @@ export default function ViewToggle({ view }: { view: "grid" | "list" }) {
   }
 
   return (
-    <div className="inline-flex items-center gap-0.5 rounded-lg border border-border bg-white p-1 shadow-xs">
+    <div className="inline-flex items-center gap-0.5 rounded-lg border border-white/70 bg-white/90 backdrop-blur-sm p-1 shadow-xs">
       <button
         onClick={() => setView("grid")}
         aria-label="Tampilan grid"

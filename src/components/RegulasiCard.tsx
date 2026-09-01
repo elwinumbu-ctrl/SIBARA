@@ -20,7 +20,7 @@ export default function RegulasiCard({
     return (
       <Link
         href={`/regulasi/${regulasi.id}`}
-        className="status-tab group flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5 bg-white border border-border rounded-2xl shadow-card hover:shadow-card-hover hover:border-accent/30 hover-lift p-4 sm:pl-6"
+        className="status-tab group flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5 bg-white/95 backdrop-blur-sm border border-white/70 rounded-2xl shadow-panel hover:shadow-card-hover hover:border-accent/30 hover-lift p-4 sm:pl-6"
         style={{ "--tab-color": TAB_COLOR[regulasi.status] } as React.CSSProperties}
       >
         <div className="flex items-start gap-3 flex-1 min-w-0">
@@ -65,7 +65,7 @@ export default function RegulasiCard({
   return (
     <Link
       href={`/regulasi/${regulasi.id}`}
-      className="status-tab group block bg-white border border-border rounded-2xl shadow-card hover:shadow-card-hover hover:border-accent/30 hover-lift p-5"
+      className="status-tab group block bg-white/95 backdrop-blur-sm border border-white/70 rounded-2xl shadow-panel hover:shadow-card-hover hover:border-accent/30 hover-lift p-5"
       style={{ "--tab-color": TAB_COLOR[regulasi.status] } as React.CSSProperties}
     >
       <div className="flex items-start justify-between gap-3 mb-3 pl-2.5">

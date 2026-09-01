@@ -45,7 +45,7 @@ export default function Topbar({
   const displayTitle = title ?? navLabel(active);
 
   return (
-    <header className="sticky top-0 z-20 h-16 shrink-0 flex items-center gap-3 bg-white/90 backdrop-blur supports-[backdrop-filter]:bg-white/75 border-b border-border px-4 sm:px-6">
+    <header className="sticky top-0 z-20 h-16 shrink-0 flex items-center gap-3 bg-white/80 backdrop-blur-xl supports-[backdrop-filter]:bg-white/75 border-b border-white/60 shadow-[0_1px_0_rgba(16,24,40,0.03)] px-4 sm:px-6">
       <button
         onClick={onOpenMobile}
         className="lg:hidden -ml-1 p-2 rounded-lg text-ink-muted hover:bg-surface-subtle"
@@ -102,7 +102,7 @@ export default function Topbar({
           {notifOpen && (
             <>
               <div className="fixed inset-0 z-10" onClick={() => setNotifOpen(false)} />
-              <div className="absolute right-0 top-full mt-2 w-72 rounded-xl bg-white border border-border shadow-panel p-3 z-20">
+              <div className="absolute right-0 top-full mt-2 w-72 rounded-xl bg-white/95 backdrop-blur-xl border border-white/70 shadow-panel p-3 z-20">
                 <p className="text-xs font-semibold text-ink px-1 mb-2">Notifikasi</p>
                 <div className="rounded-lg bg-status-ditinjau-bg px-3 py-2.5">
                   <p className="text-xs text-ink font-medium mb-0.5">
@@ -140,7 +140,7 @@ export default function Topbar({
           {menuOpen && (
             <>
               <div className="fixed inset-0 z-10" onClick={() => setMenuOpen(false)} />
-              <div className="absolute right-0 top-full mt-2 w-56 rounded-xl bg-white border border-border shadow-panel p-1.5 z-20">
+              <div className="absolute right-0 top-full mt-2 w-56 rounded-xl bg-white/95 backdrop-blur-xl border border-white/70 shadow-panel p-1.5 z-20">
                 <div className="px-2.5 py-2 mb-1 border-b border-border">
                   <p className="text-xs font-semibold text-ink truncate">
                     {email ?? "Administrator"}

@@ -24,7 +24,7 @@ export default function PengaturanPage() {
   return (
     <AppShell active="pengaturan" email={email} subtitle="Preferensi aplikasi" showAddButton={false}>
       <div className="max-w-2xl space-y-4">
-        <section className="bg-white border border-border rounded-2xl shadow-card p-5 sm:p-6">
+        <section className="bg-white/95 backdrop-blur-sm border border-white/70 rounded-2xl shadow-panel p-5 sm:p-6">
           <div className="flex items-center gap-2.5 mb-4">
             <span className="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-primary/8 text-primary">
               <Palette size={16} />
@@ -38,7 +38,7 @@ export default function PengaturanPage() {
           </p>
         </section>
 
-        <section className="bg-white border border-border rounded-2xl shadow-card p-5 sm:p-6">
+        <section className="bg-white/95 backdrop-blur-sm border border-white/70 rounded-2xl shadow-panel p-5 sm:p-6">
           <div className="flex items-center gap-2.5 mb-4">
             <span className="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-primary/8 text-primary">
               <ShieldCheck size={16} />

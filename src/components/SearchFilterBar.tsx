@@ -46,7 +46,7 @@ export default function SearchFilterBar({ tahunList }: { tahunList: number[] }) 
   return (
     <form
       onSubmit={applyFilter}
-      className="bg-white border border-border rounded-2xl shadow-card p-4 sm:p-5 mb-6"
+      className="glass-panel shadow-panel rounded-2xl p-4 sm:p-5 mb-6"
     >
       <div className="relative mb-3">
         <Search

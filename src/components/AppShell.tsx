@@ -38,7 +38,12 @@ export default function AppShell({
   }
 
   return (
-    <div className="min-h-screen bg-surface-muted">
+    <div className="relative min-h-screen overflow-hidden">
+      {/* Ambient background layer — soft blue-gray depth behind every workspace page */}
+      <div className="pointer-events-none fixed inset-0 z-0 pattern-dots-soft opacity-[0.5]" />
+      <div className="pointer-events-none fixed -top-40 right-[-10%] z-0 w-[520px] h-[520px] rounded-full bg-accent/10 blur-3xl" />
+      <div className="pointer-events-none fixed bottom-[-15%] left-[-8%] z-0 w-[440px] h-[440px] rounded-full bg-cyan/8 blur-3xl" />
+
       <Sidebar
         active={active}
         collapsed={collapsed}
@@ -48,7 +53,7 @@ export default function AppShell({
       />
 
       <div
-        className={`flex flex-col min-h-screen transition-[margin] duration-200 ease-smooth ${
+        className={`relative z-10 flex flex-col min-h-screen transition-[margin] duration-200 ease-smooth ${
           collapsed ? "lg:ml-[76px]" : "lg:ml-[264px]"
         }`}
       >

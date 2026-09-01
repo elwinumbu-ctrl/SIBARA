@@ -29,7 +29,7 @@ export default async function KategoriPage() {
           <Link
             key={k}
             href={`/regulasi?kategori=${encodeURIComponent(k)}`}
-            className="group bg-white border border-border rounded-2xl shadow-card hover:shadow-card-hover hover:border-accent/30 hover-lift p-5 flex items-start gap-4"
+            className="group bg-white/95 backdrop-blur-sm border border-white/70 rounded-2xl shadow-panel hover:shadow-card-hover hover:border-accent/30 hover-lift p-5 flex items-start gap-4"
           >
             <span className="inline-flex items-center justify-center w-11 h-11 rounded-xl bg-accent/8 text-accent shrink-0">
               <Tags size={19} strokeWidth={1.9} />

@@ -89,7 +89,7 @@ export default function LoginPage() {
 
         <form
           onSubmit={handleSubmit}
-          className="w-full bg-white rounded-2xl shadow-2xl p-6 sm:p-7 space-y-4 text-left"
+          className="w-full bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl ring-1 ring-white/40 p-6 sm:p-7 space-y-4 text-left"
         >
           <div>
             <label className="block text-xs font-semibold text-ink-subtle mb-1.5">

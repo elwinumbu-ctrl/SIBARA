@@ -66,15 +66,17 @@ const config: Config = {
         sans: ["Inter", "system-ui", "sans-serif"],
       },
       borderRadius: {
+        lg: "10px",
         xl: "12px",
-        "2xl": "14px",
-        "3xl": "18px",
+        "2xl": "18px",
+        "3xl": "22px",
       },
       boxShadow: {
         xs: "0 1px 2px rgba(16,24,40,0.04)",
         card: "0 1px 2px rgba(16,24,40,0.04), 0 1px 3px rgba(16,24,40,0.06)",
-        "card-hover": "0 4px 10px rgba(16,24,40,0.06), 0 2px 4px rgba(16,24,40,0.05)",
-        panel: "0 2px 8px rgba(16,24,40,0.05), 0 1px 2px rgba(16,24,40,0.04)",
+        "card-hover": "0 8px 20px rgba(16,24,40,0.08), 0 3px 6px rgba(16,24,40,0.05)",
+        panel: "0 4px 16px rgba(16,36,72,0.07), 0 1px 3px rgba(16,24,40,0.05)",
+        glass: "0 8px 30px rgba(16,36,72,0.09), 0 1px 2px rgba(16,24,40,0.04)",
         glow: "0 0 0 1px rgba(21,94,239,0.35), 0 4px 14px rgba(21,94,239,0.25)",
       },
       transitionTimingFunction: {

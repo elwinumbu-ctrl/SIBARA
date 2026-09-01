@@ -46,7 +46,7 @@ export default async function DokumenPage() {
             <Link
               key={r.id}
               href={`/regulasi/${r.id}`}
-              className="group flex items-center gap-4 bg-white border border-border rounded-2xl shadow-card hover:shadow-card-hover hover:border-accent/30 hover-lift p-4 sm:p-5"
+              className="group flex items-center gap-4 bg-white/95 backdrop-blur-sm border border-white/70 rounded-2xl shadow-panel hover:shadow-card-hover hover:border-accent/30 hover-lift p-4 sm:p-5"
             >
               <span className="inline-flex items-center justify-center w-11 h-11 rounded-xl bg-accent/8 text-accent shrink-0">
                 <FileDown size={18} />

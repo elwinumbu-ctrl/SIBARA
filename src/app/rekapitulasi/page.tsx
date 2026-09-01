@@ -38,7 +38,7 @@ export default async function RekapitulasiPage() {
     >
       <div className="grid lg:grid-cols-5 gap-4">
         {/* Status donut-ish breakdown */}
-        <div className="lg:col-span-2 bg-white border border-border rounded-2xl shadow-card p-5 sm:p-6">
+        <div className="lg:col-span-2 bg-white/95 backdrop-blur-sm border border-white/70 rounded-2xl shadow-panel p-5 sm:p-6">
           <div className="flex items-center gap-2 mb-5">
             <PieChart size={16} className="text-primary" />
             <h3 className="font-display font-semibold text-sm text-ink">
@@ -85,7 +85,7 @@ export default async function RekapitulasiPage() {
         </div>
 
         {/* Category breakdown */}
-        <div className="lg:col-span-3 bg-white border border-border rounded-2xl shadow-card p-5 sm:p-6">
+        <div className="lg:col-span-3 bg-white/95 backdrop-blur-sm border border-white/70 rounded-2xl shadow-panel p-5 sm:p-6">
           <h3 className="font-display font-semibold text-sm text-ink mb-5">
             Regulasi per Kategori
           </h3>

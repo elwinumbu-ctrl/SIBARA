@@ -28,11 +28,11 @@ export default async function TahunPage() {
       subtitle="Ringkasan regulasi berdasarkan tahun terbit"
     >
       {tahunList.length === 0 ? (
-        <div className="text-center py-16 bg-white border border-dashed border-border-strong rounded-2xl text-sm text-ink-subtle">
+        <div className="text-center py-16 bg-white/70 backdrop-blur-sm border border-dashed border-border-strong rounded-2xl text-sm text-ink-subtle">
           Belum ada data regulasi.
         </div>
       ) : (
-        <div className="bg-white border border-border rounded-2xl shadow-card p-5 sm:p-6">
+        <div className="bg-white/95 backdrop-blur-sm border border-white/70 rounded-2xl shadow-panel p-5 sm:p-6">
           <div className="space-y-3">
             {tahunList.map((t) => (
               <Link

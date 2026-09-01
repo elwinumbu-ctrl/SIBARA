@@ -16,6 +16,13 @@ const TONE_ICON: Record<Tone, LucideIcon> = {
   dicabut: XCircle,
 };
 
+const TONE_GLOW: Record<Tone, string> = {
+  primary: "bg-accent/15",
+  berlaku: "bg-status-berlaku/15",
+  ditinjau: "bg-status-ditinjau/15",
+  dicabut: "bg-status-dicabut/15",
+};
+
 export default function StatCard({
   label,
   value,
@@ -31,8 +38,11 @@ export default function StatCard({
   const Icon = TONE_ICON[tone];
 
   return (
-    <div className="bg-white border border-border rounded-2xl px-5 py-5 shadow-card hover-lift hover:shadow-card-hover hover:border-border-strong">
-      <div className="flex items-start justify-between mb-3.5">
+    <div className="relative overflow-hidden bg-white/95 backdrop-blur-sm border border-white/70 rounded-2xl px-5 py-5 shadow-panel hover-lift hover:shadow-card-hover hover:border-accent/20">
+      <span
+        className={`pointer-events-none absolute -top-8 -right-8 w-24 h-24 rounded-full blur-2xl ${TONE_GLOW[tone]}`}
+      />
+      <div className="relative flex items-start justify-between mb-3.5">
         <p className="text-[11px] font-semibold uppercase tracking-wider text-ink-subtle">
           {label}
         </p>

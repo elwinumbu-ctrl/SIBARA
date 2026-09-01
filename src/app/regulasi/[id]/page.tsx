@@ -206,7 +206,7 @@ export default function DetailRegulasiPage() {
           Kembali ke daftar
         </button>
 
-        <div className="bg-white border border-border rounded-2xl shadow-card p-5 sm:p-6">
+        <div className="bg-white/95 backdrop-blur-sm border border-white/70 rounded-2xl shadow-panel p-5 sm:p-6">
           <div className="flex items-start justify-between gap-3 mb-4">
             <span className="font-mono text-xs text-ink-faint">
               {regulasi.nomor_regulasi || "Tanpa nomor"} · {regulasi.tahun}
