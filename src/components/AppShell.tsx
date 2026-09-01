@@ -12,6 +12,8 @@ export default function AppShell({
   subtitle,
   email,
   showAddButton = true,
+  addHref,
+  addLabel,
   dark = false,
   children,
 }: {
@@ -20,6 +22,9 @@ export default function AppShell({
   subtitle?: string;
   email?: string;
   showAddButton?: boolean;
+  /** Tujuan & label tombol "Tambah" di topbar. Default: Tambah Regulasi. */
+  addHref?: string;
+  addLabel?: string;
   /** Cinematic deep-navy background + glass topbar, reserved for /dashboard. */
   dark?: boolean;
   children: React.ReactNode;
@@ -93,6 +98,8 @@ export default function AppShell({
           subtitle={subtitle}
           email={email}
           showAddButton={showAddButton}
+          {...(addHref ? { addHref } : {})}
+          {...(addLabel ? { addLabel } : {})}
           onOpenMobile={() => setMobileOpen(true)}
           dark={dark}
         />

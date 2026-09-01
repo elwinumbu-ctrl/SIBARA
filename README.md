@@ -28,13 +28,28 @@ lalu menerbitkannya secara online lewat GitHub, Supabase, dan Vercel.
    ini, salin seluruh isinya, tempel ke editor, lalu klik **Run**.
    Ini akan membuat tabel `regulasi`, aturan keamanan (RLS), dan folder
    penyimpanan file `regulasi-files` secara otomatis.
-5. Buka menu **Project Settings → API**. Catat dua nilai berikut, akan
-   dipakai di langkah 3 dan 5:
+4b. Ulangi langkah di atas dengan isi file `supabase/add-user-management.sql`
+   (jalankan **setelah** `schema.sql`). Ini membuat tabel `profiles` yang
+   menyimpan peran pengguna (admin utama / auditor), sehingga admin utama
+   bisa membuat akun pengguna baru langsung dari aplikasi.
+5. Buka menu **Project Settings → API**. Catat tiga nilai berikut, akan
+   dipakai di langkah 2 dan 4:
    - **Project URL**
    - **anon public key**
-6. Buat akun auditor pertama Anda: buka **Authentication → Users → Add user**,
-   isi email dan kata sandi. Auditor lain bisa ditambahkan dengan cara yang
-   sama nantinya.
+   - **service_role key** (di bagian "Project API keys" — kunci ini
+     bersifat rahasia, JANGAN pernah dipakai di sisi browser/client)
+6. Buat akun admin utama pertama Anda: buka **Authentication → Users →
+   Add user**, isi email dan kata sandi. Lalu kembali ke **SQL Editor** dan
+   jalankan (ganti email sesuai akun yang baru dibuat):
+
+   ```sql
+   update public.profiles set role = 'admin'
+   where id = (select id from auth.users where email = 'admin@contoh.go.id');
+   ```
+
+   Setelah ini, akun tersebut bisa login dan membuat akun auditor/admin
+   lain langsung lewat menu **Pengguna** di aplikasi — tidak perlu lagi
+   membuka Supabase Dashboard untuk setiap pengguna baru.
 
 ## 2. Jalankan aplikasi di komputer Anda (opsional, untuk uji coba)
 
@@ -46,13 +61,18 @@ npm install
 cp .env.example .env.local
 ```
 
-Buka `.env.local`, isi dengan **Project URL** dan **anon public key** dari
-langkah 1.5:
+Buka `.env.local`, isi dengan **Project URL**, **anon public key**, dan
+**service_role key** dari langkah 1.5:
 
 ```
 NEXT_PUBLIC_SUPABASE_URL=https://xxxxxxxxxxxx.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=isi-anon-public-key-di-sini
+SUPABASE_SERVICE_ROLE_KEY=isi-service-role-key-di-sini
 ```
+
+`SUPABASE_SERVICE_ROLE_KEY` sengaja TIDAK diawali `NEXT_PUBLIC_` supaya
+tidak pernah terkirim ke browser — hanya dipakai di server saat admin
+utama membuat pengguna baru.
 
 Jalankan:
 
@@ -86,10 +106,11 @@ jadi kredensial Supabase Anda tetap aman.
 
 1. Buka [vercel.com](https://vercel.com) → login memakai akun GitHub Anda.
 2. Klik **Add New → Project**, pilih repositori `sibara` yang baru diunggah.
-3. Pada bagian **Environment Variables**, tambahkan dua variabel yang sama
+3. Pada bagian **Environment Variables**, tambahkan tiga variabel yang sama
    seperti di `.env.local`:
    - `NEXT_PUBLIC_SUPABASE_URL`
    - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+   - `SUPABASE_SERVICE_ROLE_KEY`
 4. Klik **Deploy**. Setelah selesai (±1-2 menit), Vercel akan memberikan
    URL publik seperti `https://sibara.vercel.app` — aplikasi sudah bisa
    diakses oleh seluruh auditor.
@@ -97,11 +118,17 @@ jadi kredensial Supabase Anda tetap aman.
 Setiap kali Anda melakukan `git push` ke GitHub setelahnya, Vercel akan
 otomatis membangun ulang dan menerbitkan versi terbaru.
 
-## 5. Menambahkan pengguna (auditor) baru
+## 5. Menambahkan pengguna (auditor/admin) baru
 
-Buka Supabase → **Authentication → Users → Add user**, isi email dan kata
-sandi auditor tersebut. Tidak perlu pendaftaran mandiri — akses memang
-dibatasi hanya untuk auditor internal.
+Login sebagai admin utama, buka menu **Pengguna** di sidebar, lalu klik
+**Tambah Pengguna**. Isi nama, email, kata sandi awal, dan pilih peran
+(Auditor atau Admin Utama), lalu simpan — akun langsung bisa dipakai untuk
+login, tanpa perlu membuka Supabase Dashboard.
+
+Menu ini hanya muncul untuk akun berperan admin utama (lihat langkah 1.6
+untuk menetapkan admin utama pertama). Auditor biasa hanya melihat profil
+akunnya sendiri di menu ini. Tidak ada pendaftaran mandiri — akses memang
+dibatasi hanya untuk pengguna internal yang dibuatkan akun oleh admin utama.
 
 ---
 

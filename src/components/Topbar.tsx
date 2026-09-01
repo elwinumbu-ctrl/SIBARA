@@ -22,6 +22,8 @@ export default function Topbar({
   email,
   onOpenMobile,
   showAddButton = true,
+  addHref = "/regulasi/baru",
+  addLabel = "Tambah Regulasi",
   dark = false,
 }: {
   active: string;
@@ -30,6 +32,8 @@ export default function Topbar({
   email?: string;
   onOpenMobile: () => void;
   showAddButton?: boolean;
+  addHref?: string;
+  addLabel?: string;
   dark?: boolean;
 }) {
   const router = useRouter();
@@ -86,7 +90,7 @@ export default function Topbar({
       <div className="flex items-center gap-2 sm:gap-3">
         {showAddButton && (
           <Link
-            href="/regulasi/baru"
+            href={addHref}
             className={`hidden sm:inline-flex items-center gap-1.5 rounded-lg text-sm font-semibold px-4 py-2.5 transition-colors ${
               dark
                 ? "bg-gradient-to-r from-accent to-cyan text-white shadow-glow hover:brightness-110"
@@ -94,13 +98,13 @@ export default function Topbar({
             }`}
           >
             <Plus size={16} strokeWidth={2.4} />
-            Tambah Regulasi
+            {addLabel}
           </Link>
         )}
         {showAddButton && (
           <Link
-            href="/regulasi/baru"
-            aria-label="Tambah Regulasi"
+            href={addHref}
+            aria-label={addLabel}
             className={`sm:hidden inline-flex items-center justify-center w-9 h-9 rounded-lg text-white ${
               dark ? "bg-gradient-to-r from-accent to-cyan shadow-glow" : "bg-accent shadow-xs"
             }`}

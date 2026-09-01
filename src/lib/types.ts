@@ -40,3 +40,23 @@ export const KATEGORI_REGULASI = [
   "Tata Kelola Sekolah",
   "Lainnya",
 ];
+
+// ---- Manajemen Pengguna ----
+
+export type PeranPengguna = "admin" | "auditor";
+
+export interface Profile {
+  id: string;
+  nama_lengkap: string | null;
+  role: PeranPengguna;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface PenggunaListItem {
+  id: string;
+  email: string | null;
+  nama_lengkap: string | null;
+  role: PeranPengguna;
+  created_at: string;
+}
