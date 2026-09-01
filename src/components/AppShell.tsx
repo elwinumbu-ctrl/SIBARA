@@ -12,6 +12,7 @@ export default function AppShell({
   subtitle,
   email,
   showAddButton = true,
+  dark = false,
   children,
 }: {
   active: string;
@@ -19,6 +20,8 @@ export default function AppShell({
   subtitle?: string;
   email?: string;
   showAddButton?: boolean;
+  /** Cinematic deep-navy background + glass topbar, reserved for /dashboard. */
+  dark?: boolean;
   children: React.ReactNode;
 }) {
   const [collapsed, setCollapsed] = useState(false);
@@ -38,11 +41,38 @@ export default function AppShell({
   }
 
   return (
-    <div className="relative min-h-screen overflow-hidden">
-      {/* Ambient background layer — soft blue-gray depth behind every workspace page */}
-      <div className="pointer-events-none fixed inset-0 z-0 pattern-dots-soft opacity-[0.5]" />
-      <div className="pointer-events-none fixed -top-40 right-[-10%] z-0 w-[520px] h-[520px] rounded-full bg-accent/10 blur-3xl" />
-      <div className="pointer-events-none fixed bottom-[-15%] left-[-8%] z-0 w-[440px] h-[440px] rounded-full bg-cyan/8 blur-3xl" />
+    <div className={`relative min-h-screen overflow-hidden ${dark ? "bg-[#071229]" : ""}`}>
+      {dark ? (
+        <>
+          {/* Deep navy → royal blue cinematic canvas, reserved for the dashboard */}
+          <div
+            className="pointer-events-none fixed inset-0 z-0"
+            style={{
+              background:
+                "radial-gradient(120% 90% at 12% -10%, #123a72 0%, #0a2348 38%, #06152f 72%, #050f24 100%)",
+            }}
+          />
+          <div className="pointer-events-none fixed inset-0 z-0 pattern-dots opacity-[0.05]" />
+          <div
+            className="pointer-events-none fixed inset-0 z-0 opacity-[0.06]"
+            style={{
+              backgroundImage:
+                "linear-gradient(rgba(255,255,255,0.6) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.6) 1px, transparent 1px)",
+              backgroundSize: "56px 56px",
+            }}
+          />
+          <div className="pointer-events-none fixed -top-32 right-[-8%] z-0 w-[560px] h-[560px] rounded-full bg-accent/20 blur-[120px]" />
+          <div className="pointer-events-none fixed bottom-[-18%] left-[-10%] z-0 w-[480px] h-[480px] rounded-full bg-cyan/15 blur-[120px]" />
+          <div className="pointer-events-none fixed inset-0 z-0 shadow-[inset_0_0_180px_60px_rgba(2,8,20,0.55)]" />
+        </>
+      ) : (
+        <>
+          {/* Ambient background layer — soft blue-gray depth behind every workspace page */}
+          <div className="pointer-events-none fixed inset-0 z-0 pattern-dots-soft opacity-[0.5]" />
+          <div className="pointer-events-none fixed -top-40 right-[-10%] z-0 w-[520px] h-[520px] rounded-full bg-accent/10 blur-3xl" />
+          <div className="pointer-events-none fixed bottom-[-15%] left-[-8%] z-0 w-[440px] h-[440px] rounded-full bg-cyan/8 blur-3xl" />
+        </>
+      )}
 
       <Sidebar
         active={active}
@@ -64,8 +94,9 @@ export default function AppShell({
           email={email}
           showAddButton={showAddButton}
           onOpenMobile={() => setMobileOpen(true)}
+          dark={dark}
         />
-        <main className="flex-1 px-4 sm:px-6 py-6 max-w-[1400px] w-full mx-auto">
+        <main className="flex-1 px-4 sm:px-6 py-6 max-w-[1400px] w-full mx-auto animate-[fadein_0.4s_ease]">
           {children}
         </main>
       </div>
