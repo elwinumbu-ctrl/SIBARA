@@ -1,11 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import AppShell from "@/components/AppShell";
 import PageHero from "@/components/PageHero";
-import { LogOut, Palette, ShieldCheck, Info, Settings } from "lucide-react";
+import { LogOut, Palette, ShieldCheck, Info, Settings, Building2, ChevronRight } from "lucide-react";
 
 export default function PengaturanPage() {
   const router = useRouter();
@@ -44,6 +45,27 @@ export default function PengaturanPage() {
             Inspektorat.
           </p>
         </section>
+
+        <Link
+          href="/pengaturan/profil-inspektorat"
+          className="group surface-card-dark p-5 sm:p-6 flex items-center gap-4 hover:border-cyan/30 hover-lift transition-colors"
+        >
+          <span className="inline-flex items-center justify-center w-11 h-11 rounded-xl bg-cyan/10 text-cyan shrink-0">
+            <Building2 size={18} />
+          </span>
+          <div className="min-w-0 flex-1">
+            <h3 className="font-display font-semibold text-sm text-white group-hover:text-cyan transition-colors">
+              Profil Inspektorat
+            </h3>
+            <p className="text-xs text-white/45 mt-0.5">
+              Ubah identitas, kontak, visi & misi, serta data dan foto pejabat.
+            </p>
+          </div>
+          <ChevronRight
+            size={16}
+            className="text-white/30 group-hover:text-cyan group-hover:translate-x-0.5 transition-all shrink-0"
+          />
+        </Link>
 
         <section className="surface-card-dark p-5 sm:p-6">
           <div className="flex items-center gap-2.5 mb-4">

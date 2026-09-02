@@ -60,3 +60,28 @@ export interface PenggunaListItem {
   role: PeranPengguna;
   created_at: string;
 }
+
+// ---- Profil Inspektorat (dapat diedit lewat Pengaturan) ----
+
+export interface ProfilInspektorat {
+  id: number;
+  selayang_pandang: string | null;
+  alamat: string | null;
+  telepon: string | null;
+  email: string | null;
+  visi: string | null;
+  misi: string[];
+  tugas_pokok: string[];
+  updated_at: string;
+}
+
+export interface PejabatStruktur {
+  id: string;
+  peran: string;
+  nama: string | null;
+  keterangan: string | null;
+  foto_path: string | null;
+  urutan: number;
+  created_at: string;
+  updated_at: string;
+}

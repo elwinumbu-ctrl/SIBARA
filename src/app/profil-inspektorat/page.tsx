@@ -1,6 +1,8 @@
+import Image from "next/image";
 import { createClient } from "@/lib/supabase/server";
 import AppShell from "@/components/AppShell";
 import PageHero from "@/components/PageHero";
+import type { PejabatStruktur, ProfilInspektorat } from "@/lib/types";
 import {
   Building2,
   Target,
@@ -10,24 +12,60 @@ import {
   MapPin,
   Mail,
   Phone,
+  User,
 } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
-const TUGAS_POKOK = [
+// Data bawaan — tampil selama admin belum mengisi/menyimpan data lewat
+// menu Pengaturan -> Profil Inspektorat, atau jika skrip migrasi
+// supabase/add-profil-inspektorat.sql belum dijalankan.
+const DEFAULT_SELAYANG_PANDANG =
+  "Inspektorat Kabupaten Sumba Barat adalah perangkat daerah yang bertugas " +
+  "menyelenggarakan pengawasan internal atas penyelenggaraan urusan " +
+  "pemerintahan yang menjadi kewenangan daerah, termasuk pengawasan " +
+  "pengelolaan Dana Bantuan Operasional Satuan Pendidikan (BOSP) melalui " +
+  "Inspektur Pembantu Wilayah IV. SIBARA hadir sebagai sistem informasi " +
+  "yang mendukung transparansi dan akuntabilitas regulasi dana BOSP.";
+
+const DEFAULT_ALAMAT = "Jl. Pemerintahan, Waikabubak, Kabupaten Sumba Barat, NTT";
+const DEFAULT_TELEPON = "(0387) xxx-xxx";
+const DEFAULT_EMAIL = "inspektorat@sumbabaratkab.go.id";
+
+const DEFAULT_VISI =
+  "Terwujudnya pengawasan internal pemerintahan daerah yang profesional, " +
+  "independen, dan berintegritas untuk mendukung tata kelola pemerintahan " +
+  "yang bersih dan akuntabel.";
+
+const DEFAULT_MISI = [
+  "Meningkatkan kualitas pengawasan internal pemerintah daerah.",
+  "Mendorong akuntabilitas pengelolaan keuangan & aset daerah.",
+  "Membangun sistem informasi pengawasan yang transparan.",
+  "Meningkatkan kapasitas dan integritas aparatur pengawas.",
+];
+
+const DEFAULT_TUGAS_POKOK = [
   "Melaksanakan pengawasan internal terhadap kinerja dan keuangan perangkat daerah.",
   "Mengawal akuntabilitas pengelolaan Dana BOSP di satuan pendidikan.",
   "Melakukan reviu, evaluasi, pemantauan, dan pengawasan lainnya.",
   "Menyusun laporan hasil pengawasan sebagai bahan pengambilan kebijakan Bupati.",
 ];
 
-const STRUKTUR = [
-  { peran: "Inspektur", nama: "—", keterangan: "Pimpinan tertinggi Inspektorat" },
-  { peran: "Sekretaris", nama: "—", keterangan: "Koordinasi administrasi & program" },
-  { peran: "Inspektur Pembantu Wilayah I", nama: "—", keterangan: "Wilayah kerja I" },
-  { peran: "Inspektur Pembantu Wilayah II", nama: "—", keterangan: "Wilayah kerja II" },
-  { peran: "Inspektur Pembantu Wilayah III", nama: "—", keterangan: "Wilayah kerja III" },
-  { peran: "Inspektur Pembantu Wilayah IV", nama: "—", keterangan: "Pengawasan Dana BOSP" },
+interface StrukturRow {
+  id: string | null;
+  peran: string;
+  nama: string | null;
+  keterangan: string | null;
+  foto_path: string | null;
+}
+
+const DEFAULT_STRUKTUR: StrukturRow[] = [
+  { id: null, peran: "Inspektur", nama: "—", keterangan: "Pimpinan tertinggi Inspektorat", foto_path: null },
+  { id: null, peran: "Sekretaris", nama: "—", keterangan: "Koordinasi administrasi & program", foto_path: null },
+  { id: null, peran: "Inspektur Pembantu Wilayah I", nama: "—", keterangan: "Wilayah kerja I", foto_path: null },
+  { id: null, peran: "Inspektur Pembantu Wilayah II", nama: "—", keterangan: "Wilayah kerja II", foto_path: null },
+  { id: null, peran: "Inspektur Pembantu Wilayah III", nama: "—", keterangan: "Wilayah kerja III", foto_path: null },
+  { id: null, peran: "Inspektur Pembantu Wilayah IV", nama: "—", keterangan: "Pengawasan Dana BOSP", foto_path: null },
 ];
 
 export default async function ProfilInspektoratPage() {
@@ -35,6 +73,33 @@ export default async function ProfilInspektoratPage() {
   const {
     data: { user },
   } = await supabase.auth.getUser();
+
+  const [{ data: profilRow }, { data: pejabatRows }] = await Promise.all([
+    supabase.from("profil_inspektorat").select("*").eq("id", 1).maybeSingle(),
+    supabase.from("pejabat_struktur").select("*").order("urutan", { ascending: true }),
+  ]);
+
+  const profil = profilRow as ProfilInspektorat | null;
+  const pejabatList = (pejabatRows ?? []) as PejabatStruktur[];
+
+  const selayangPandang = profil?.selayang_pandang?.trim() || DEFAULT_SELAYANG_PANDANG;
+  const alamat = profil?.alamat?.trim() || DEFAULT_ALAMAT;
+  const telepon = profil?.telepon?.trim() || DEFAULT_TELEPON;
+  const email = profil?.email?.trim() || DEFAULT_EMAIL;
+  const visi = profil?.visi?.trim() || DEFAULT_VISI;
+  const misi = profil?.misi && profil.misi.length > 0 ? profil.misi : DEFAULT_MISI;
+  const tugasPokok =
+    profil?.tugas_pokok && profil.tugas_pokok.length > 0 ? profil.tugas_pokok : DEFAULT_TUGAS_POKOK;
+  const struktur: StrukturRow[] =
+    pejabatList.length > 0
+      ? pejabatList.map((p) => ({
+          id: p.id,
+          peran: p.peran,
+          nama: p.nama,
+          keterangan: p.keterangan,
+          foto_path: p.foto_path,
+        }))
+      : DEFAULT_STRUKTUR;
 
   return (
     <AppShell
@@ -57,13 +122,8 @@ export default async function ProfilInspektoratPage() {
           <h3 className="font-display text-base font-semibold text-white mb-2">
             Selayang Pandang
           </h3>
-          <p className="text-sm text-white/60 leading-relaxed">
-            Inspektorat Kabupaten Sumba Barat adalah perangkat daerah yang bertugas
-            menyelenggarakan pengawasan internal atas penyelenggaraan urusan
-            pemerintahan yang menjadi kewenangan daerah, termasuk pengawasan
-            pengelolaan Dana Bantuan Operasional Satuan Pendidikan (BOSP) melalui
-            Inspektur Pembantu Wilayah IV. SIBARA hadir sebagai sistem informasi
-            yang mendukung transparansi dan akuntabilitas regulasi dana BOSP.
+          <p className="text-sm text-white/60 leading-relaxed whitespace-pre-line">
+            {selayangPandang}
           </p>
         </div>
         <div className="surface-card-dark p-5 sm:p-6">
@@ -73,15 +133,15 @@ export default async function ProfilInspektoratPage() {
           <ul className="space-y-3 text-sm text-white/60">
             <li className="flex items-start gap-2.5">
               <MapPin size={16} className="text-cyan shrink-0 mt-0.5" />
-              <span>Jl. Pemerintahan, Waikabubak, Kabupaten Sumba Barat, NTT</span>
+              <span>{alamat}</span>
             </li>
             <li className="flex items-center gap-2.5">
               <Phone size={16} className="text-cyan shrink-0" />
-              <span>(0387) xxx-xxx</span>
+              <span>{telepon}</span>
             </li>
             <li className="flex items-center gap-2.5">
               <Mail size={16} className="text-cyan shrink-0" />
-              <span>inspektorat@sumbabaratkab.go.id</span>
+              <span>{email}</span>
             </li>
           </ul>
         </div>
@@ -96,10 +156,8 @@ export default async function ProfilInspektoratPage() {
             </span>
             <h3 className="font-display text-base font-semibold text-white">Visi</h3>
           </div>
-          <p className="text-sm text-white/60 leading-relaxed">
-            Terwujudnya pengawasan internal pemerintahan daerah yang profesional,
-            independen, dan berintegritas untuk mendukung tata kelola pemerintahan
-            yang bersih dan akuntabel.
+          <p className="text-sm text-white/60 leading-relaxed whitespace-pre-line">
+            {visi}
           </p>
         </div>
         <div className="surface-card-dark p-5 sm:p-6">
@@ -110,10 +168,9 @@ export default async function ProfilInspektoratPage() {
             <h3 className="font-display text-base font-semibold text-white">Misi</h3>
           </div>
           <ul className="text-sm text-white/60 leading-relaxed space-y-1.5 list-disc list-inside">
-            <li>Meningkatkan kualitas pengawasan internal pemerintah daerah.</li>
-            <li>Mendorong akuntabilitas pengelolaan keuangan & aset daerah.</li>
-            <li>Membangun sistem informasi pengawasan yang transparan.</li>
-            <li>Meningkatkan kapasitas dan integritas aparatur pengawas.</li>
+            {misi.map((m, i) => (
+              <li key={i}>{m}</li>
+            ))}
           </ul>
         </div>
       </div>
@@ -129,7 +186,7 @@ export default async function ProfilInspektoratPage() {
           </h3>
         </div>
         <div className="grid sm:grid-cols-2 gap-3">
-          {TUGAS_POKOK.map((tugas, i) => (
+          {tugasPokok.map((tugas, i) => (
             <div key={i} className="flex items-start gap-3 rounded-xl bg-white/5 border border-white/8 p-3.5">
               <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-cyan/15 text-cyan text-xs font-semibold shrink-0">
                 {i + 1}
@@ -150,28 +207,45 @@ export default async function ProfilInspektoratPage() {
             Struktur Organisasi
           </h3>
         </div>
-        <div className="overflow-x-auto -mx-1">
-          <table className="w-full text-sm min-w-[540px]">
-            <thead>
-              <tr className="text-left text-[11px] uppercase tracking-wider text-white/40 border-b border-white/10">
-                <th className="py-2.5 px-3 font-semibold">Jabatan</th>
-                <th className="py-2.5 px-3 font-semibold">Nama</th>
-                <th className="py-2.5 px-3 font-semibold">Keterangan</th>
-              </tr>
-            </thead>
-            <tbody>
-              {STRUKTUR.map((row, i) => (
-                <tr key={i} className="border-b border-white/5 last:border-0">
-                  <td className="py-3 px-3 text-white/80 font-medium">{row.peran}</td>
-                  <td className="py-3 px-3 text-white/55">{row.nama}</td>
-                  <td className="py-3 px-3 text-white/40">{row.keterangan}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          {struktur.map((row, i) => {
+            const fotoUrl = row.foto_path
+              ? supabase.storage.from("pejabat-photos").getPublicUrl(row.foto_path).data.publicUrl
+              : null;
+
+            return (
+              <div
+                key={row.id ?? i}
+                className="flex items-center gap-3.5 rounded-xl bg-white/5 border border-white/8 p-3.5"
+              >
+                <span className="relative shrink-0 w-14 h-14 rounded-full overflow-hidden border border-white/15 bg-white/10">
+                  {fotoUrl ? (
+                    <Image
+                      src={fotoUrl}
+                      alt={row.nama || row.peran}
+                      fill
+                      className="object-cover"
+                      unoptimized
+                    />
+                  ) : (
+                    <span className="flex items-center justify-center w-full h-full text-white/30">
+                      <User size={22} />
+                    </span>
+                  )}
+                </span>
+                <div className="min-w-0">
+                  <p className="text-sm font-semibold text-white truncate">{row.peran}</p>
+                  <p className="text-xs text-white/55 truncate">{row.nama || "—"}</p>
+                  <p className="text-xs text-white/35 truncate">{row.keterangan}</p>
+                </div>
+              </div>
+            );
+          })}
         </div>
-        <p className="text-xs text-white/30 mt-3">
-          * Data nama pejabat dapat diperbarui melalui menu Pengaturan.
+
+        <p className="text-xs text-white/30 mt-4">
+          * Data dan foto pejabat dapat diperbarui melalui menu Pengaturan → Profil Inspektorat.
         </p>
       </div>
     </AppShell>
