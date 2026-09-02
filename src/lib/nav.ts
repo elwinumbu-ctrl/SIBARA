@@ -11,6 +11,7 @@ import {
   PieChart,
   Users,
   Settings,
+  ScrollText,
   type LucideIcon,
 } from "lucide-react";
 
@@ -27,6 +28,7 @@ export const NAV_ITEMS: NavItem[] = [
   { key: "regulasi", label: "Regulasi", href: "/regulasi", icon: FileText },
   { key: "jenis", label: "Jenis Regulasi", href: "/jenis", icon: Layers },
   { key: "kategori", label: "Kategori", href: "/kategori", icon: Tags },
+  { key: "matriks-bosp", label: "Matriks BOSP", href: "/matriks-bosp", icon: ScrollText },
   { key: "tahun", label: "Tahun", href: "/tahun", icon: CalendarRange },
   { key: "status", label: "Status", href: "/status", icon: Activity },
   { key: "dokumen", label: "Dokumen Pendukung", href: "/dokumen", icon: Paperclip },
