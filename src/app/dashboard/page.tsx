@@ -152,29 +152,32 @@ export default async function DashboardPage() {
         </svg>
 
         <div className="relative px-5 sm:px-8 py-7 sm:py-9">
-          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
-            <div className="min-w-0 flex-1 overflow-hidden">
-              <div className="marquee-track flex flex-col items-start">
-                <p className="text-xs tracking-[0.15em] uppercase text-white/55 mb-2 flex items-center gap-2 whitespace-nowrap">
-                  {greeting}, {displayName}
-                </p>
-                <h2 className="font-display text-2xl sm:text-3xl font-bold leading-tight whitespace-nowrap">
-                  Bank Regulasi Dana BOSP
-                </h2>
-                <p className="text-sm text-white/65 mt-1.5 whitespace-nowrap">
-                  Pengawasan Dana BOSP — Inspektur Pembantu Wilayah IV
-                </p>
-              </div>
+          <div className="min-w-0 flex-1 overflow-hidden">
+            <div className="marquee-track flex flex-col items-start">
+              <p className="text-xs tracking-[0.15em] uppercase text-white/55 mb-2 flex items-center gap-2 whitespace-nowrap">
+                {greeting}, {displayName}
+              </p>
+              <h2 className="font-display text-2xl sm:text-3xl font-bold leading-tight whitespace-nowrap">
+                Bank Regulasi Dana BOSP
+              </h2>
+              <p className="text-sm text-white/65 mt-1.5 whitespace-nowrap">
+                Pengawasan Dana BOSP — Inspektur Pembantu Wilayah IV
+              </p>
             </div>
-            <Link
-              href="/regulasi/baru"
-              className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-accent to-cyan text-white text-sm font-semibold px-4 py-2.5 shadow-glow hover:brightness-110 hover:-translate-y-0.5 transition-all self-start"
-            >
-              <Plus size={16} strokeWidth={2.4} />
-              Tambah Regulasi
-            </Link>
           </div>
         </div>
+      </div>
+
+      {/* Tombol Tambah Regulasi — dipindah keluar dari banner foto agar
+          tidak menutupi/mengganggu foto kantor Inspektorat di background. */}
+      <div className="flex justify-end mb-6 -mt-2">
+        <Link
+          href="/regulasi/baru"
+          className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-accent to-cyan text-white text-sm font-semibold px-4 py-2.5 shadow-glow hover:brightness-110 hover:-translate-y-0.5 transition-all"
+        >
+          <Plus size={16} strokeWidth={2.4} />
+          Tambah Regulasi
+        </Link>
       </div>
 
       {/* KPI stat cards */}

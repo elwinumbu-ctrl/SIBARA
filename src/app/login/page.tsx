@@ -68,7 +68,7 @@ export default function LoginPage() {
       </div>
 
       <div className="relative w-full max-w-sm flex flex-col items-center text-center">
-        <div className="w-20 h-20 rounded-2xl bg-white shadow-2xl flex items-center justify-center p-2.5 mb-5 ring-1 ring-white/10">
+        <div className="w-28 h-28 rounded-2xl bg-white shadow-2xl flex items-center justify-center p-3 mb-5 ring-1 ring-white/10">
           <Image
             src="/logo-sumba-barat.png"
             alt="Lambang Kabupaten Sumba Barat"

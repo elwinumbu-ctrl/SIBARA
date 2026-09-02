@@ -43,7 +43,7 @@ export default function Sidebar({
         {/* Brand */}
         <div className={`relative flex items-center h-16 shrink-0 ${collapsed ? "justify-center px-2" : "justify-between px-4"}`}>
           <Link href="/dashboard" className="flex items-center gap-2.5 min-w-0">
-            <span className="relative inline-flex items-center justify-center w-9 h-9 rounded-lg bg-white p-1.5 shrink-0 overflow-hidden">
+            <span className="relative inline-flex items-center justify-center w-12 h-12 rounded-lg bg-white p-1.5 shrink-0 overflow-hidden">
               <Image
                 src="/logo-sumba-barat.png"
                 alt="Lambang Kabupaten Sumba Barat"

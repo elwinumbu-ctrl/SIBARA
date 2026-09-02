@@ -267,7 +267,6 @@ export default async function ProfilInspektoratPage() {
               <div className="min-w-0">
                 <p className="text-sm font-semibold text-white truncate">{row.peran}</p>
                 <p className="text-xs text-white/55 truncate">{row.nama || "—"}</p>
-                <p className="text-xs text-white/35 truncate">{row.keterangan}</p>
               </div>
             </div>
           ))}

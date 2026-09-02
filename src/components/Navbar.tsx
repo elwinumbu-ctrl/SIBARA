@@ -94,7 +94,7 @@ export default function Navbar({ email }: { email?: string }) {
       <div className="border-b border-paper-line bg-paper-card/90 backdrop-blur supports-[backdrop-filter]:bg-paper-card/75">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <Link href="/dashboard" className="flex items-center gap-3 group">
-            <span className="relative inline-flex items-center justify-center w-10 h-10 rounded-full bg-white ring-1 ring-paper-line shadow-card p-1.5 overflow-hidden shrink-0">
+            <span className="relative inline-flex items-center justify-center w-14 h-14 rounded-full bg-white ring-1 ring-paper-line shadow-card p-1.5 overflow-hidden shrink-0">
               <Image
                 src="/logo-sumba-barat.png"
                 alt="Lambang Kabupaten Sumba Barat"
