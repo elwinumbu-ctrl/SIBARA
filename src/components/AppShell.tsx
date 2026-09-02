@@ -46,15 +46,21 @@ export default function AppShell({
   }
 
   return (
-    <div className={`relative min-h-screen overflow-hidden ${dark ? "bg-[#071229]" : ""}`}>
+    <div className={`relative min-h-screen overflow-hidden ${dark ? "bg-[#071229]" : "bg-primary-800"}`}>
+      {/* Kantor Bupati Sumba Barat — background foto di setiap halaman menu */}
+      <div
+        className="pointer-events-none fixed inset-0 z-0 bg-cover bg-center"
+        style={{ backgroundImage: "url(/dashboard-bg.jpg)" }}
+      />
+
       {dark ? (
         <>
-          {/* Deep navy → royal blue cinematic canvas, reserved for the dashboard */}
+          {/* Deep navy → royal blue cinematic tint over the photo, reserved for the dashboard */}
           <div
             className="pointer-events-none fixed inset-0 z-0"
             style={{
               background:
-                "radial-gradient(120% 90% at 12% -10%, #123a72 0%, #0a2348 38%, #06152f 72%, #050f24 100%)",
+                "radial-gradient(120% 90% at 12% -10%, rgba(18,58,114,0.90) 0%, rgba(10,35,72,0.93) 38%, rgba(6,21,47,0.95) 72%, rgba(5,15,36,0.97) 100%)",
             }}
           />
           <div className="pointer-events-none fixed inset-0 z-0 pattern-dots opacity-[0.05]" />
@@ -72,7 +78,8 @@ export default function AppShell({
         </>
       ) : (
         <>
-          {/* Ambient background layer — soft blue-gray depth behind every workspace page */}
+          {/* Light overlay so the photo shows through while cards/text stay readable */}
+          <div className="pointer-events-none fixed inset-0 z-0 bg-white/85" />
           <div className="pointer-events-none fixed inset-0 z-0 pattern-dots-soft opacity-[0.5]" />
           <div className="pointer-events-none fixed -top-40 right-[-10%] z-0 w-[520px] h-[520px] rounded-full bg-accent/10 blur-3xl" />
           <div className="pointer-events-none fixed bottom-[-15%] left-[-8%] z-0 w-[440px] h-[440px] rounded-full bg-cyan/8 blur-3xl" />
