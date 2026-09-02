@@ -107,11 +107,11 @@ export default async function DashboardPage() {
           boxShadow: "0 20px 60px rgba(3,12,30,0.45)",
         }}
       >
-        {/* Foto Kantor Inspektorat — bg-contain supaya seluruh foto tetap
-            terlihat utuh, tidak terpotong. */}
+        {/* Foto Kantor Inspektorat — dibentangkan penuh mengisi seluruh
+            lebar & tinggi banner (bukan contain/cover) sesuai permintaan. */}
         <div
-          className="pointer-events-none absolute inset-0 bg-contain bg-center bg-no-repeat"
-          style={{ backgroundImage: "url(/dashboard-bg.jpg)" }}
+          className="pointer-events-none absolute inset-0 bg-no-repeat bg-center"
+          style={{ backgroundImage: "url(/dashboard-bg.jpg)", backgroundSize: "100% 100%" }}
         />
         {/* Tint tipis supaya foto tetap terlihat, teks tetap kontras */}
         <div
