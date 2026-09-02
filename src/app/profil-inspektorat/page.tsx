@@ -1,7 +1,7 @@
-import Image from "next/image";
 import { createClient } from "@/lib/supabase/server";
 import AppShell from "@/components/AppShell";
 import PageHero from "@/components/PageHero";
+import PejabatFotoEditor from "@/components/PejabatFotoEditor";
 import type { PejabatStruktur, ProfilInspektorat } from "@/lib/types";
 import {
   Building2,
@@ -12,7 +12,6 @@ import {
   MapPin,
   Mail,
   Phone,
-  User,
 } from "lucide-react";
 
 export const dynamic = "force-dynamic";
@@ -209,43 +208,31 @@ export default async function ProfilInspektoratPage() {
         </div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
-          {struktur.map((row, i) => {
-            const fotoUrl = row.foto_path
-              ? supabase.storage.from("pejabat-photos").getPublicUrl(row.foto_path).data.publicUrl
-              : null;
-
-            return (
-              <div
-                key={row.id ?? i}
-                className="flex items-center gap-3.5 rounded-xl bg-white/5 border border-white/8 p-3.5"
-              >
-                <span className="relative shrink-0 w-14 h-14 rounded-full overflow-hidden border border-white/15 bg-white/10">
-                  {fotoUrl ? (
-                    <Image
-                      src={fotoUrl}
-                      alt={row.nama || row.peran}
-                      fill
-                      className="object-cover"
-                      unoptimized
-                    />
-                  ) : (
-                    <span className="flex items-center justify-center w-full h-full text-white/30">
-                      <User size={22} />
-                    </span>
-                  )}
-                </span>
-                <div className="min-w-0">
-                  <p className="text-sm font-semibold text-white truncate">{row.peran}</p>
-                  <p className="text-xs text-white/55 truncate">{row.nama || "—"}</p>
-                  <p className="text-xs text-white/35 truncate">{row.keterangan}</p>
-                </div>
+          {struktur.map((row, i) => (
+            <div
+              key={row.id ?? i}
+              className="flex items-center gap-3.5 rounded-xl bg-white/5 border border-white/8 p-3.5"
+            >
+              <PejabatFotoEditor
+                id={row.id}
+                peran={row.peran}
+                nama={row.nama}
+                keterangan={row.keterangan}
+                urutan={i + 1}
+                fotoPath={row.foto_path}
+              />
+              <div className="min-w-0">
+                <p className="text-sm font-semibold text-white truncate">{row.peran}</p>
+                <p className="text-xs text-white/55 truncate">{row.nama || "—"}</p>
+                <p className="text-xs text-white/35 truncate">{row.keterangan}</p>
               </div>
-            );
-          })}
+            </div>
+          ))}
         </div>
 
         <p className="text-xs text-white/30 mt-4">
-          * Data dan foto pejabat dapat diperbarui melalui menu Pengaturan → Profil Inspektorat.
+          * Arahkan kursor ke foto lalu klik untuk mengunggah atau mengganti foto pejabat.
+          Data lengkap juga dapat diperbarui melalui menu Pengaturan → Profil Inspektorat.
         </p>
       </div>
     </AppShell>
