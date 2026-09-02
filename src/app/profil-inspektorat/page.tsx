@@ -59,12 +59,55 @@ interface StrukturRow {
 }
 
 const DEFAULT_STRUKTUR: StrukturRow[] = [
-  { id: null, peran: "Inspektur", nama: "—", keterangan: "Pimpinan tertinggi Inspektorat", foto_path: null },
-  { id: null, peran: "Sekretaris", nama: "—", keterangan: "Koordinasi administrasi & program", foto_path: null },
-  { id: null, peran: "Inspektur Pembantu Wilayah I", nama: "—", keterangan: "Wilayah kerja I", foto_path: null },
-  { id: null, peran: "Inspektur Pembantu Wilayah II", nama: "—", keterangan: "Wilayah kerja II", foto_path: null },
-  { id: null, peran: "Inspektur Pembantu Wilayah III", nama: "—", keterangan: "Wilayah kerja III", foto_path: null },
-  { id: null, peran: "Inspektur Pembantu Wilayah IV", nama: "—", keterangan: "Pengawasan Dana BOSP", foto_path: null },
+  {
+    id: null,
+    peran: "Inspektur",
+    nama: "Weru Raddi Kaka Ora, SP",
+    keterangan: "Pimpinan tertinggi Inspektorat",
+    foto_path: "/pejabat/weru-raddi-kaka-ora.jpg",
+  },
+  {
+    id: null,
+    peran: "Sekretaris",
+    nama: "Simon Malo Kii, S.Pd, M.Si",
+    keterangan: "Koordinasi administrasi & program",
+    foto_path: "/pejabat/simon-malo-kii.jpg",
+  },
+  {
+    id: null,
+    peran: "Inspektur Pembantu Wilayah I",
+    nama: "Yuliana Tineke Evi Malo, ST",
+    keterangan: "Wilayah kerja I",
+    foto_path: "/pejabat/evi-malo.jpg",
+  },
+  {
+    id: null,
+    peran: "Inspektur Pembantu Wilayah II",
+    nama: "Betseba L. Mude, S.Sos",
+    keterangan: "Wilayah kerja II",
+    foto_path: "/pejabat/betsy-mude.jpg",
+  },
+  {
+    id: null,
+    peran: "Inspektur Pembantu Wilayah III",
+    nama: "drh. Maimun Indriany Hamzah, S.KH",
+    keterangan: "Wilayah kerja III",
+    foto_path: "/pejabat/maimun-hamzah.jpg",
+  },
+  {
+    id: null,
+    peran: "Inspektur Pembantu Wilayah IV",
+    nama: "Abdullah Daud, SE",
+    keterangan: "Pengawasan Dana BOSP",
+    foto_path: "/pejabat/abdullah-daud.jpg",
+  },
+  {
+    id: null,
+    peran: "Inspektur Pembantu Wilayah V",
+    nama: "Yunias Baga Wulla Male, SP",
+    keterangan: "Wilayah kerja V",
+    foto_path: "/pejabat/yunias-baga-wulla-male.jpg",
+  },
 ];
 
 export default async function ProfilInspektoratPage() {

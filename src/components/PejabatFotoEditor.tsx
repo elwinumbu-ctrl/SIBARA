@@ -11,6 +11,9 @@ const MAX_SIZE_MB = 5;
 
 function publicUrl(path: string | null) {
   if (!path) return null;
+  // Foto bawaan (default) disimpan statis di /public/pejabat dan direferensikan
+  // dengan path yang diawali "/", jadi tidak perlu diambil dari Supabase Storage.
+  if (path.startsWith("/")) return path;
   const supabase = createClient();
   return supabase.storage.from(BUCKET).getPublicUrl(path).data.publicUrl;
 }
@@ -90,7 +93,9 @@ export default function PejabatFotoEditor({
         setRowId(inserted.id as string);
       }
 
-      if (oldFotoPath) {
+      if (oldFotoPath && !oldFotoPath.startsWith("/")) {
+        // Hanya hapus dari Storage kalau foto lama memang tersimpan di sana
+        // (bukan foto bawaan statis di /public/pejabat).
         await supabase.storage.from(BUCKET).remove([oldFotoPath]);
       }
 
