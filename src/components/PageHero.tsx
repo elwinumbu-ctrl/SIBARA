@@ -31,9 +31,10 @@ export default function PageHero({
         boxShadow: "0 20px 60px rgba(3,12,30,0.45)",
       }}
     >
-      {/* Foto Kantor Bupati Sumba Barat */}
+      {/* Foto Kantor Inspektorat — bg-contain supaya seluruh foto (termasuk
+          plang & papan nama) tetap terlihat utuh, tidak terpotong. */}
       <div
-        className="pointer-events-none absolute inset-0 bg-cover bg-center"
+        className="pointer-events-none absolute inset-0 bg-contain bg-center bg-no-repeat"
         style={{ backgroundImage: "url(/dashboard-bg.jpg)" }}
       />
       {/* Tint tipis supaya foto tetap terlihat, teks tetap kontras */}
