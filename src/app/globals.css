@@ -122,6 +122,18 @@ body {
   to { opacity: 1; transform: translateY(0); }
 }
 
+/* Teks berjalan terus-menerus dari kanan ke kiri (marquee) — dipakai pada
+   sapaan & judul banner Dashboard. */
+@keyframes marquee-rtl {
+  from { transform: translateX(100%); }
+  to { transform: translateX(-100%); }
+}
+.marquee-track {
+  display: inline-block;
+  white-space: nowrap;
+  animation: marquee-rtl 18s linear infinite;
+}
+
 /* Garis aksen status di sisi kiri kartu regulasi */
 .status-tab {
   position: relative;

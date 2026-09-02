@@ -68,7 +68,16 @@ export default async function DashboardPage() {
   const recentList = (recent ?? []) as Regulasi[];
 
   const displayName = user?.email?.split("@")[0] ?? "Auditor";
-  const hour = new Date().getHours();
+  // Selalu hitung berdasarkan jam WITA (zona waktu Waikabubak, Sumba Barat, NTT),
+  // bukan zona waktu server — supaya sapaan pagi/siang/sore/malam selalu tepat
+  // untuk pengguna di Indonesia, di mana pun server ini di-hosting.
+  const hour = Number(
+    new Intl.DateTimeFormat("en-US", {
+      hour: "numeric",
+      hour12: false,
+      timeZone: "Asia/Makassar",
+    }).format(new Date())
+  );
   const greeting =
     hour < 11 ? "Selamat pagi" : hour < 15 ? "Selamat siang" : hour < 18 ? "Selamat sore" : "Selamat malam";
 
@@ -143,17 +152,19 @@ export default async function DashboardPage() {
         </svg>
 
         <div className="relative px-5 sm:px-8 py-7 sm:py-9">
-          <p className="text-xs tracking-[0.15em] uppercase text-white/55 mb-2 flex items-center gap-2">
-            {greeting}, {displayName}
-          </p>
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
-            <div>
-              <h2 className="font-display text-2xl sm:text-3xl font-bold leading-tight">
-                Bank Regulasi Dana BOSP
-              </h2>
-              <p className="text-sm text-white/65 mt-1.5">
-                Pengawasan Dana BOSP — Inspektur Pembantu Wilayah IV
-              </p>
+            <div className="min-w-0 flex-1 overflow-hidden">
+              <div className="marquee-track flex flex-col items-start">
+                <p className="text-xs tracking-[0.15em] uppercase text-white/55 mb-2 flex items-center gap-2 whitespace-nowrap">
+                  {greeting}, {displayName}
+                </p>
+                <h2 className="font-display text-2xl sm:text-3xl font-bold leading-tight whitespace-nowrap">
+                  Bank Regulasi Dana BOSP
+                </h2>
+                <p className="text-sm text-white/65 mt-1.5 whitespace-nowrap">
+                  Pengawasan Dana BOSP — Inspektur Pembantu Wilayah IV
+                </p>
+              </div>
             </div>
             <Link
               href="/regulasi/baru"
