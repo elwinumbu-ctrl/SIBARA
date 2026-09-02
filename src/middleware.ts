@@ -33,6 +33,7 @@ export async function middleware(request: NextRequest) {
   const isAuthRoute = request.nextUrl.pathname.startsWith("/login");
   const PROTECTED_PREFIXES = [
     "/dashboard",
+    "/profil-inspektorat",
     "/regulasi",
     "/kategori",
     "/tahun",

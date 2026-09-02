@@ -1,5 +1,6 @@
 import {
   LayoutDashboard,
+  Building2,
   FileText,
   Layers,
   Tags,
@@ -22,6 +23,7 @@ export interface NavItem {
 
 export const NAV_ITEMS: NavItem[] = [
   { key: "dashboard", label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+  { key: "profil-inspektorat", label: "Profil Inspektorat", href: "/profil-inspektorat", icon: Building2 },
   { key: "regulasi", label: "Regulasi", href: "/regulasi", icon: FileText },
   { key: "jenis", label: "Jenis Regulasi", href: "/jenis", icon: Layers },
   { key: "kategori", label: "Kategori", href: "/kategori", icon: Tags },
