@@ -103,11 +103,22 @@ export default async function DashboardPage() {
       <div
         className="relative overflow-hidden rounded-[20px] text-white mb-6 border"
         style={{
-          background: "linear-gradient(120deg, #0a2348 0%, #123a72 55%, #0e2c5a 100%)",
           borderColor: "rgba(255,255,255,0.10)",
           boxShadow: "0 20px 60px rgba(3,12,30,0.45)",
         }}
       >
+        {/* Foto Kantor Bupati Sumba Barat */}
+        <div
+          className="pointer-events-none absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: "url(/dashboard-bg.jpg)" }}
+        />
+        {/* Tint tipis supaya foto tetap terlihat, teks tetap kontras */}
+        <div
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background: "linear-gradient(120deg, rgba(10,35,72,0.72) 0%, rgba(18,58,114,0.55) 55%, rgba(14,44,90,0.72) 100%)",
+          }}
+        />
         <div className="pointer-events-none absolute inset-0 pattern-dots opacity-[0.06]" />
         <div className="pointer-events-none absolute -top-16 right-10 w-72 h-72 rounded-full opacity-25 blur-3xl bg-accent" />
         <div className="pointer-events-none absolute bottom-[-40%] left-[10%] w-64 h-64 rounded-full opacity-15 blur-3xl bg-cyan" />
