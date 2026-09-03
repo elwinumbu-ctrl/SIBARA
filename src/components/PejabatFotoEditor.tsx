@@ -26,6 +26,7 @@ export default function PejabatFotoEditor({
   urutan,
   fotoPath: initialFotoPath,
   readOnly = false,
+  size = "sm",
 }: {
   /** null jika baris ini belum ada di database (masih data bawaan tampilan). */
   id: string | null;
@@ -36,6 +37,8 @@ export default function PejabatFotoEditor({
   fotoPath: string | null;
   /** true untuk sesi pengunjung (read-only): tampilkan foto tanpa opsi unggah. */
   readOnly?: boolean;
+  /** "lg" = kartu foto besar (mis. grid Struktur Organisasi), "sm" = avatar bulat kecil (default). */
+  size?: "sm" | "lg";
 }) {
   const supabase = createClient();
 
@@ -111,14 +114,21 @@ export default function PejabatFotoEditor({
     }
   }
 
+  const frameClass =
+    size === "lg"
+      ? "relative block w-full aspect-[4/5] rounded-2xl overflow-hidden border border-white/15 bg-white/10 shrink-0"
+      : "relative block w-14 h-14 rounded-full overflow-hidden border border-white/15 bg-white/10 shrink-0";
+  const placeholderIconSize = size === "lg" ? 48 : 22;
+  const cameraIconSize = size === "lg" ? 26 : 16;
+
   if (readOnly) {
     return (
-      <div className="relative block w-14 h-14 rounded-full overflow-hidden border border-white/15 bg-white/10 shrink-0">
+      <div className={frameClass}>
         {previewUrl ? (
           <Image src={previewUrl} alt={nama || peran} fill className="object-cover" unoptimized />
         ) : (
           <span className="flex items-center justify-center w-full h-full text-white/30">
-            <User size={22} />
+            <User size={placeholderIconSize} />
           </span>
         )}
       </div>
@@ -126,24 +136,24 @@ export default function PejabatFotoEditor({
   }
 
   return (
-    <div className="relative shrink-0">
+    <div className={`relative shrink-0 ${size === "lg" ? "w-full" : ""}`}>
       <label
-        className="relative block w-14 h-14 rounded-full overflow-hidden border border-white/15 bg-white/10 cursor-pointer group"
+        className={`${frameClass} cursor-pointer group`}
         title="Klik untuk mengunggah/mengganti foto"
       >
         {previewUrl ? (
           <Image src={previewUrl} alt={nama || peran} fill className="object-cover" unoptimized />
         ) : (
           <span className="flex items-center justify-center w-full h-full text-white/30">
-            <User size={22} />
+            <User size={placeholderIconSize} />
           </span>
         )}
 
         <span className="absolute inset-0 bg-black/55 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
           {uploading ? (
-            <Loader2 size={16} className="text-white animate-spin" />
+            <Loader2 size={cameraIconSize} className="text-white animate-spin" />
           ) : (
-            <Camera size={16} className="text-white" />
+            <Camera size={cameraIconSize} className="text-white" />
           )}
         </span>
 

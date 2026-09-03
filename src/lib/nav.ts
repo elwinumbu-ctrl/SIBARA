@@ -27,7 +27,7 @@ export interface NavItem {
 }
 
 export const NAV_ITEMS: NavItem[] = [
-  { key: "dashboard", label: "Dashboard", href: "/dashboard", icon: LayoutDashboard, guestAllowed: true },
+  { key: "dashboard", label: "Beranda", href: "/dashboard", icon: LayoutDashboard, guestAllowed: true },
   {
     key: "profil-inspektorat",
     label: "Profil Inspektorat",

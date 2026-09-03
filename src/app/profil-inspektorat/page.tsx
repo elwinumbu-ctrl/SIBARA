@@ -253,11 +253,11 @@ export default async function ProfilInspektoratPage() {
           </h3>
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
           {struktur.map((row, i) => (
             <div
               key={row.id ?? i}
-              className="flex items-center gap-3.5 rounded-xl bg-white/5 border border-white/8 p-3.5"
+              className="flex flex-col items-center text-center gap-3 rounded-2xl bg-white/5 border border-white/8 p-4"
             >
               <PejabatFotoEditor
                 id={row.id}
@@ -267,6 +267,7 @@ export default async function ProfilInspektoratPage() {
                 urutan={i + 1}
                 fotoPath={row.foto_path}
                 readOnly={isGuest}
+                size="lg"
               />
               <div className="min-w-0">
                 <p className="text-sm font-semibold text-white truncate">{row.peran}</p>

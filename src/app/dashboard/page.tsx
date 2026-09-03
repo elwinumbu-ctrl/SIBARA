@@ -113,7 +113,7 @@ export default async function DashboardPage() {
     >
       {/* Hero — cinematic deep navy / royal blue banner */}
       <div
-        className="relative overflow-hidden rounded-[20px] text-white mb-6 border"
+        className="relative overflow-hidden rounded-[20px] text-white mb-6 border flex flex-col justify-end min-h-[52vh] sm:min-h-[64vh] lg:min-h-[74vh]"
         style={{
           borderColor: "rgba(255,255,255,0.10)",
           boxShadow: "0 20px 60px rgba(3,12,30,0.45)",
@@ -154,7 +154,7 @@ export default async function DashboardPage() {
           <path d="M0 210 C 90 195, 170 218, 260 200 S 390 188, 420 205" stroke="#5B93FF" strokeWidth="1.2" opacity="0.6" />
         </svg>
 
-        <div className="relative px-5 sm:px-8 py-7 sm:py-9">
+        <div className="relative px-5 sm:px-8 py-7 sm:py-10">
           <div className="min-w-0 flex-1 overflow-hidden">
             <div className="marquee-track flex flex-col items-start">
               <p className="text-xs tracking-[0.15em] uppercase text-white/55 mb-2 flex items-center gap-2 whitespace-nowrap">
