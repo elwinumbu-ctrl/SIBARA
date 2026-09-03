@@ -20,7 +20,12 @@ export default function Sidebar({
   onCloseMobile: () => void;
   isGuest?: boolean;
 }) {
-  const items = isGuest ? NAV_ITEMS.filter((item) => item.guestAllowed !== false) : NAV_ITEMS;
+  const items = NAV_ITEMS.filter(
+    (item) => !item.hideFromSidebar && (!isGuest || item.guestAllowed !== false)
+  );
+
+  const profilPejabat = NAV_ITEMS.find((item) => item.key === "profil-inspektorat");
+  const isProfilActive = active === "profil-inspektorat";
 
   return (
     <>
@@ -46,11 +51,24 @@ export default function Sidebar({
 
         {/* Brand */}
         <div className={`relative flex items-center h-16 shrink-0 ${collapsed ? "justify-center px-2" : "justify-between px-4"}`}>
-          <Link href="/dashboard" className="flex items-center gap-2.5 min-w-0">
-            <span className="relative inline-flex items-center justify-center w-12 h-12 rounded-lg bg-white p-1.5 shrink-0 overflow-hidden">
+          <Link
+            href={profilPejabat?.href ?? "/profil-inspektorat"}
+            onClick={onCloseMobile}
+            title="Profil Inspektorat & Pejabat"
+            aria-label="Buka menu Profil Inspektorat & Pejabat"
+            className="flex items-center gap-2.5 min-w-0 group"
+          >
+            <span
+              className={`relative inline-flex items-center justify-center w-12 h-12 rounded-lg bg-white p-1.5 shrink-0 overflow-hidden ring-2 transition-all duration-150
+                ${
+                  isProfilActive
+                    ? "ring-cyan shadow-glow"
+                    : "ring-transparent group-hover:ring-cyan/60"
+                }`}
+            >
               <Image
                 src="/logo-sumba-barat.png"
-                alt="Lambang Kabupaten Sumba Barat"
+                alt="Lambang Kabupaten Sumba Barat — buka Profil Inspektorat & Pejabat"
                 width={260}
                 height={300}
                 className="w-full h-full object-contain"
@@ -58,11 +76,15 @@ export default function Sidebar({
             </span>
             {!collapsed && (
               <span className="min-w-0">
-                <span className="block font-display font-bold text-sm leading-none tracking-wide">
+                <span
+                  className={`block font-display font-bold text-sm leading-none tracking-wide transition-colors ${
+                    isProfilActive ? "text-cyan" : "group-hover:text-cyan"
+                  }`}
+                >
                   SIBARA
                 </span>
                 <span className="block text-[10.5px] text-white/55 leading-none mt-1 truncate">
-                  Bank Regulasi Dana BOSP
+                  Profil Inspektorat & Pejabat
                 </span>
               </span>
             )}

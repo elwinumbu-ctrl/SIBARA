@@ -22,11 +22,23 @@ export interface NavItem {
   icon: LucideIcon;
   /** false = disembunyikan & diblokir untuk sesi pengunjung (guest/anonim). */
   guestAllowed?: boolean;
+  /** true = tidak ditampilkan di daftar menu sidebar (aksesnya dipindah ke tempat lain, mis. logo). */
+  hideFromSidebar?: boolean;
 }
 
 export const NAV_ITEMS: NavItem[] = [
   { key: "dashboard", label: "Dashboard", href: "/dashboard", icon: LayoutDashboard, guestAllowed: true },
-  { key: "profil-inspektorat", label: "Profil Inspektorat", href: "/profil-inspektorat", icon: Building2, guestAllowed: true },
+  {
+    key: "profil-inspektorat",
+    label: "Profil Inspektorat",
+    href: "/profil-inspektorat",
+    icon: Building2,
+    guestAllowed: true,
+    // Menu ini tidak lagi tampil di daftar sidebar — aksesnya dipindah ke
+    // logo Sumba Barat di bagian atas sidebar, yang sekaligus berfungsi
+    // sebagai tombol menuju halaman Profil Inspektorat & Pejabat.
+    hideFromSidebar: true,
+  },
   { key: "regulasi", label: "Regulasi", href: "/regulasi", icon: FileText, guestAllowed: true },
   { key: "jenis", label: "Jenis Regulasi", href: "/jenis", icon: Layers, guestAllowed: true },
   { key: "kategori", label: "Kategori", href: "/kategori", icon: Tags, guestAllowed: true },
