@@ -100,12 +100,15 @@ export default async function DashboardPage() {
     return seg;
   });
 
+  const isGuest = Boolean(user?.is_anonymous);
+
   return (
     <AppShell
       active="dashboard"
       email={user?.email}
       subtitle="Ringkasan Bank Regulasi Dana BOSP"
       showAddButton={false}
+      isGuest={isGuest}
       dark
     >
       {/* Hero — cinematic deep navy / royal blue banner */}
@@ -169,16 +172,19 @@ export default async function DashboardPage() {
       </div>
 
       {/* Tombol Tambah Regulasi — dipindah keluar dari banner foto agar
-          tidak menutupi/mengganggu foto kantor Inspektorat di background. */}
-      <div className="flex justify-end mb-6 -mt-2">
-        <Link
-          href="/regulasi/baru"
-          className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-accent to-cyan text-white text-sm font-semibold px-4 py-2.5 shadow-glow hover:brightness-110 hover:-translate-y-0.5 transition-all"
-        >
-          <Plus size={16} strokeWidth={2.4} />
-          Tambah Regulasi
-        </Link>
-      </div>
+          tidak menutupi/mengganggu foto kantor Inspektorat di background.
+          Disembunyikan untuk sesi pengunjung (read-only). */}
+      {!isGuest && (
+        <div className="flex justify-end mb-6 -mt-2">
+          <Link
+            href="/regulasi/baru"
+            className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-accent to-cyan text-white text-sm font-semibold px-4 py-2.5 shadow-glow hover:brightness-110 hover:-translate-y-0.5 transition-all"
+          >
+            <Plus size={16} strokeWidth={2.4} />
+            Tambah Regulasi
+          </Link>
+        </div>
+      )}
 
       {/* KPI stat cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
@@ -289,8 +295,7 @@ export default async function DashboardPage() {
             <EmptyState
               icon={FileSearch}
               title="Belum ada regulasi terdaftar"
-              actionLabel="Tambah Regulasi"
-              actionHref="/regulasi/baru"
+              {...(isGuest ? {} : { actionLabel: "Tambah Regulasi", actionHref: "/regulasi/baru" })}
               dark
             />
           ) : (

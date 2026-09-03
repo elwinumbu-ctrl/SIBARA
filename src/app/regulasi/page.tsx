@@ -49,21 +49,26 @@ export default async function RegulasiPage({
     searchParams.q || searchParams.jenis || searchParams.kategori || searchParams.tahun || searchParams.status
   );
   const view = searchParams.view === "list" ? "list" : "grid";
+  const isGuest = Boolean(user?.is_anonymous);
 
   return (
     <AppShell
       active="regulasi"
       email={user?.email}
       subtitle="Seluruh regulasi, dikelompokkan per jenis"
+      isGuest={isGuest}
       dark
     >
       <PageHero
         icon={FileText}
         eyebrow="Bank Regulasi"
         title="Seluruh Regulasi"
-        description="Telusuri, saring, dan kelola seluruh regulasi Dana BOSP yang terdaftar."
-        actionHref="/regulasi/baru"
-        actionLabel="Tambah Regulasi"
+        description={
+          isGuest
+            ? "Telusuri dan saring seluruh regulasi Dana BOSP yang terdaftar (lihat-saja)."
+            : "Telusuri, saring, dan kelola seluruh regulasi Dana BOSP yang terdaftar."
+        }
+        {...(isGuest ? {} : { actionHref: "/regulasi/baru", actionLabel: "Tambah Regulasi" })}
       />
 
       <SearchFilterBar tahunList={tahunList} dark />
@@ -90,9 +95,12 @@ export default async function RegulasiPage({
         <EmptyState
           icon={FileSearch}
           title="Belum ada regulasi yang cocok"
-          description="Ubah kata kunci atau filter, atau tambahkan regulasi baru ke dalam bank regulasi."
-          actionLabel="Tambah Regulasi"
-          actionHref="/regulasi/baru"
+          description={
+            isGuest
+              ? "Ubah kata kunci atau filter untuk melihat regulasi lainnya."
+              : "Ubah kata kunci atau filter, atau tambahkan regulasi baru ke dalam bank regulasi."
+          }
+          {...(isGuest ? {} : { actionLabel: "Tambah Regulasi", actionHref: "/regulasi/baru" })}
           dark
         />
       ) : (

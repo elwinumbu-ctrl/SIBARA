@@ -143,12 +143,15 @@ export default async function ProfilInspektoratPage() {
         }))
       : DEFAULT_STRUKTUR;
 
+  const isGuest = Boolean(user?.is_anonymous);
+
   return (
     <AppShell
       active="profil-inspektorat"
       email={user?.email}
       subtitle="Tentang Inspektorat Kabupaten Sumba Barat"
       showAddButton={false}
+      isGuest={isGuest}
       dark
     >
       <PageHero
@@ -263,6 +266,7 @@ export default async function ProfilInspektoratPage() {
                 keterangan={row.keterangan}
                 urutan={i + 1}
                 fotoPath={row.foto_path}
+                readOnly={isGuest}
               />
               <div className="min-w-0">
                 <p className="text-sm font-semibold text-white truncate">{row.peran}</p>
@@ -272,10 +276,12 @@ export default async function ProfilInspektoratPage() {
           ))}
         </div>
 
-        <p className="text-xs text-white/30 mt-4">
-          * Arahkan kursor ke foto lalu klik untuk mengunggah atau mengganti foto pejabat.
-          Data lengkap juga dapat diperbarui melalui menu Pengaturan → Profil Inspektorat.
-        </p>
+        {!isGuest && (
+          <p className="text-xs text-white/30 mt-4">
+            * Arahkan kursor ke foto lalu klik untuk mengunggah atau mengganti foto pejabat.
+            Data lengkap juga dapat diperbarui melalui menu Pengaturan → Profil Inspektorat.
+          </p>
+        )}
       </div>
     </AppShell>
   );

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { ChevronsLeft, ChevronsRight, X, ShieldCheck } from "lucide-react";
+import { ChevronsLeft, ChevronsRight, X, ShieldCheck, Eye } from "lucide-react";
 import { NAV_ITEMS } from "@/lib/nav";
 
 export default function Sidebar({
@@ -11,13 +11,17 @@ export default function Sidebar({
   onToggleCollapse,
   mobileOpen,
   onCloseMobile,
+  isGuest = false,
 }: {
   active: string;
   collapsed: boolean;
   onToggleCollapse: () => void;
   mobileOpen: boolean;
   onCloseMobile: () => void;
+  isGuest?: boolean;
 }) {
+  const items = isGuest ? NAV_ITEMS.filter((item) => item.guestAllowed !== false) : NAV_ITEMS;
+
   return (
     <>
       {/* Overlay mobile */}
@@ -76,7 +80,7 @@ export default function Sidebar({
 
         {/* Nav */}
         <nav className="relative flex-1 overflow-y-auto thin-scrollbar px-3 py-2.5 space-y-1">
-          {NAV_ITEMS.map((item) => {
+          {items.map((item) => {
             const isActive = active === item.key;
             const Icon = item.icon;
             return (
@@ -109,8 +113,17 @@ export default function Sidebar({
         <div className="relative p-3 shrink-0">
           {!collapsed && (
             <div className="hidden lg:flex items-center gap-2 rounded-lg px-3 py-2.5 mb-1 text-white/45 text-[11px]">
-              <ShieldCheck size={14} />
-              <span>Inspektorat Wilayah IV</span>
+              {isGuest ? (
+                <>
+                  <Eye size={14} className="text-cyan" />
+                  <span className="text-cyan">Mode Pengunjung (Read-only)</span>
+                </>
+              ) : (
+                <>
+                  <ShieldCheck size={14} />
+                  <span>Inspektorat Wilayah IV</span>
+                </>
+              )}
             </div>
           )}
           <button

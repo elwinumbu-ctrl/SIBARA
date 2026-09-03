@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Sidebar from "./Sidebar";
 import Topbar from "./Topbar";
+import { createClient } from "@/lib/supabase/client";
 
 const COLLAPSE_KEY = "sibara-sidebar-collapsed";
 
@@ -15,6 +16,7 @@ export default function AppShell({
   addHref,
   addLabel,
   dark = false,
+  isGuest: isGuestProp,
   children,
 }: {
   active: string;
@@ -27,15 +29,29 @@ export default function AppShell({
   addLabel?: string;
   /** Cinematic deep-navy background + glass topbar, used across all menu pages. */
   dark?: boolean;
+  /** Jika halaman induk (server component) sudah tahu status pengunjung,
+   * teruskan di sini untuk menghindari kedipan UI. Jika tidak diberikan,
+   * AppShell akan mendeteksi sendiri sesi saat ini (client-side). */
+  isGuest?: boolean;
   children: React.ReactNode;
 }) {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [detectedGuest, setDetectedGuest] = useState(false);
+  const isGuest = isGuestProp ?? detectedGuest;
 
   useEffect(() => {
     const stored = localStorage.getItem(COLLAPSE_KEY);
     if (stored === "1") setCollapsed(true);
   }, []);
+
+  useEffect(() => {
+    if (isGuestProp !== undefined) return;
+    const supabase = createClient();
+    supabase.auth.getUser().then(({ data }) => {
+      setDetectedGuest(Boolean(data.user?.is_anonymous));
+    });
+  }, [isGuestProp]);
 
   function toggleCollapse() {
     setCollapsed((v) => {
@@ -85,6 +101,7 @@ export default function AppShell({
         onToggleCollapse={toggleCollapse}
         mobileOpen={mobileOpen}
         onCloseMobile={() => setMobileOpen(false)}
+        isGuest={isGuest}
       />
 
       <div
@@ -102,6 +119,7 @@ export default function AppShell({
           {...(addLabel ? { addLabel } : {})}
           onOpenMobile={() => setMobileOpen(true)}
           dark={dark}
+          isGuest={isGuest}
         />
         <main className="flex-1 px-4 sm:px-6 py-6 max-w-[1400px] w-full mx-auto animate-[fadein_0.4s_ease]">
           {children}

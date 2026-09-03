@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { createClient } from "@/lib/supabase/client";
 import { Mail, Lock, Eye, EyeOff, Loader2, ShieldCheck } from "lucide-react";
+// Eye juga dipakai untuk tombol "Masuk sebagai Pengunjung" di bawah.
 
 export default function LoginPage() {
   const router = useRouter();
@@ -14,6 +15,7 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [guestLoading, setGuestLoading] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -29,6 +31,25 @@ export default function LoginPage() {
 
     if (error) {
       setError("Email atau kata sandi salah. Silakan coba lagi.");
+      return;
+    }
+
+    router.push("/dashboard");
+    router.refresh();
+  }
+
+  async function handleGuestLogin() {
+    setError(null);
+    setGuestLoading(true);
+
+    const { error } = await supabase.auth.signInAnonymously();
+
+    setGuestLoading(false);
+
+    if (error) {
+      setError(
+        "Akses pengunjung belum aktif. Hubungi admin sistem untuk mengaktifkannya."
+      );
       return;
     }
 
@@ -157,11 +178,40 @@ export default function LoginPage() {
               "Masuk"
             )}
           </button>
+
+          <div className="flex items-center gap-3">
+            <span className="h-px flex-1 bg-border" />
+            <span className="text-[11px] uppercase tracking-wider text-ink-faint">atau</span>
+            <span className="h-px flex-1 bg-border" />
+          </div>
+
+          <button
+            type="button"
+            onClick={handleGuestLogin}
+            disabled={guestLoading}
+            className="w-full inline-flex items-center justify-center gap-2 rounded-lg border border-border bg-white text-ink-muted text-sm font-semibold py-2.5 hover:bg-surface-muted hover:text-ink transition-colors disabled:opacity-60"
+          >
+            {guestLoading ? (
+              <>
+                <Loader2 size={15} className="animate-spin" />
+                Memproses...
+              </>
+            ) : (
+              <>
+                <Eye size={15} />
+                Masuk sebagai Pengunjung
+              </>
+            )}
+          </button>
+          <p className="text-center text-[11px] text-ink-faint leading-relaxed">
+            Akses pengunjung bersifat lihat-saja (read-only), tanpa perlu akun.
+          </p>
         </form>
 
         <p className="text-center text-xs text-white/50 mt-6">
-          Akses terbatas untuk auditor Inspektorat Kabupaten Sumba Barat.
-          Hubungi admin sistem untuk pembuatan akun.
+          Akses penuh terbatas untuk auditor Inspektorat Kabupaten Sumba Barat.
+          Hubungi admin sistem untuk pembuatan akun, atau masuk sebagai
+          pengunjung untuk melihat data secara terbatas.
         </p>
       </div>
 

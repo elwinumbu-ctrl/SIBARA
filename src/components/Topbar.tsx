@@ -13,6 +13,7 @@ import {
   Plus,
   Settings,
   UserRound,
+  Eye,
 } from "lucide-react";
 
 export default function Topbar({
@@ -25,6 +26,7 @@ export default function Topbar({
   addHref = "/regulasi/baru",
   addLabel = "Tambah Regulasi",
   dark = false,
+  isGuest = false,
 }: {
   active: string;
   title?: string;
@@ -35,6 +37,7 @@ export default function Topbar({
   addHref?: string;
   addLabel?: string;
   dark?: boolean;
+  isGuest?: boolean;
 }) {
   const router = useRouter();
   const supabase = createClient();
@@ -47,8 +50,9 @@ export default function Topbar({
     router.refresh();
   }
 
-  const initials = email?.split("@")[0]?.slice(0, 2).toUpperCase() ?? "AD";
+  const initials = isGuest ? "PU" : email?.split("@")[0]?.slice(0, 2).toUpperCase() ?? "AD";
   const displayTitle = title ?? navLabel(active);
+  const canAdd = showAddButton && !isGuest;
 
   return (
     <header
@@ -88,7 +92,17 @@ export default function Topbar({
       </div>
 
       <div className="flex items-center gap-2 sm:gap-3">
-        {showAddButton && (
+        {isGuest && (
+          <span
+            className={`hidden sm:inline-flex items-center gap-1.5 rounded-lg text-xs font-semibold px-3 py-2 ${
+              dark ? "bg-white/10 text-cyan" : "bg-accent/10 text-accent"
+            }`}
+          >
+            <Eye size={14} />
+            Mode Pengunjung
+          </span>
+        )}
+        {canAdd && (
           <Link
             href={addHref}
             className={`hidden sm:inline-flex items-center gap-1.5 rounded-lg text-sm font-semibold px-4 py-2.5 transition-colors ${
@@ -101,7 +115,7 @@ export default function Topbar({
             {addLabel}
           </Link>
         )}
-        {showAddButton && (
+        {canAdd && (
           <Link
             href={addHref}
             aria-label={addLabel}
@@ -179,14 +193,14 @@ export default function Topbar({
             </span>
             <span className="hidden md:block text-left leading-tight">
               <span className={`block text-xs font-semibold ${dark ? "text-white" : "text-ink"}`}>
-                Administrator
+                {isGuest ? "Pengunjung" : "Administrator"}
               </span>
               <span
                 className={`block text-[11px] truncate max-w-[140px] ${
                   dark ? "text-white/50" : "text-ink-faint"
                 }`}
               >
-                {email ?? "auditor"}
+                {isGuest ? "Sesi tamu" : email ?? "auditor"}
               </span>
             </span>
             <ChevronDown size={15} className={dark ? "hidden sm:block text-white/50" : "hidden sm:block text-ink-faint"} />
@@ -203,32 +217,36 @@ export default function Topbar({
               >
                 <div className={`px-2.5 py-2 mb-1 border-b ${dark ? "border-white/10" : "border-border"}`}>
                   <p className={`text-xs font-semibold truncate ${dark ? "text-white" : "text-ink"}`}>
-                    {email ?? "Administrator"}
+                    {isGuest ? "Pengunjung" : email ?? "Administrator"}
                   </p>
                   <p className={`text-[11px] ${dark ? "text-white/50" : "text-ink-faint"}`}>
-                    Auditor Inspektorat
+                    {isGuest ? "Akses lihat-saja (read-only)" : "Auditor Inspektorat"}
                   </p>
                 </div>
-                <Link
-                  href="/pengaturan"
-                  onClick={() => setMenuOpen(false)}
-                  className={`flex items-center gap-2.5 rounded-md px-2.5 py-2 text-sm transition-colors ${
-                    dark ? "text-white/70 hover:bg-white/10 hover:text-white" : "text-ink-muted hover:bg-surface-subtle hover:text-ink"
-                  }`}
-                >
-                  <Settings size={15} />
-                  Pengaturan
-                </Link>
-                <Link
-                  href="/pengguna"
-                  onClick={() => setMenuOpen(false)}
-                  className={`flex items-center gap-2.5 rounded-md px-2.5 py-2 text-sm transition-colors ${
-                    dark ? "text-white/70 hover:bg-white/10 hover:text-white" : "text-ink-muted hover:bg-surface-subtle hover:text-ink"
-                  }`}
-                >
-                  <UserRound size={15} />
-                  Profil Pengguna
-                </Link>
+                {!isGuest && (
+                  <>
+                    <Link
+                      href="/pengaturan"
+                      onClick={() => setMenuOpen(false)}
+                      className={`flex items-center gap-2.5 rounded-md px-2.5 py-2 text-sm transition-colors ${
+                        dark ? "text-white/70 hover:bg-white/10 hover:text-white" : "text-ink-muted hover:bg-surface-subtle hover:text-ink"
+                      }`}
+                    >
+                      <Settings size={15} />
+                      Pengaturan
+                    </Link>
+                    <Link
+                      href="/pengguna"
+                      onClick={() => setMenuOpen(false)}
+                      className={`flex items-center gap-2.5 rounded-md px-2.5 py-2 text-sm transition-colors ${
+                        dark ? "text-white/70 hover:bg-white/10 hover:text-white" : "text-ink-muted hover:bg-surface-subtle hover:text-ink"
+                      }`}
+                    >
+                      <UserRound size={15} />
+                      Profil Pengguna
+                    </Link>
+                  </>
+                )}
                 <button
                   onClick={handleLogout}
                   className={`w-full flex items-center gap-2.5 rounded-md px-2.5 py-2 text-sm transition-colors ${
@@ -236,7 +254,7 @@ export default function Topbar({
                   }`}
                 >
                   <LogOut size={15} />
-                  Keluar
+                  {isGuest ? "Keluar dari mode pengunjung" : "Keluar"}
                 </button>
               </div>
             </>

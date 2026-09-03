@@ -35,6 +35,13 @@ export default function DetailRegulasiPage() {
   const [error, setError] = useState<string | null>(null);
   const [fileUrl, setFileUrl] = useState<string | null>(null);
   const [newFile, setNewFile] = useState<File | null>(null);
+  const [isGuest, setIsGuest] = useState(false);
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => {
+      setIsGuest(Boolean(data.user?.is_anonymous));
+    });
+  }, []);
 
   useEffect(() => {
     async function load() {
@@ -172,7 +179,7 @@ export default function DetailRegulasiPage() {
 
   if (loading) {
     return (
-      <AppShell active="regulasi" title="Detail Regulasi" showAddButton={false} dark>
+      <AppShell active="regulasi" title="Detail Regulasi" showAddButton={false} isGuest={isGuest} dark>
         <div className="flex items-center justify-center gap-2 py-24 text-sm text-white/50">
           <Loader2 size={16} className="animate-spin" />
           Memuat data regulasi...
@@ -183,7 +190,7 @@ export default function DetailRegulasiPage() {
 
   if (error && !regulasi) {
     return (
-      <AppShell active="regulasi" title="Detail Regulasi" showAddButton={false} dark>
+      <AppShell active="regulasi" title="Detail Regulasi" showAddButton={false} isGuest={isGuest} dark>
         <div className="max-w-2xl mx-auto text-center py-16">
           <p className="text-sm text-status-dicabut bg-status-dicabut/10 border border-status-dicabut/20 inline-block rounded-lg px-4 py-2.5">
             {error}
@@ -196,7 +203,7 @@ export default function DetailRegulasiPage() {
   if (!regulasi) return null;
 
   return (
-    <AppShell active="regulasi" title="Detail Regulasi" showAddButton={false} dark>
+    <AppShell active="regulasi" title="Detail Regulasi" showAddButton={false} isGuest={isGuest} dark>
       <PageHero
         icon={FileText}
         eyebrow="Bank Regulasi"
@@ -271,23 +278,32 @@ export default function DetailRegulasiPage() {
               </div>
 
               <div className="flex items-center gap-3 pt-4 border-t border-white/10">
-                <button
-                  onClick={() => {
-                    setNewFile(null);
-                    setEditing(true);
-                  }}
-                  className="inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-accent to-cyan text-white text-sm font-semibold px-4 py-2.5 shadow-glow hover:brightness-110 transition-all"
-                >
-                  <Pencil size={14} />
-                  Ubah Data
-                </button>
-                <button
-                  onClick={handleDelete}
-                  className="inline-flex items-center gap-1.5 text-sm text-status-dicabut hover:bg-status-dicabut/10 rounded-lg px-3 py-2.5 transition-colors"
-                >
-                  <Trash2 size={14} />
-                  Hapus regulasi
-                </button>
+                {isGuest ? (
+                  <p className="text-xs text-white/40">
+                    Anda masuk sebagai pengunjung (lihat-saja). Hubungi auditor Inspektorat
+                    untuk mengubah atau menghapus data ini.
+                  </p>
+                ) : (
+                  <>
+                    <button
+                      onClick={() => {
+                        setNewFile(null);
+                        setEditing(true);
+                      }}
+                      className="inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-accent to-cyan text-white text-sm font-semibold px-4 py-2.5 shadow-glow hover:brightness-110 transition-all"
+                    >
+                      <Pencil size={14} />
+                      Ubah Data
+                    </button>
+                    <button
+                      onClick={handleDelete}
+                      className="inline-flex items-center gap-1.5 text-sm text-status-dicabut hover:bg-status-dicabut/10 rounded-lg px-3 py-2.5 transition-colors"
+                    >
+                      <Trash2 size={14} />
+                      Hapus regulasi
+                    </button>
+                  </>
+                )}
               </div>
             </>
           ) : (

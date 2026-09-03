@@ -25,6 +25,7 @@ export default function PejabatFotoEditor({
   keterangan,
   urutan,
   fotoPath: initialFotoPath,
+  readOnly = false,
 }: {
   /** null jika baris ini belum ada di database (masih data bawaan tampilan). */
   id: string | null;
@@ -33,6 +34,8 @@ export default function PejabatFotoEditor({
   keterangan: string | null;
   urutan: number;
   fotoPath: string | null;
+  /** true untuk sesi pengunjung (read-only): tampilkan foto tanpa opsi unggah. */
+  readOnly?: boolean;
 }) {
   const supabase = createClient();
 
@@ -106,6 +109,20 @@ export default function PejabatFotoEditor({
     } finally {
       setUploading(false);
     }
+  }
+
+  if (readOnly) {
+    return (
+      <div className="relative block w-14 h-14 rounded-full overflow-hidden border border-white/15 bg-white/10 shrink-0">
+        {previewUrl ? (
+          <Image src={previewUrl} alt={nama || peran} fill className="object-cover" unoptimized />
+        ) : (
+          <span className="flex items-center justify-center w-full h-full text-white/30">
+            <User size={22} />
+          </span>
+        )}
+      </div>
+    );
   }
 
   return (
