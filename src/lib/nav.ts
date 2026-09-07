@@ -60,9 +60,9 @@ export const NAV_ITEMS: NavItem[] = [
       { key: "status", label: "Status", href: "/status", icon: Activity, guestAllowed: true },
       { key: "dokumen", label: "Dokumen Pendukung", href: "/dokumen", icon: Paperclip, guestAllowed: true },
       { key: "laporan", label: "Laporan Regulasi", href: "/laporan", icon: ClipboardList, guestAllowed: true },
+      { key: "rekapitulasi", label: "Rekapitulasi", href: "/rekapitulasi", icon: PieChart, guestAllowed: true },
     ],
   },
-  { key: "rekapitulasi", label: "Rekapitulasi", href: "/rekapitulasi", icon: PieChart, guestAllowed: true },
   { key: "pengguna", label: "Pengguna", href: "/pengguna", icon: Users, guestAllowed: false },
   { key: "pengaturan", label: "Pengaturan", href: "/pengaturan", icon: Settings, guestAllowed: false },
 ];
