@@ -1,9 +1,10 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ChevronsLeft, ChevronsRight, X, ShieldCheck, Eye } from "lucide-react";
-import { NAV_ITEMS } from "@/lib/nav";
+import { ChevronsLeft, ChevronsRight, ChevronDown, X, ShieldCheck, Eye } from "lucide-react";
+import { NAV_ITEMS, type NavItem } from "@/lib/nav";
 
 export default function Sidebar({
   active,
@@ -26,6 +27,49 @@ export default function Sidebar({
 
   const profilPejabat = NAV_ITEMS.find((item) => item.key === "profil-inspektorat");
   const isProfilActive = active === "profil-inspektorat";
+
+  // Grup yang mengandung menu aktif otomatis terbuka saat pertama kali
+  // dirender; state per-grup disimpan berdasarkan key parent-nya.
+  const [openGroups, setOpenGroups] = useState<Record<string, boolean>>(() => {
+    const initial: Record<string, boolean> = {};
+    for (const item of items) {
+      if (item.children) {
+        initial[item.key] = item.children.some((child) => child.key === active);
+      }
+    }
+    return initial;
+  });
+
+  function toggleGroup(key: string) {
+    setOpenGroups((prev) => ({ ...prev, [key]: !prev[key] }));
+  }
+
+  function renderLink(item: NavItem, isChild: boolean) {
+    const isActive = active === item.key;
+    const Icon = item.icon;
+    return (
+      <Link
+        key={item.key}
+        href={item.href}
+        onClick={onCloseMobile}
+        title={collapsed ? item.label : undefined}
+        className={`group relative flex items-center gap-3 rounded-xl text-[13.5px] transition-all duration-150
+          ${isChild ? "py-2 pl-[2.6rem] pr-3" : "px-3 py-2.5"}
+          ${collapsed ? "lg:justify-center lg:px-0 lg:pl-0" : ""}
+          ${
+            isActive
+              ? "bg-accent/90 text-white font-semibold shadow-glow"
+              : "text-white/65 hover:text-white hover:bg-white/8"
+          }`}
+      >
+        {isActive && !collapsed && (
+          <span className="absolute left-0 top-1.5 bottom-1.5 w-[3px] rounded-r-full bg-cyan" />
+        )}
+        <Icon size={isChild ? 16 : 18} strokeWidth={1.9} className="shrink-0" />
+        {!collapsed && <span className="truncate">{item.label}</span>}
+      </Link>
+    );
+  }
 
   return (
     <>
@@ -103,28 +147,54 @@ export default function Sidebar({
         {/* Nav */}
         <nav className="relative flex-1 overflow-y-auto thin-scrollbar px-3 py-2.5 space-y-1">
           {items.map((item) => {
-            const isActive = active === item.key;
+            if (!item.children) {
+              return renderLink(item, false);
+            }
+
+            // Grup dengan sub-menu (mis. "Regulasi") -> accordion.
+            const children = item.children.filter(
+              (child) => !isGuest || child.guestAllowed !== false
+            );
+            const isGroupActive = children.some((child) => child.key === active);
+            const isOpen = collapsed ? false : (openGroups[item.key] ?? isGroupActive);
             const Icon = item.icon;
+
+            // Sidebar diciutkan: tampilkan sebagai ikon tautan biasa ke
+            // halaman utama grup (mis. ikon Regulasi -> /regulasi).
+            if (collapsed) {
+              return renderLink({ ...item }, false);
+            }
+
             return (
-              <Link
-                key={item.key}
-                href={item.href}
-                onClick={onCloseMobile}
-                title={collapsed ? item.label : undefined}
-                className={`group relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-[13.5px] transition-all duration-150
-                  ${collapsed ? "lg:justify-center lg:px-0" : ""}
-                  ${
-                    isActive
-                      ? "bg-accent/90 text-white font-semibold shadow-glow"
-                      : "text-white/65 hover:text-white hover:bg-white/8"
-                  }`}
-              >
-                {isActive && !collapsed && (
-                  <span className="absolute left-0 top-1.5 bottom-1.5 w-[3px] rounded-r-full bg-cyan" />
+              <div key={item.key}>
+                <button
+                  type="button"
+                  onClick={() => toggleGroup(item.key)}
+                  aria-expanded={isOpen}
+                  className={`group relative flex items-center gap-3 w-full rounded-xl px-3 py-2.5 text-[13.5px] transition-all duration-150
+                    ${
+                      isGroupActive
+                        ? "text-white font-semibold"
+                        : "text-white/65 hover:text-white hover:bg-white/8"
+                    }`}
+                >
+                  {isGroupActive && (
+                    <span className="absolute left-0 top-1.5 bottom-1.5 w-[3px] rounded-r-full bg-cyan" />
+                  )}
+                  <Icon size={18} strokeWidth={1.9} className="shrink-0" />
+                  <span className="truncate flex-1 text-left">{item.label}</span>
+                  <ChevronDown
+                    size={15}
+                    className={`shrink-0 transition-transform duration-150 ${isOpen ? "rotate-180" : ""}`}
+                  />
+                </button>
+
+                {isOpen && (
+                  <div className="mt-1 space-y-0.5">
+                    {children.map((child) => renderLink(child, true))}
+                  </div>
                 )}
-                <Icon size={18} strokeWidth={1.9} className="shrink-0" />
-                {!collapsed && <span className="truncate">{item.label}</span>}
-              </Link>
+              </div>
             );
           })}
         </nav>

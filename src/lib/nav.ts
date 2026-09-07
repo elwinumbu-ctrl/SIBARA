@@ -24,6 +24,9 @@ export interface NavItem {
   guestAllowed?: boolean;
   /** true = tidak ditampilkan di daftar menu sidebar (aksesnya dipindah ke tempat lain, mis. logo). */
   hideFromSidebar?: boolean;
+  /** Sub-menu (opsional). Jika diisi, item ini dirender sebagai grup yang
+   * bisa dibuka/tutup (accordion) di sidebar, berisi tautan-tautan anak. */
+  children?: NavItem[];
 }
 
 export const NAV_ITEMS: NavItem[] = [
@@ -39,14 +42,26 @@ export const NAV_ITEMS: NavItem[] = [
     // sebagai tombol menuju halaman Profil Inspektorat & Pejabat.
     hideFromSidebar: true,
   },
-  { key: "regulasi", label: "Regulasi", href: "/regulasi", icon: FileText, guestAllowed: true },
-  { key: "jenis", label: "Jenis Regulasi", href: "/jenis", icon: Layers, guestAllowed: true },
-  { key: "kategori", label: "Kategori", href: "/kategori", icon: Tags, guestAllowed: true },
-  { key: "matriks-bosp", label: "Matriks BOSP", href: "/matriks-bosp", icon: ScrollText, guestAllowed: true },
-  { key: "tahun", label: "Tahun", href: "/tahun", icon: CalendarRange, guestAllowed: true },
-  { key: "status", label: "Status", href: "/status", icon: Activity, guestAllowed: true },
-  { key: "dokumen", label: "Dokumen Pendukung", href: "/dokumen", icon: Paperclip, guestAllowed: true },
-  { key: "laporan", label: "Laporan Regulasi", href: "/laporan", icon: ClipboardList, guestAllowed: true },
+  // Semua menu terkait regulasi digabung dalam satu grup "Regulasi" di
+  // sidebar (accordion). Setiap anak tetap memakai key & href asalnya,
+  // sehingga seluruh halaman, filter, dan hak akses guest tidak berubah.
+  {
+    key: "regulasi",
+    label: "Regulasi",
+    href: "/regulasi",
+    icon: FileText,
+    guestAllowed: true,
+    children: [
+      { key: "regulasi", label: "Semua Regulasi", href: "/regulasi", icon: FileText, guestAllowed: true },
+      { key: "jenis", label: "Jenis Regulasi", href: "/jenis", icon: Layers, guestAllowed: true },
+      { key: "kategori", label: "Kategori", href: "/kategori", icon: Tags, guestAllowed: true },
+      { key: "matriks-bosp", label: "Matriks BOSP", href: "/matriks-bosp", icon: ScrollText, guestAllowed: true },
+      { key: "tahun", label: "Tahun", href: "/tahun", icon: CalendarRange, guestAllowed: true },
+      { key: "status", label: "Status", href: "/status", icon: Activity, guestAllowed: true },
+      { key: "dokumen", label: "Dokumen Pendukung", href: "/dokumen", icon: Paperclip, guestAllowed: true },
+      { key: "laporan", label: "Laporan Regulasi", href: "/laporan", icon: ClipboardList, guestAllowed: true },
+    ],
+  },
   { key: "rekapitulasi", label: "Rekapitulasi", href: "/rekapitulasi", icon: PieChart, guestAllowed: true },
   { key: "pengguna", label: "Pengguna", href: "/pengguna", icon: Users, guestAllowed: false },
   { key: "pengaturan", label: "Pengaturan", href: "/pengaturan", icon: Settings, guestAllowed: false },
@@ -55,6 +70,11 @@ export const NAV_ITEMS: NavItem[] = [
 /** Prefix rute yang sepenuhnya tertutup untuk sesi pengunjung (guest/anonim). */
 export const GUEST_BLOCKED_PREFIXES = ["/pengguna", "/pengaturan", "/regulasi/baru"];
 
+/** Daftar rata (flat) semua item termasuk anak dari grup, untuk pencarian by key. */
+function flatNavItems(): NavItem[] {
+  return NAV_ITEMS.flatMap((item) => (item.children ? item.children : [item]));
+}
+
 export function navLabel(key: string): string {
-  return NAV_ITEMS.find((n) => n.key === key)?.label ?? "SIBARA";
+  return flatNavItems().find((n) => n.key === key)?.label ?? "SIBARA";
 }
