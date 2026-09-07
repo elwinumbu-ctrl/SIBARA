@@ -11,7 +11,6 @@ import {
   PieChart,
   Settings,
   ScrollText,
-  Search,
   type LucideIcon,
 } from "lucide-react";
 
@@ -43,7 +42,6 @@ export const NAV_ITEMS: NavItem[] = [
       { key: "profil-inspektorat", label: "Profil Inspektorat", href: "/profil-inspektorat", icon: Building2, guestAllowed: true },
     ],
   },
-  { key: "pencarian", label: "Pencarian", href: "/pencarian", icon: Search, guestAllowed: true },
   // Semua menu terkait regulasi digabung dalam satu grup "Regulasi" di
   // sidebar (accordion). Setiap anak tetap memakai key & href asalnya,
   // sehingga seluruh halaman, filter, dan hak akses guest tidak berubah.
