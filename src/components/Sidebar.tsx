@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ChevronsLeft, ChevronsRight, ChevronDown, X, ShieldCheck, Eye } from "lucide-react";
-import { NAV_ITEMS, findNavItem, type NavItem } from "@/lib/nav";
+import { NAV_ITEMS, type NavItem } from "@/lib/nav";
 
 export default function Sidebar({
   active,
@@ -25,23 +25,18 @@ export default function Sidebar({
     (item) => !item.hideFromSidebar && (!isGuest || item.guestAllowed !== false)
   );
 
-  const profilPejabat = findNavItem("profil-inspektorat");
-  const isProfilActive = active === "profil-inspektorat";
+  const isDashboardActive = active === "dashboard";
 
-  // Grup yang mengandung menu aktif otomatis terbuka saat pertama kali
-  // dirender; state per-grup disimpan berdasarkan key parent-nya.
-  const [openGroups, setOpenGroups] = useState<Record<string, boolean>>(() => {
-    const initial: Record<string, boolean> = {};
-    for (const item of items) {
-      if (item.children) {
-        initial[item.key] = item.children.some((child) => child.key === active);
-      }
-    }
-    return initial;
+  // Hanya satu grup yang boleh terbuka dalam satu waktu: state accordion
+  // disimpan sebagai satu key saja (bukan per-item), jadi saat grup lain
+  // dibuka, grup yang sedang terbuka otomatis tertutup.
+  const [openGroup, setOpenGroup] = useState<string | null>(() => {
+    const activeGroup = items.find((item) => item.children?.some((c) => c.key === active));
+    return activeGroup?.key ?? null;
   });
 
   function toggleGroup(key: string) {
-    setOpenGroups((prev) => ({ ...prev, [key]: !prev[key] }));
+    setOpenGroup((prev) => (prev === key ? null : key));
   }
 
   function renderLink(item: NavItem, isChild: boolean) {
@@ -96,23 +91,23 @@ export default function Sidebar({
         {/* Brand */}
         <div className={`relative flex items-center h-16 shrink-0 ${collapsed ? "justify-center px-2" : "justify-between px-4"}`}>
           <Link
-            href={profilPejabat?.href ?? "/profil-inspektorat"}
+            href="/dashboard"
             onClick={onCloseMobile}
-            title="Profil Inspektorat & Pejabat"
-            aria-label="Buka menu Profil Inspektorat & Pejabat"
+            title="SIBARA — Beranda"
+            aria-label="Buka Beranda"
             className="flex items-center gap-2.5 min-w-0 group"
           >
             <span
               className={`relative inline-flex items-center justify-center w-12 h-12 rounded-lg bg-white p-1.5 shrink-0 overflow-hidden ring-2 transition-all duration-150
                 ${
-                  isProfilActive
+                  isDashboardActive
                     ? "ring-cyan shadow-glow"
                     : "ring-transparent group-hover:ring-cyan/60"
                 }`}
             >
               <Image
                 src="/logo-sumba-barat.png"
-                alt="Lambang Kabupaten Sumba Barat — buka Profil Inspektorat & Pejabat"
+                alt="Lambang Kabupaten Sumba Barat — buka Beranda"
                 width={260}
                 height={300}
                 className="w-full h-full object-contain"
@@ -122,13 +117,13 @@ export default function Sidebar({
               <span className="min-w-0">
                 <span
                   className={`block font-display font-bold text-sm leading-none tracking-wide transition-colors ${
-                    isProfilActive ? "text-cyan" : "group-hover:text-cyan"
+                    isDashboardActive ? "text-cyan" : "group-hover:text-cyan"
                   }`}
                 >
                   SIBARA
                 </span>
                 <span className="block text-[10.5px] text-white/55 leading-none mt-1 truncate">
-                  Profil Inspektorat & Pejabat
+                  Sistem Informasi Bank Regulasi
                 </span>
               </span>
             )}
@@ -156,7 +151,7 @@ export default function Sidebar({
               (child) => !isGuest || child.guestAllowed !== false
             );
             const isGroupActive = children.some((child) => child.key === active);
-            const isOpen = collapsed ? false : (openGroups[item.key] ?? isGroupActive);
+            const isOpen = collapsed ? false : openGroup === item.key;
             const Icon = item.icon;
 
             // Sidebar diciutkan: tampilkan sebagai ikon tautan biasa ke
