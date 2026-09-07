@@ -1,0 +1,78 @@
+import Link from "next/link";
+import { createClient } from "@/lib/supabase/server";
+import AppShell from "@/components/AppShell";
+import PageHero from "@/components/PageHero";
+import StatusBadge from "@/components/StatusBadge";
+import EmptyState from "@/components/EmptyState";
+import { Regulasi } from "@/lib/types";
+import { FileDown, Paperclip } from "lucide-react";
+
+export const dynamic = "force-dynamic";
+
+export default async function DokumenPage() {
+  const supabase = createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  const { data } = await supabase
+    .from("regulasi")
+    .select("*")
+    .not("file_path", "is", null)
+    .order("created_at", { ascending: false });
+
+  const list = (data ?? []) as Regulasi[];
+
+  return (
+    <AppShell
+      active="dokumen"
+      email={user?.email}
+      subtitle="Seluruh dokumen fisik regulasi yang telah diunggah"
+      dark
+    >
+      <PageHero
+        icon={Paperclip}
+        eyebrow="Arsip"
+        title="Dokumen Pendukung"
+        description="Seluruh dokumen fisik regulasi yang telah diunggah ke SIBARA."
+      />
+      <div className="flex items-center justify-between mb-4">
+        <p className="text-xs text-white/50">
+          <span className="font-semibold text-white">{list.length}</span> regulasi memiliki dokumen pendukung
+        </p>
+      </div>
+
+      {list.length === 0 ? (
+        <EmptyState
+          icon={Paperclip}
+          title="Belum ada dokumen pendukung"
+          description="Dokumen akan muncul di sini setelah diunggah pada halaman detail regulasi."
+          dark
+        />
+      ) : (
+        <div className="flex flex-col gap-3">
+          {list.map((r) => (
+            <Link
+              key={r.id}
+              href={`/regulasi/${r.id}`}
+              className="group flex items-center gap-4 surface-card-dark hover:border-cyan/30 hover-lift p-4 sm:p-5"
+            >
+              <span className="inline-flex items-center justify-center w-11 h-11 rounded-xl bg-cyan/10 text-cyan shrink-0">
+                <FileDown size={18} />
+              </span>
+              <div className="min-w-0 flex-1">
+                <h3 className="font-display font-semibold text-sm text-white truncate group-hover:text-cyan transition-colors">
+                  {r.judul}
+                </h3>
+                <p className="text-xs text-white/40 truncate mt-0.5">
+                  {r.file_nama} · {r.nomor_regulasi || "Tanpa nomor"} · {r.tahun}
+                </p>
+              </div>
+              <StatusBadge status={r.status} size="sm" dark />
+            </Link>
+          ))}
+        </div>
+      )}
+    </AppShell>
+  );
+}

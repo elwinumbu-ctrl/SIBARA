@@ -1,0 +1,150 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  border-color: #E4E7EC;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  /* Layered soft blue-gray canvas — replaces the old flat near-white
+     background so every workspace page has depth instead of a white wall. */
+  background-color: #EEF3F9;
+  background-image: linear-gradient(180deg, #F1F5FA 0%, #EAF0F8 45%, #F5F7FB 100%);
+  background-attachment: fixed;
+}
+
+/* Faint geometric grid used behind workspace content, very low opacity */
+.pattern-grid {
+  background-image:
+    linear-gradient(rgba(11, 31, 58, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(11, 31, 58, 0.05) 1px, transparent 1px);
+  background-size: 44px 44px;
+}
+
+/* Dark-on-light dot pattern, for use over the soft blue-gray canvas
+   (distinct from the white-on-navy .pattern-dots used in the sidebar/hero) */
+.pattern-dots-soft {
+  background-image: radial-gradient(circle at 1px 1px, rgba(11, 31, 58, 0.07) 1px, transparent 0);
+  background-size: 22px 22px;
+}
+
+/* Controlled glassmorphism — header, filter panels, floating/overlay surfaces */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+/* Canonical light-surface card — the base "container" every workspace page
+   (kategori, jenis, tahun, status, dokumen, laporan, rekapitulasi, pengaturan,
+   pengguna, regulasi list/detail/form, dashboard's "Regulasi Terbaru" rows,
+   loading skeletons, etc.) builds on. Defined once so every menu renders the
+   same card no matter how its internal layout differs. */
+.surface-card {
+  background-color: rgb(255 255 255 / 0.95);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border: 1px solid rgb(255 255 255 / 0.7);
+  border-radius: 18px; /* rounded-2xl */
+  box-shadow: 0 4px 16px rgba(16,36,72,0.07), 0 1px 3px rgba(16,24,40,0.05); /* shadow-panel */
+}
+
+/* Dark counterpart of .surface-card, for panels living on the cinematic navy
+   dashboard canvas (or any future dark-context page) — same shape/rhythm as
+   the light card so the two contexts still read as one design system. */
+.surface-card-dark {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+::selection {
+  background-color: #155EEF;
+  color: #FFFFFF;
+}
+
+:focus-visible {
+  outline: 2px solid #155EEF;
+  outline-offset: 2px;
+}
+
+/* Subtle dot-grid pattern used behind the sidebar & hero panels */
+.pattern-dots {
+  background-image: radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.6) 1px, transparent 0);
+  background-size: 20px 20px;
+}
+
+/* Scrollbar tipis & rapi untuk sidebar dan area scroll internal */
+.thin-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.thin-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.thin-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Micro-interaction halus untuk kartu & item interaktif */
+.hover-lift {
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+.hover-lift:hover {
+  transform: translateY(-2px);
+}
+
+@keyframes fadein {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeup {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Teks berjalan terus-menerus dari kanan ke kiri (marquee) — dipakai pada
+   sapaan & judul banner Dashboard. */
+@keyframes marquee-rtl {
+  from { transform: translateX(100%); }
+  to { transform: translateX(-100%); }
+}
+.marquee-track {
+  display: inline-block;
+  white-space: nowrap;
+  animation: marquee-rtl 18s linear infinite;
+}
+
+/* Garis aksen status di sisi kiri kartu regulasi */
+.status-tab {
+  position: relative;
+}
+.status-tab::before {
+  content: "";
+  position: absolute;
+  top: 14px;
+  bottom: 14px;
+  left: 0;
+  width: 3px;
+  border-radius: 0 3px 3px 0;
+  background-color: var(--tab-color, #1B2A4A);
+}
