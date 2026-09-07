@@ -30,17 +30,18 @@ export interface NavItem {
 }
 
 export const NAV_ITEMS: NavItem[] = [
-  { key: "dashboard", label: "Beranda", href: "/dashboard", icon: LayoutDashboard, guestAllowed: true },
+  // "Profil Inspektorat" dipindah jadi sub-menu dari "Beranda" (accordion),
+  // selain tetap bisa diakses lewat logo Sumba Barat di atas sidebar.
   {
-    key: "profil-inspektorat",
-    label: "Profil Inspektorat",
-    href: "/profil-inspektorat",
-    icon: Building2,
+    key: "dashboard",
+    label: "Beranda",
+    href: "/dashboard",
+    icon: LayoutDashboard,
     guestAllowed: true,
-    // Menu ini tidak lagi tampil di daftar sidebar — aksesnya dipindah ke
-    // logo Sumba Barat di bagian atas sidebar, yang sekaligus berfungsi
-    // sebagai tombol menuju halaman Profil Inspektorat & Pejabat.
-    hideFromSidebar: true,
+    children: [
+      { key: "dashboard", label: "Beranda", href: "/dashboard", icon: LayoutDashboard, guestAllowed: true },
+      { key: "profil-inspektorat", label: "Profil Inspektorat", href: "/profil-inspektorat", icon: Building2, guestAllowed: true },
+    ],
   },
   // Semua menu terkait regulasi digabung dalam satu grup "Regulasi" di
   // sidebar (accordion). Setiap anak tetap memakai key & href asalnya,
@@ -71,10 +72,14 @@ export const NAV_ITEMS: NavItem[] = [
 export const GUEST_BLOCKED_PREFIXES = ["/pengguna", "/pengaturan", "/regulasi/baru"];
 
 /** Daftar rata (flat) semua item termasuk anak dari grup, untuk pencarian by key. */
-function flatNavItems(): NavItem[] {
+export function flatNavItems(): NavItem[] {
   return NAV_ITEMS.flatMap((item) => (item.children ? item.children : [item]));
 }
 
+export function findNavItem(key: string): NavItem | undefined {
+  return flatNavItems().find((n) => n.key === key);
+}
+
 export function navLabel(key: string): string {
-  return flatNavItems().find((n) => n.key === key)?.label ?? "SIBARA";
+  return findNavItem(key)?.label ?? "SIBARA";
 }

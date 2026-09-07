@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ChevronsLeft, ChevronsRight, ChevronDown, X, ShieldCheck, Eye } from "lucide-react";
-import { NAV_ITEMS, type NavItem } from "@/lib/nav";
+import { NAV_ITEMS, findNavItem, type NavItem } from "@/lib/nav";
 
 export default function Sidebar({
   active,
@@ -25,7 +25,7 @@ export default function Sidebar({
     (item) => !item.hideFromSidebar && (!isGuest || item.guestAllowed !== false)
   );
 
-  const profilPejabat = NAV_ITEMS.find((item) => item.key === "profil-inspektorat");
+  const profilPejabat = findNavItem("profil-inspektorat");
   const isProfilActive = active === "profil-inspektorat";
 
   // Grup yang mengandung menu aktif otomatis terbuka saat pertama kali
