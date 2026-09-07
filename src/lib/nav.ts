@@ -11,6 +11,7 @@ import {
   PieChart,
   Settings,
   ScrollText,
+  Users,
   type LucideIcon,
 } from "lucide-react";
 
@@ -23,6 +24,8 @@ export interface NavItem {
   guestAllowed?: boolean;
   /** true = tidak ditampilkan di daftar menu sidebar (aksesnya dipindah ke tempat lain, mis. logo). */
   hideFromSidebar?: boolean;
+  /** true = hanya tampil untuk pengguna dengan role admin (mis. Manajemen Pengguna). */
+  adminOnly?: boolean;
   /** Sub-menu (opsional). Jika diisi, item ini dirender sebagai grup yang
    * bisa dibuka/tutup (accordion) di sidebar, berisi tautan-tautan anak. */
   children?: NavItem[];
@@ -63,6 +66,10 @@ export const NAV_ITEMS: NavItem[] = [
       { key: "rekapitulasi", label: "Rekapitulasi", href: "/rekapitulasi", icon: PieChart, guestAllowed: true },
     ],
   },
+  // Manajemen Pengguna: hanya untuk admin. Item ini sengaja TIDAK diberi
+  // "children", jadi selalu tampil sebagai tautan langsung (bukan
+  // accordion) di sidebar, konsisten dengan "Pengaturan" di bawahnya.
+  { key: "pengguna", label: "Manajemen Pengguna", href: "/pengguna", icon: Users, guestAllowed: false, adminOnly: true },
   { key: "pengaturan", label: "Pengaturan", href: "/pengaturan", icon: Settings, guestAllowed: false },
 ];
 

@@ -13,6 +13,7 @@ export default function Sidebar({
   mobileOpen,
   onCloseMobile,
   isGuest = false,
+  isAdmin = false,
 }: {
   active: string;
   collapsed: boolean;
@@ -20,9 +21,14 @@ export default function Sidebar({
   mobileOpen: boolean;
   onCloseMobile: () => void;
   isGuest?: boolean;
+  /** true kalau pengguna yang login punya role admin (menampilkan menu adminOnly, mis. Manajemen Pengguna). */
+  isAdmin?: boolean;
 }) {
   const items = NAV_ITEMS.filter(
-    (item) => !item.hideFromSidebar && (!isGuest || item.guestAllowed !== false)
+    (item) =>
+      !item.hideFromSidebar &&
+      (!isGuest || item.guestAllowed !== false) &&
+      (!item.adminOnly || isAdmin)
   );
 
   const isDashboardActive = active === "dashboard";

@@ -1,29 +1,27 @@
-import { createClient as createSupabaseClient } from "@supabase/supabase-js";
+import "server-only";
+import { createClient } from "@supabase/supabase-js";
 
 /**
- * Klien Supabase dengan hak akses "service role" (Admin API).
+ * Supabase client dengan service_role key -- BYPASS Row Level Security.
  *
- * PENTING: hanya boleh dipakai di kode sisi server (Route Handler atau
- * Server Component) — TIDAK PERNAH diimpor ke komponen client ("use
- * client"), karena kunci ini memiliki akses penuh ke seluruh data dan
- * melewati Row Level Security. Dipakai khusus untuk fitur admin utama
- * membuat akun pengguna baru (auth.admin.createUser).
+ * PERINGATAN: hanya boleh dipakai di server (Route Handler / Server
+ * Action), TIDAK PERNAH diimpor ke Client Component. Paket "server-only"
+ * di atas akan membuat build gagal kalau file ini ke-import ke bundle
+ * browser, sebagai pengaman tambahan.
+ *
+ * Dipakai khusus untuk operasi admin: membuat akun pengguna baru,
+ * mengubah role, menonaktifkan, atau menghapus pengguna lain --
+ * hal-hal yang tidak boleh dilakukan lewat client biasa.
  */
-export function createAdminClient() {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-
-  if (!url || !serviceRoleKey) {
-    throw new Error(
-      "SUPABASE_SERVICE_ROLE_KEY belum diatur di environment variable " +
-        "server. Buka Supabase -> Project Settings -> API, salin nilai " +
-        "'service_role', lalu tambahkan sebagai SUPABASE_SERVICE_ROLE_KEY " +
-        "di .env.local (dan di pengaturan environment variable Vercel). " +
-        "JANGAN beri awalan NEXT_PUBLIC_ pada variabel ini."
-    );
-  }
-
-  return createSupabaseClient(url, serviceRoleKey, {
-    auth: { autoRefreshToken: false, persistSession: false },
-  });
+export function createAdminSupabaseClient() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    {
+      auth: {
+        autoRefreshToken: false,
+        persistSession: false,
+      },
+    }
+  );
 }

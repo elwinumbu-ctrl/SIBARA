@@ -1,30 +1,30 @@
-import { createServerClient, type CookieOptions } from "@supabase/ssr";
+import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 
-export function createClient() {
-  const cookieStore = cookies();
+/**
+ * Supabase client untuk dipakai di Server Component / Route Handler.
+ * Membaca sesi user dari cookie, sehingga tahu "siapa yang sedang login"
+ * dan tunduk pada RLS sesuai user tersebut (BUKAN admin/service_role).
+ */
+export async function createServerSupabaseClient() {
+  const cookieStore = await cookies();
 
   return createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
-        get(name: string) {
-          return cookieStore.get(name)?.value;
+        getAll() {
+          return cookieStore.getAll();
         },
-        set(name: string, value: string, options: CookieOptions) {
+        setAll(cookiesToSet) {
           try {
-            cookieStore.set({ name, value, ...options });
+            cookiesToSet.forEach(({ name, value, options }) =>
+              cookieStore.set(name, value, options)
+            );
           } catch {
-            // Dipanggil dari Server Component - boleh diabaikan jika ada middleware
-            // yang menangani refresh sesi.
-          }
-        },
-        remove(name: string, options: CookieOptions) {
-          try {
-            cookieStore.set({ name, value: "", ...options });
-          } catch {
-            // idem
+            // Dipanggil dari Server Component (bukan Route Handler/middleware);
+            // boleh diabaikan selama ada middleware yang me-refresh sesi.
           }
         },
       },

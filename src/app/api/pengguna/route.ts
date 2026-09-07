@@ -1,170 +1,109 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
-import { createAdminClient } from "@/lib/supabase/admin";
-import type { PenggunaListItem } from "@/lib/types";
-
-export const dynamic = "force-dynamic";
+import { getCurrentUser } from "@/lib/auth-guard";
+import { createAdminSupabaseClient } from "@/lib/supabase/admin";
 
 /**
- * Memastikan pemanggil sudah login DAN berperan admin di tabel profiles.
- * Dijalankan lewat klien server biasa (bukan admin client) agar memakai
- * sesi login pengguna yang sebenarnya, bukan hak akses penuh service role.
+ * GET /api/pengguna
+ * Daftar semua pengguna (gabungan data auth.users + profiles).
+ * Hanya admin aktif yang boleh mengakses.
  */
-async function requireAdmin() {
-  const supabase = createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    return {
-      user: null,
-      error: NextResponse.json(
-        { error: "Anda harus masuk terlebih dahulu." },
-        { status: 401 }
-      ),
-    };
-  }
-
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("role")
-    .eq("id", user.id)
-    .maybeSingle();
-
-  if (profile?.role !== "admin") {
-    return {
-      user: null,
-      error: NextResponse.json(
-        {
-          error:
-            "Hanya admin utama yang dapat mengelola pengguna. Hubungi admin aplikasi Anda.",
-        },
-        { status: 403 }
-      ),
-    };
-  }
-
-  return { user, error: null };
-}
-
-// GET /api/pengguna — daftar seluruh pengguna (khusus admin)
 export async function GET() {
-  const { error: authError } = await requireAdmin();
-  if (authError) return authError;
-
-  try {
-    const admin = createAdminClient();
-    const supabase = createClient();
-
-    const [{ data: authUsers, error: listError }, { data: profiles, error: profileError }] =
-      await Promise.all([
-        admin.auth.admin.listUsers({ perPage: 1000 }),
-        supabase.from("profiles").select("id, nama_lengkap, role, created_at"),
-      ]);
-
-    if (listError) throw listError;
-    if (profileError) throw profileError;
-
-    const profileMap = new Map((profiles ?? []).map((p) => [p.id, p]));
-
-    const users: PenggunaListItem[] = (authUsers?.users ?? [])
-      .map((u) => {
-        const profile = profileMap.get(u.id);
-        return {
-          id: u.id,
-          email: u.email ?? null,
-          nama_lengkap: profile?.nama_lengkap ?? null,
-          role: (profile?.role as "admin" | "auditor") ?? "auditor",
-          created_at: profile?.created_at ?? u.created_at,
-        };
-      })
-      .sort(
-        (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-      );
-
-    return NextResponse.json({ users });
-  } catch (err: any) {
-    return NextResponse.json(
-      { error: err?.message || "Gagal memuat daftar pengguna." },
-      { status: 500 }
-    );
+  const currentUser = await getCurrentUser();
+  if (!currentUser || currentUser.role !== "admin" || !currentUser.aktif) {
+    return NextResponse.json({ error: "Tidak diizinkan." }, { status: 403 });
   }
+
+  const admin = createAdminSupabaseClient();
+
+  const { data: profiles, error: profilesError } = await admin
+    .from("profiles")
+    .select("id, nama, role, aktif, created_at")
+    .order("created_at", { ascending: false });
+
+  if (profilesError) {
+    return NextResponse.json({ error: profilesError.message }, { status: 500 });
+  }
+
+  // Ambil email dari auth.users lewat Admin API (email tidak disimpan di
+  // tabel profiles supaya tidak duplikat sumber data).
+  const { data: authList, error: authError } =
+    await admin.auth.admin.listUsers({ perPage: 1000 });
+
+  if (authError) {
+    return NextResponse.json({ error: authError.message }, { status: 500 });
+  }
+
+  const emailById = new Map(authList.users.map((u) => [u.id, u.email]));
+
+  const pengguna = profiles.map((p) => ({
+    ...p,
+    email: emailById.get(p.id) ?? null,
+  }));
+
+  return NextResponse.json({ pengguna });
 }
 
-// POST /api/pengguna — buat akun pengguna baru (khusus admin)
+/**
+ * POST /api/pengguna
+ * Body: { nama: string, email: string, password: string, role: "admin" | "staff" }
+ * Membuat akun pengguna baru. Hanya admin aktif yang boleh mengakses.
+ */
 export async function POST(request: Request) {
-  const { error: authError } = await requireAdmin();
-  if (authError) return authError;
+  const currentUser = await getCurrentUser();
+  if (!currentUser || currentUser.role !== "admin" || !currentUser.aktif) {
+    return NextResponse.json({ error: "Tidak diizinkan." }, { status: 403 });
+  }
 
-  let body: {
+  const body = await request.json();
+  const { nama, email, password, role } = body as {
+    nama?: string;
     email?: string;
     password?: string;
-    nama_lengkap?: string;
     role?: string;
   };
 
-  try {
-    body = await request.json();
-  } catch {
+  if (!nama || !email || !password) {
     return NextResponse.json(
-      { error: "Data formulir tidak valid." },
+      { error: "Nama, email, dan password wajib diisi." },
       { status: 400 }
     );
   }
-
-  const email = body.email?.trim().toLowerCase();
-  const password = body.password ?? "";
-  const namaLengkap = body.nama_lengkap?.trim() || null;
-  const role = body.role === "admin" ? "admin" : "auditor";
-
-  if (!email || !email.includes("@")) {
+  if (password.length < 8) {
     return NextResponse.json(
-      { error: "Alamat email tidak valid." },
+      { error: "Password minimal 8 karakter." },
       { status: 400 }
     );
   }
-  if (password.length < 6) {
-    return NextResponse.json(
-      { error: "Kata sandi minimal 6 karakter." },
-      { status: 400 }
-    );
-  }
+  const finalRole = role === "admin" ? "admin" : "staff";
 
-  try {
-    const admin = createAdminClient();
+  const admin = createAdminSupabaseClient();
 
-    const { data: created, error: createError } = await admin.auth.admin.createUser({
+  const { data: created, error: createError } =
+    await admin.auth.admin.createUser({
       email,
       password,
       email_confirm: true,
-      user_metadata: { nama_lengkap: namaLengkap, role },
+      user_metadata: { nama, role: finalRole },
     });
 
-    if (createError) {
-      const raw = createError.message || "";
-      const message = raw.toLowerCase().includes("already")
-        ? "Email tersebut sudah terdaftar sebagai pengguna."
-        : raw || "Gagal membuat pengguna baru.";
-      return NextResponse.json({ error: message }, { status: 400 });
-    }
+  if (createError) {
+    return NextResponse.json({ error: createError.message }, { status: 400 });
+  }
 
-    const newUserId = created.user?.id;
-    if (newUserId) {
-      // Trigger database (on_auth_user_created) seharusnya sudah membuat
-      // baris profil otomatis; upsert di sini sebagai jaminan agar nama
-      // & peran tetap tersimpan walau trigger belum terpasang.
-      const { error: upsertError } = await admin
-        .from("profiles")
-        .upsert({ id: newUserId, nama_lengkap: namaLengkap, role });
-      if (upsertError) throw upsertError;
-    }
+  // Trigger on_auth_user_created sudah membuat baris profiles dengan role
+  // default 'staff'; pastikan role sesuai pilihan admin (mis. kalau admin
+  // memilih 'admin' langsung saat membuat akun).
+  const { error: updateRoleError } = await admin
+    .from("profiles")
+    .update({ nama, role: finalRole })
+    .eq("id", created.user.id);
 
-    return NextResponse.json({ success: true, id: newUserId });
-  } catch (err: any) {
+  if (updateRoleError) {
     return NextResponse.json(
-      { error: err?.message || "Gagal membuat pengguna baru." },
+      { error: updateRoleError.message },
       { status: 500 }
     );
   }
+
+  return NextResponse.json({ ok: true, id: created.user.id }, { status: 201 });
 }
