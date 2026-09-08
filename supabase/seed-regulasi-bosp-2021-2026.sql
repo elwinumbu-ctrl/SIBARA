@@ -24,7 +24,7 @@ select * from (values
     'Peraturan Menteri',
     'Kementerian Pendidikan dan Kebudayaan',
     2021,
-    'Penggunaan Dana',
+    'Realisasi & Belanja',
     'dicabut',
     'Mengatur juknis pengelolaan Dana BOS Reguler tahun anggaran 2021, sebelum penyatuan istilah menjadi "Dana BOSP" pada tahun 2022. Berlaku untuk tahun anggaran 2021 dan digantikan oleh Permendikbudristek No. 63 Tahun 2022.',
     'https://jdih.kemendikbud.go.id/'
@@ -35,7 +35,7 @@ select * from (values
     'Peraturan Menteri',
     'Kementerian Pendidikan, Kebudayaan, Riset, dan Teknologi',
     2022,
-    'Penggunaan Dana',
+    'Realisasi & Belanja',
     'dicabut',
     'Regulasi dasar yang pertama kali menyatukan BOP PAUD, Dana BOS, dan BOP Kesetaraan ke dalam satu skema "Dana BOSP", berlaku sejak tahun anggaran 2022. Diubah dengan Permendikbudristek No. 63 Tahun 2023 dan pada akhirnya digantikan penuh oleh Permendikdasmen No. 8 Tahun 2025.',
     'https://jdih.kemendikbud.go.id/'
@@ -46,7 +46,7 @@ select * from (values
     'Peraturan Menteri',
     'Kementerian Pendidikan, Kebudayaan, Riset, dan Teknologi',
     2023,
-    'Penggunaan Dana',
+    'Realisasi & Belanja',
     'dicabut',
     'Merevisi sejumlah ketentuan Permendikbudristek No. 63 Tahun 2022, antara lain penambahan jenjang penerima (SDLB, SMPLB, SMALB) dan mekanisme penyaluran. Menjadi acuan juknis Dana BOSP untuk tahun anggaran 2023 dan 2024, sebelum digantikan Permendikdasmen No. 8 Tahun 2025.',
     'https://jdih.kemendikbud.go.id/'
@@ -57,7 +57,7 @@ select * from (values
     'Peraturan Menteri',
     'Kementerian Pendidikan Dasar dan Menengah',
     2025,
-    'Penggunaan Dana',
+    'Realisasi & Belanja',
     'dicabut',
     'Juknis Dana BOSP pertama yang diterbitkan Kementerian Pendidikan Dasar dan Menengah pasca pemisahan dari Kemendikbudristek, berlaku untuk tahun anggaran 2025. Dicabut dan digantikan oleh Permendikdasmen No. 8 Tahun 2026.',
     'https://peraturan.bpk.go.id/'
@@ -68,7 +68,7 @@ select * from (values
     'Peraturan Menteri',
     'Kementerian Pendidikan Dasar dan Menengah',
     2026,
-    'Penggunaan Dana',
+    'Realisasi & Belanja',
     'berlaku',
     'Juknis Dana BOSP terbaru, ditetapkan 5 Februari 2026 dan mulai berlaku 6 Februari 2026, mencabut Permendikdasmen No. 8 Tahun 2025. Mengatur pengelolaan Dana BOP PAUD, Dana BOS, dan Dana BOP Kesetaraan (reguler, kinerja, afirmasi) untuk tahun anggaran 2026, dengan penguatan tata kelola digital dan akuntabilitas.',
     'https://peraturan.bpk.go.id/Details/345734/permendikdasmen-no-8-tahun-2026'

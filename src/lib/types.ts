@@ -32,12 +32,12 @@ export const JENIS_REGULASI = [
 ];
 
 export const KATEGORI_REGULASI = [
-  "Perencanaan",
-  "Penggunaan Dana",
-  "Pelaporan",
-  "Pengawasan",
-  "Pengadaan Barang/Jasa",
-  "Tata Kelola Sekolah",
+  "Perencanaan & RKAS",
+  "Pengadaan (PBJ)",
+  "Realisasi & Belanja",
+  "SPJ & Pelaporan",
+  "Audit & Pengawasan",
+  "Tata Kelola & SOP",
   "Lainnya",
 ];
 
