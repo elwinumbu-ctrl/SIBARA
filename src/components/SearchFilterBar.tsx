@@ -23,17 +23,24 @@ export default function SearchFilterBar({
   const [tahun, setTahun] = useState(searchParams.get("tahun") ?? "");
   const [status, setStatus] = useState(searchParams.get("status") ?? "");
 
+  // Param non-filter yang harus tetap dipertahankan meski filter diubah,
+  // mis. "view" (grid/list di halaman Regulasi) atau "tab" (sub-menu di
+  // halaman Rekapitulasi/Laporan Regulasi).
+  const PRESERVED_PARAMS = ["view", "tab"];
+
   function applyFilter(e?: React.FormEvent) {
     e?.preventDefault();
     const params = new URLSearchParams(searchParams.toString());
-    const view = params.get("view");
+    const preserved = PRESERVED_PARAMS.map((key) => [key, params.get(key)] as const);
     params.forEach((_, key) => params.delete(key));
     if (q) params.set("q", q);
     if (jenis) params.set("jenis", jenis);
     if (kategori) params.set("kategori", kategori);
     if (tahun) params.set("tahun", tahun);
     if (status) params.set("status", status);
-    if (view) params.set("view", view);
+    preserved.forEach(([key, value]) => {
+      if (value) params.set(key, value);
+    });
     router.push(`${pathname}?${params.toString()}`);
   }
 
@@ -43,8 +50,13 @@ export default function SearchFilterBar({
     setKategori("");
     setTahun("");
     setStatus("");
-    const view = searchParams.get("view");
-    router.push(`${pathname}${view ? `?view=${view}` : ""}`);
+    const params = new URLSearchParams();
+    PRESERVED_PARAMS.forEach((key) => {
+      const value = searchParams.get(key);
+      if (value) params.set(key, value);
+    });
+    const qs = params.toString();
+    router.push(`${pathname}${qs ? `?${qs}` : ""}`);
   }
 
   const selectClass = dark
