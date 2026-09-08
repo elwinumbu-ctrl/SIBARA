@@ -104,7 +104,7 @@ export default function Sidebar({
             className="flex items-center gap-2.5 min-w-0 group"
           >
             <span
-              className={`relative inline-flex items-center justify-center w-12 h-12 rounded-lg bg-white p-0.5 shrink-0 overflow-hidden ring-2 transition-all duration-150
+              className={`relative inline-flex items-center justify-center w-12 h-12 rounded-lg bg-white p-1.5 shrink-0 overflow-hidden ring-2 transition-all duration-150
                 ${
                   isDashboardActive
                     ? "ring-cyan shadow-glow"
@@ -116,7 +116,7 @@ export default function Sidebar({
                 alt="Lambang Kabupaten Sumba Barat — buka Beranda"
                 width={260}
                 height={300}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-contain"
               />
             </span>
             {!collapsed && (

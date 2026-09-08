@@ -7,7 +7,6 @@ import {
   CalendarRange,
   Activity,
   Paperclip,
-  ClipboardList,
   PieChart,
   Settings,
   ScrollText,
@@ -62,7 +61,9 @@ export const NAV_ITEMS: NavItem[] = [
       { key: "tahun", label: "Tahun", href: "/tahun", icon: CalendarRange, guestAllowed: true },
       { key: "status", label: "Status", href: "/status", icon: Activity, guestAllowed: true },
       { key: "dokumen", label: "Dokumen Pendukung", href: "/dokumen", icon: Paperclip, guestAllowed: true },
-      { key: "laporan", label: "Laporan Regulasi", href: "/laporan", icon: ClipboardList, guestAllowed: true },
+      // "Laporan Regulasi" digabung menjadi sub-menu (tab) di dalam
+      // halaman Rekapitulasi (lihat src/app/rekapitulasi/page.tsx),
+      // bukan menu terpisah di sidebar lagi.
       { key: "rekapitulasi", label: "Rekapitulasi", href: "/rekapitulasi", icon: PieChart, guestAllowed: true },
     ],
   },
